@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root {
+  --scuro: #18122B;
+  --scuro-2: #393053;
+  --chiaro-2: #443C68;
+  --chiaro: #635985;
+}
+
+/* #region colori */
+.bg-scuro {
+  background-color: var(--scuro);
+}
+
+.bg-scuro-2 {
+  background-color: var(--scuro-2);
+}
+
+.bg-chiaro {
+  background-color: var(--chiaro);
+}
+
+.bg-chiaro-2 {
+  background-color: var(--chiaro-2);
+}
+
+.text-scuro {
+  color: var(--scuro);
+}
+
+.text-scuro-2 {
+  color: var(--scuro-2);
+}
+
+.text-chiaro {
+  color: var(--chiaro);
+}
+
+.text-chiaro-2 {
+  color: var(--chiaro-2);
+}
+
+/* #endregion */
+body {
+  background-color: var(--scuro);
+  font-family: "Michroma", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.michroma-regular {
+  font-family: "Michroma", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.exo-2 {
+  font-family: "Exo 2", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
