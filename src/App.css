@@ -114,6 +114,7 @@ body {
   transform: skewX(-12deg);
   border: none;
   cursor: pointer;
+  width: max-content;
 }
 
 .cta:focus {
