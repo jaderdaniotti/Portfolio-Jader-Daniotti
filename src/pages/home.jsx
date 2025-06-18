@@ -8,6 +8,8 @@ import Marquee from "react-fast-marquee";
 function Home() {
 
     const navigate = useNavigate();
+    let h_icon = 75;
+    let w_icon = 75;
     let progetti = [
         {
             title: "VENDOR",
@@ -45,8 +47,6 @@ function Home() {
             linkGithub: " https://github.com/jader/social-media-analytics"
         }
     ]
-    let h_icon = 75;
-    let w_icon = 75;
     let linguaggiEframework = [
         {
             name: "HTML",
@@ -160,14 +160,13 @@ function Home() {
     return (
         <>
             <Navbar />
-
             {/* chi sono */}
             <div className="hero h-screen" id='home'>
                 <div className="hero-content text-center">
                     <div className="max-w-md py-10">
-                        <p className="text-5xl md:text-7xl" data-aos="zoom-in"  data-aos-duration="500">Ciao!</p>
-                        <p className="text-6xl md:text-8xl" data-aos="zoom-in"  data-aos-duration="500">Sono</p>
-                        <h1 className="titolo-bianco text-7xl md:text-9xl " data-aos="zoom-in"  data-aos-duration="500">Jader
+                        <p className="text-5xl md:text-7xl" data-aos="zoom-in" data-aos-duration="500">Ciao!</p>
+                        <p className="text-6xl md:text-8xl" data-aos="zoom-in" data-aos-duration="500">Sono</p>
+                        <h1 className="titolo-bianco text-7xl md:text-9xl " data-aos="zoom-in" data-aos-duration="500">Jader
                             <p className="py-6 text-2xl text-bianco" >
                                 Fullstack Developer con una preferenza verso il Frontend.
                             </p>
@@ -186,8 +185,8 @@ function Home() {
                         </p>
                         <BigButton text="CONOSCIMI" href="/"></BigButton>
                     </div>
-                    <div className=" max-w-full p-10 object-contain" data-aos="fade-up"  data-aos-duration="500">
-                        <img src="immagini\AVATAR\1-Photoroom.png" className='shadow shadow-fuchsia-200 rounded-full border-fuchsia-200 border-1' alt="" data-aos="zoom-in"  data-aos-duration="500" />
+                    <div className="shadow shadow-fuchsia-200 rounded-full border-fuchsia-200 border-1 max-w-full p-10 object-contain" data-aos="fade-up" data-aos-duration="500">
+                        <img src="immagini\AVATAR\1-Photoroom.png" className='hover:scale-110 hover:rotate-3 transition-all duration-300' alt="" />
                     </div>
                 </div>
             </div>
@@ -202,7 +201,7 @@ function Home() {
                         <p className="text-xl md:text-2xl  max-w-3xl mx-auto" data-aos="fade-up" >
                             Ecco le anteprime dei miei progetti. Troverai un anteprima col video di ogni progetto, una descrizione di come è stato creato, e il link alla repository su <br />
                         </p>
-                        <p className="titolo-bianco mt-6 md:text-3xl text-5xl " data-aos="fade-up" >
+                        <p className="titolo-bianco mt-6 md:text-5xl text-5xl " data-aos="fade-up" >
                             <a href='https://github.com/jaderdaniotti' target='_blank'  > Github <i className="bi bi-github"></i></a>
                         </p>
                     </div>
