@@ -209,58 +209,28 @@ function Home() {
                             Ecco una lista di alcune delle competenze che ho acquistato nello sviluppo web e che uso nel mio quotidiano.
                         </p>
                     </div>
-                    {/* linguaggi */}
-                    <h3 className='text-2xl md:text-3xl text-center font-bold py-10'>Linguaggi e Framework</h3>
-                    <div className="flex overflow-hidden  space-x-16 relative mx-0 ">
-                        <div className="flex animate-loop-scroll">
-                            {linguaggiEframework.map((linguaggio, index) => (
-                                <span key={index} className="mx-8 hover:scale-90 duration-300 transition-all">
-                                    <span dangerouslySetInnerHTML={{ __html: linguaggio.svg }} />
-                                </span>
-                            ))}
-                            {linguaggiEframework.map((linguaggio, index) => (
-                                <span key={`dup-${index}`} className="mx-8 hover:scale-90 duration-300 transition-all">
-                                    <span dangerouslySetInnerHTML={{ __html: linguaggio.svg }} />
-                                </span>
-                            ))}
-                            {linguaggiEframework.map((linguaggio, index) => (
-                                <span key={`dup-${index}`} className="mx-8 hover:scale-90 duration-300 transition-all">
-                                    <span dangerouslySetInnerHTML={{ __html: linguaggio.svg }} />
-                                </span>
-                            ))}
-                            {linguaggiEframework.map((linguaggio, index) => (
-                                <span key={`dup-${index}`} className="mx-8 hover:scale-90 duration-300 transition-all">
-                                    <span dangerouslySetInnerHTML={{ __html: linguaggio.svg }} />
-                                </span>
-                            ))}
-                            {linguaggiEframework.map((linguaggio, index) => (
-                                <span key={`dup-${index}`} className="mx-8 hover:scale-90 duration-300 transition-all">
-                                    <span dangerouslySetInnerHTML={{ __html: linguaggio.svg }} />
+                    {/* Carosello Linguaggi e Framework */}
+                    <div className="carosello-wrapper">
+                        <div className="carosello-track linguaggi-track">
+                            {linguaggiEframework.concat(linguaggiEframework).map((item, idx) => (
+                                <span key={idx} className="carosello-item">
+                                    <span dangerouslySetInnerHTML={{ __html: item.svg }} />
                                 </span>
                             ))}
                         </div>
                     </div>
-                    {/* linguaggi */}
-                    <h3 className='text-2xl md:text-3xl text-center font-bold py-10'>Strumenti di sviluppo</h3>
-                    <div className="flex overflow-hidden  space-x-16 relative mx-0 ">
-                        <div className="flex animate-loop-scroll">
-                            {strumenti.map((linguaggio, index) => (
-                                <span key={index} className="mx-8 hover:scale-90 duration-300 transition-all">
-                                    <span dangerouslySetInnerHTML={{ __html: linguaggio.svg }} />
-                                </span>
-                            ))}
-                            {strumenti.map((linguaggio, index) => (
-                                <span key={`dup-${index}`} className="mx-8 hover:scale-90 duration-300 transition-all">
-                                    <span dangerouslySetInnerHTML={{ __html: linguaggio.svg }} />
-                                </span>
-                            ))}
-                            {strumenti.map((linguaggio, index) => (
-                                <span key={`dup-${index}`} className="mx-8 hover:scale-90 duration-300 transition-all">
-                                    <span dangerouslySetInnerHTML={{ __html: linguaggio.svg }} />
+
+                    {/* Carosello Strumenti di Sviluppo */}
+                    <div className="carosello-wrapper">
+                        <div className="carosello-track strumenti-track">
+                            {strumenti.concat(strumenti).map((item, idx) => (
+                                <span key={idx} className="carosello-item">
+                                    <span dangerouslySetInnerHTML={{ __html: item.svg }} />
                                 </span>
                             ))}
                         </div>
                     </div>
+
 
 
                     <div className="text-center mt-16" data-aos="fade-up" >

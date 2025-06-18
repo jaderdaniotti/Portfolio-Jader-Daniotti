@@ -17,6 +17,7 @@
     "gsap": "^3.13.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-fast-marquee": "^1.6.5",
     "react-feather": "^2.0.10",
     "react-router-dom": "^7.6.2",
     "tailwindcss": "^4.1.10"
