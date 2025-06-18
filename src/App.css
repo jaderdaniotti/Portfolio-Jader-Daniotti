@@ -11,7 +11,9 @@
   --bianco: #f8f8ffd9
 }
 
+
 body {
+    scroll-behavior: smooth;
   background: #18122B;
   background: linear-gradient(90deg, rgba(24, 18, 43, 1) 0%, rgb(34, 28, 49) 50%, rgba(24, 18, 43, 1) 100%);
   color: #f8f8ffd9;
@@ -193,49 +195,3 @@ body {
   border: #746a94 6px solid;
 }
 
-/* #region carosello loghi */
-.carosello-wrapper {
-  overflow: hidden;
-  width: 100%;
-  position: relative;
-  margin-bottom: 2rem;
-}
-
-.carosello-track {
-  display: flex;
-  width: max-content;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-
-.linguaggi-track {
-  animation-name: scroll-linguaggi;
-  animation-duration: 20s;
-}
-
-.strumenti-track {
-  animation-name: scroll-strumenti;
-  animation-duration: 15s;
-}
-
-.carosello-item {
-  margin: 0 2rem;
-  flex: 0 0 auto;
-}
-
-@keyframes scroll-linguaggi {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-@keyframes scroll-strumenti {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.carosello-track:hover {
-  animation-play-state: paused;
-}
-
-
-/* #endregion */

@@ -6,27 +6,18 @@ function Footer() {
         { icona: "bi bi-github", link: "https://github.com/jaderdaniotti" },
         { icona: "bi bi-whatsapp", link: "https://wa.me/3513152008" },
         { icona: "bi bi-instagram", link: "https://www.instagram.com/jader_ness/" },
+        
     ]
     Aos.init()
     return (
         <footer className="footer sm:footer-horizontal bg-chiaro text-scuro items-center p-4">
 
-            <nav className="grid-flow-col text-3xl gap-6 md:place-self-center md:justify-self-start">
-                <a href="" className="duration-300 hover:scale-110 transition-all hover:-translate-y-1">
-                    <i className="bi bi-facebook " ></i>
-                </a>
-                <a href="" className="duration-300 hover:scale-110 transition-all hover:-translate-y-1">
-                    <i className="bi bi-instagram " ></i>
-                </a>
-                <a href="" className="duration-300 hover:scale-110 transition-all hover:-translate-y-1">
-                    <i className="bi bi-linkedin " ></i>
-                </a>
-                <a href="" className="duration-300 hover:scale-110 transition-all hover:-translate-y-1">
-                    <i className="bi bi-github " ></i>
-                </a>
-                <a href="" className="duration-300 hover:scale-110 transition-all hover:-translate-y-1">
-                    <i className="bi bi-whatsapp " ></i>
-                </a>
+            <nav className="grid-flow-col text-4xl gap-6 md:place-self-center md:justify-self-start">
+                {contatti.map((contatto, index) => (
+                    <a href={contatto.link} className="duration-300 hover:scale-110 transition-all hover:-translate-y-1" target="_blank" key={index}>
+                        <i className={contatto.icona} ></i>
+                    </a>
+                ))}
             </nav>
             <aside className="grid-flow-col gap-4 md:place-self-center text-lg md:justify-self-end flex items-center">
                 <p>Copyright © {new Date().getFullYear()} - All right reserved</p>

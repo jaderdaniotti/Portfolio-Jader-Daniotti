@@ -3,7 +3,10 @@ import BigButton from '../components/bigButton'
 import CardAnteprimaProgetti from '../components/cardAnteprimaProgetti'
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import Marquee from "react-fast-marquee";
+
 function Home() {
+
     const navigate = useNavigate();
     let progetti = [
         {
@@ -104,7 +107,7 @@ function Home() {
         },
         {
             name: "GITHUB",
-            svg: `<svg xmlns="http://www.w3.org/2000/svg" height="${h_icon}" width="${w_icon}" viewBox="0 0 128 128"><g fill="#181616"><path fill-rule="evenodd" clip-rule="evenodd" d="M64 5.103c-33.347 0-60.388 27.035-60.388 60.388 0 26.682 17.303 49.317 41.297 57.303 3.017.56 4.125-1.31 4.125-2.905 0-1.44-.056-6.197-.082-11.243-16.8 3.653-20.345-7.125-20.345-7.125-2.747-6.98-6.705-8.836-6.705-8.836-5.48-3.748.413-3.67.413-3.67 6.063.425 9.257 6.223 9.257 6.223 5.386 9.23 14.127 6.562 17.573 5.02.542-3.903 2.107-6.568 3.834-8.076-13.413-1.525-27.514-6.704-27.514-29.843 0-6.593 2.36-11.98 6.223-16.21-.628-1.52-2.695-7.662.584-15.98 0 0 5.07-1.623 16.61 6.19C53.7 35 58.867 34.327 64 34.304c5.13.023 10.3.694 15.127 2.033 11.526-7.813 16.59-6.19 16.59-6.19 3.287 8.317 1.22 14.46.593 15.98 3.872 4.23 6.215 9.617 6.215 16.21 0 23.194-14.127 28.3-27.574 29.796 2.167 1.874 4.097 5.55 4.097 11.183 0 8.08-.07 14.583-.07 16.572 0 1.607 1.088 3.49 4.148 2.897 23.98-7.994 41.263-30.622 41.263-57.294C124.388 32.14 97.35 5.104 64 5.104z"/><path d="M26.484 91.806c-.133.3-.605.39-1.035.185-.44-.196-.685-.605-.543-.906.13-.31.603-.395 1.04-.188.44.197.69.61.537.91zm2.446 2.729c-.287.267-.85.143-1.232-.28-.396-.42-.47-.983-.177-1.254.298-.266.844-.14 1.24.28.394.426.472.984.17 1.255zM31.312 98.012c-.37.258-.976.017-1.35-.52-.37-.538-.37-1.183.01-1.44.373-.258.97-.025 1.35.507.368.545.368 1.19-.01 1.452zm3.261 3.361c-.33.365-1.036.267-1.552-.23-.527-.487-.674-1.18-.343-1.544.336-.366 1.045-.264 1.564.23.527.486.686 1.18.333 1.543zm4.5 1.951c-.147.473-.825.688-1.51.486-.683-.207-1.13-.76-.99-1.238.14-.477.823-.7 1.512-.485.683.206 1.13.756.988 1.237zm4.943.361c.017.498-.563.91-1.28.92-.723.017-1.308-.387-1.315-.877 0-.503.568-.91 1.29-.924.717-.013 1.306.387 1.306.88zm4.598-.782c.086.485-.413.984-1.126 1.117-.7.13-1.35-.172-1.44-.653-.086-.498.422-.997 1.122-1.126.714-.123 1.354.17 1.444.663zm0 0"/></g></svg>`
+            svg: `<svg xmlns="http://www.w3.org/2000/svg" height="${h_icon}" width="${w_icon}" viewBox="0 0 128 128"><g fill="#D8D7E0"><path fill-rule="evenodd" clip-rule="evenodd" d="M64 5.103c-33.347 0-60.388 27.035-60.388 60.388 0 26.682 17.303 49.317 41.297 57.303 3.017.56 4.125-1.31 4.125-2.905 0-1.44-.056-6.197-.082-11.243-16.8 3.653-20.345-7.125-20.345-7.125-2.747-6.98-6.705-8.836-6.705-8.836-5.48-3.748.413-3.67.413-3.67 6.063.425 9.257 6.223 9.257 6.223 5.386 9.23 14.127 6.562 17.573 5.02.542-3.903 2.107-6.568 3.834-8.076-13.413-1.525-27.514-6.704-27.514-29.843 0-6.593 2.36-11.98 6.223-16.21-.628-1.52-2.695-7.662.584-15.98 0 0 5.07-1.623 16.61 6.19C53.7 35 58.867 34.327 64 34.304c5.13.023 10.3.694 15.127 2.033 11.526-7.813 16.59-6.19 16.59-6.19 3.287 8.317 1.22 14.46.593 15.98 3.872 4.23 6.215 9.617 6.215 16.21 0 23.194-14.127 28.3-27.574 29.796 2.167 1.874 4.097 5.55 4.097 11.183 0 8.08-.07 14.583-.07 16.572 0 1.607 1.088 3.49 4.148 2.897 23.98-7.994 41.263-30.622 41.263-57.294C124.388 32.14 97.35 5.104 64 5.104z"/><path d="M26.484 91.806c-.133.3-.605.39-1.035.185-.44-.196-.685-.605-.543-.906.13-.31.603-.395 1.04-.188.44.197.69.61.537.91zm2.446 2.729c-.287.267-.85.143-1.232-.28-.396-.42-.47-.983-.177-1.254.298-.266.844-.14 1.24.28.394.426.472.984.17 1.255zM31.312 98.012c-.37.258-.976.017-1.35-.52-.37-.538-.37-1.183.01-1.44.373-.258.97-.025 1.35.507.368.545.368 1.19-.01 1.452zm3.261 3.361c-.33.365-1.036.267-1.552-.23-.527-.487-.674-1.18-.343-1.544.336-.366 1.045-.264 1.564.23.527.486.686 1.18.333 1.543zm4.5 1.951c-.147.473-.825.688-1.51.486-.683-.207-1.13-.76-.99-1.238.14-.477.823-.7 1.512-.485.683.206 1.13.756.988 1.237zm4.943.361c.017.498-.563.91-1.28.92-.723.017-1.308-.387-1.315-.877 0-.503.568-.91 1.29-.924.717-.013 1.306.387 1.306.88zm4.598-.782c.086.485-.413.984-1.126 1.117-.7.13-1.35-.172-1.44-.653-.086-.498.422-.997 1.122-1.126.714-.123 1.354.17 1.444.663zm0 0"/></g></svg>`
         },
         {
             name: "GIT",
@@ -125,20 +128,46 @@ function Home() {
 `
         },
         {
-            name: "FIGMA",
-            svg: `<svg xmlns="http://www.w3.org/2000/svg" height="${h_icon}" width="${w_icon}" viewBox="0 0 128 128"><path fill="#0acf83" d="M45.5 129c11.9 0 21.5-9.6 21.5-21.5V86H45.5C33.6 86 24 95.6 24 107.5S33.6 129 45.5 129zm0 0"/><path fill="#a259ff" d="M24 64.5C24 52.6 33.6 43 45.5 43H67v43H45.5C33.6 86 24 76.4 24 64.5zm0 0"/><path fill="#f24e1e" d="M24 21.5C24 9.6 33.6 0 45.5 0H67v43H45.5C33.6 43 24 33.4 24 21.5zm0 0"/><path fill="#ff7262" d="M67 0h21.5C100.4 0 110 9.6 110 21.5S100.4 43 88.5 43H67zm0 0"/><path fill="#1abcfe" d="M110 64.5c0 11.9-9.6 21.5-21.5 21.5S67 76.4 67 64.5 76.6 43 88.5 43 110 52.6 110 64.5zm0 0"/></svg>`
-        }
+            name: "WINDOWS",
+            svg: `<svg xmlns="http://www.w3.org/2000/svg" height="${h_icon}" width="${w_icon}" viewBox="0 0 128 128"><path fill="#00ADEF" d="M126 1.637l-67 9.834v49.831l67-.534zM1.647 66.709l.003 42.404 50.791 6.983-.04-49.057zm56.82.68l.094 49.465 67.376 9.509.016-58.863zM1.61 19.297l.047 42.383 50.791-.289-.023-49.016z"/></svg>`
+        },
+        {
+            name: "GOOGLE",
+            svg: `<svg xmlns="http://www.w3.org/2000/svg" height="${h_icon}" width="${w_icon}" viewBox="0 0 128 128"><circle fill="#fff" cx="64.149" cy="64.236" r="60.999"/><path fill-opacity=".1" d="M102.966 75.327c0-21.439-17.379-38.819-38.817-38.819s-38.818 17.38-38.818 38.819h11.09c0-15.314 12.415-27.727 27.727-27.727 15.313 0 27.727 12.413 27.727 27.727"/><circle fill-opacity=".1" cx="66.922" cy="71.999" r="21.072"/><linearGradient id="chrome-original-a" gradientUnits="userSpaceOnUse" x1="395.191" y1="484.168" x2="395.191" y2="484.723" gradientTransform="matrix(82 0 0 82 -32341.5 -39660.313)"><stop offset="0" stop-color="#81B4E0"/><stop offset="1" stop-color="#0C5A94"/></linearGradient><circle fill="url(#chrome-original-a)" cx="64.149" cy="64.235" r="22.736"/><linearGradient id="chrome-original-b" gradientUnits="userSpaceOnUse" x1="-608.91" y1="-597.648" x2="-608.91" y2="-547.185" gradientTransform="translate(675 599.775)"><stop offset="0" stop-color="#F06B59"/><stop offset="1" stop-color="#DF2227"/></linearGradient><path fill="url(#chrome-original-b)" d="M119.602 36.508C104.336 5.792 67.06-6.732 36.343 8.534A62.105 62.105 0 0012.578 29.3l24.955 43.253c-4.597-14.606 3.521-30.174 18.127-34.77a27.676 27.676 0 017.935-1.274"/><linearGradient id="chrome-original-c" gradientUnits="userSpaceOnUse" x1="-657.835" y1="-491.393" x2="-632.327" y2="-533.537" gradientTransform="translate(675 599.775)"><stop offset="0" stop-color="#388B41"/><stop offset="1" stop-color="#4CB749"/></linearGradient><path fill="url(#chrome-original-c)" d="M12.578 29.3c-19.1 28.492-11.486 67.071 17.005 86.171a62.133 62.133 0 0029.575 10.319l26.063-44.363c-9.745 11.811-27.22 13.486-39.032 3.74a27.717 27.717 0 01-8.657-12.613"/><linearGradient id="chrome-original-d" gradientUnits="userSpaceOnUse" x1="-572.385" y1="-486.91" x2="-599.557" y2="-552.345" gradientTransform="translate(675 599.775)"><stop offset="0" stop-color="#E4B022"/><stop offset=".3" stop-color="#FCD209"/></linearGradient><path fill="url(#chrome-original-d)" d="M59.158 125.791c34.204 2.585 64.027-23.047 66.613-57.25a62.097 62.097 0 00-6.17-32.031H63.595c15.312.07 27.67 12.541 27.598 27.854a27.725 27.725 0 01-5.972 17.064"/><linearGradient id="chrome-original-e" gradientUnits="userSpaceOnUse" x1="-649.391" y1="-528.885" x2="-649.391" y2="-573.247" gradientTransform="translate(675 599.775)"><stop offset="0" stop-opacity=".15"/><stop offset=".3" stop-opacity=".06"/><stop offset="1" stop-opacity=".03"/></linearGradient><path fill="url(#chrome-original-e)" d="M12.578 29.3l24.955 43.253a27.725 27.725 0 011.107-18.854L13.686 27.636"/><linearGradient id="chrome-original-f" gradientUnits="userSpaceOnUse" x1="-588.158" y1="-514.559" x2="-618.657" y2="-483.505" gradientTransform="translate(675 599.775)"><stop offset="0" stop-opacity=".15"/><stop offset=".3" stop-opacity=".06"/><stop offset="1" stop-opacity=".03"/></linearGradient><path fill="url(#chrome-original-f)" d="M59.158 125.791l26.063-44.363a27.731 27.731 0 01-16.082 9.426l-11.091 34.937"/><linearGradient id="chrome-original-g" gradientUnits="userSpaceOnUse" x1="-588.6" y1="-505.621" x2="-584.163" y2="-549.431" gradientTransform="translate(675 599.775)"><stop offset="0" stop-opacity=".15"/><stop offset=".3" stop-opacity=".06"/><stop offset="1" stop-opacity=".03"/></linearGradient><path fill="url(#chrome-original-g)" d="M119.602 36.508H63.595a27.727 27.727 0 0121.626 10.537l35.491-8.873"/></svg>`
+        },
+        {
+            name: "WORDPRESS",
+            svg: `<svg xmlns="http://www.w3.org/2000/svg" height="${h_icon}" width="${w_icon}" viewBox="0 0 128 128"><path fill-rule="evenodd" clip-rule="evenodd" fill="#337BA2" d="M43.257 121.233c.079 1.018.029 2.071.299 3.037.115.408.9.629 1.381.935l.625.401c-.235.137-.469.389-.707.392a165.82 165.82 0 01-5.598.002c-.248-.004-.491-.237-.735-.364.198-.143.388-.391.597-.408 1.251-.105 1.632-.865 1.626-1.989-.011-2.066-.006-4.134.003-6.202.005-1.152-.322-1.993-1.679-2.045-.188-.008-.366-.296-.548-.453.182-.111.366-.321.546-.318 2.39.029 4.79-.024 7.167.177 1.873.159 3.107 1.455 3.234 2.949.138 1.639-.703 2.764-2.605 3.486l-.729.272c1.225 1.158 2.31 2.29 3.516 3.272.535.437 1.293.697 1.989.817 1.393.238 2.149-.361 2.187-1.742.061-2.229.032-4.461.011-6.691-.01-1.022-.449-1.697-1.589-1.753-.215-.01-.42-.253-.629-.388.239-.14.478-.4.715-.399 2.432.02 4.875-.055 7.291.161 4.123.366 6.42 3.797 5.214 7.588-.735 2.312-2.495 3.619-4.759 3.773-3.958.27-7.938.215-11.909.243-.316.002-.706-.341-.944-.623-.914-1.085-1.776-2.213-2.668-3.316-.27-.334-.571-.641-.858-.961l-.444.147zm13.119-5.869c0 2.785-.034 5.484.036 8.18.011.414.41 1.039.78 1.187 1.457.581 3.812-.368 4.47-1.842.881-1.973.988-4.05-.203-5.922-1.175-1.847-3.132-1.663-5.083-1.603zm-13.021 4.561c1.262.032 2.653.313 3.192-1.073.302-.777.234-1.982-.183-2.69-.633-1.076-1.906-.888-3.01-.752l.001 4.515z"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#515151" d="M96.77 119.35c.834-.18 1.661-.154 2.198-.537.451-.32.563-1.116.908-1.886.199.357.386.539.39.724.025 1.38.03 2.761 0 4.141-.005.216-.226.427-.347.641-.136-.114-.339-.2-.399-.346-.733-1.771-.729-1.772-2.843-1.583.309 1.382-.763 3.149.89 4.058.843.463 2.203.371 3.189.068.841-.256 1.48-1.171 2.212-1.798v3.096c-.405.036-.712.086-1.021.086-4.141.006-8.282-.012-12.422.019-.714.006-1.197-.174-1.633-.773-.857-1.182-1.799-2.302-2.725-3.432-.232-.283-.534-.508-1.021-.962 0 1.154-.042 1.981.012 2.802.056.858.469 1.427 1.418 1.534.279.032.529.325.792.5-.271.105-.54.298-.812.303-1.827.026-3.653.025-5.48.001-.28-.004-.558-.173-.866-.275l.156-.303c2.244-.906 2.25-.906 2.248-3.508a343.88 343.88 0 00-.039-4.87c-.017-1.121-.321-2.01-1.689-2.058-.197-.007-.384-.287-.577-.441.226-.113.453-.325.678-.323 2.311.022 4.635-.054 6.93.16 2.512.234 4.065 2.329 3.132 4.257-.51 1.053-1.688 1.783-2.725 2.818.984.9 2.117 2.194 3.491 3.135 1.941 1.33 3.268.571 3.317-1.748.041-1.947-.007-3.896-.015-5.845-.004-1.155-.361-1.994-1.717-2.013-.185-.003-.367-.2-.586-.33.705-.52 7.499-.709 10.448-.332l.19 3.214-.333.136c-.686-.717-.601-2.199-2.02-2.204-1.084-.005-2.168-.119-3.332-.189.003 1.356.003 2.59.003 4.063zm-12.647.566c2.61.105 3.646-.603 3.584-2.364-.061-1.698-1.195-2.383-3.584-2.121v4.485z"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#3179A1" d="M11.555 120.682c.996-2.947 1.979-5.897 3.003-8.834.141-.404.486-.737.737-1.104.248.378.587.725.729 1.14.931 2.719 1.817 5.451 2.722 8.179.072.219.165.43.375.969.928-2.813 1.787-5.308 2.564-7.829.27-.873-.081-1.504-1.097-1.618-.335-.039-.66-.17-1.051-.274.676-.749 5.957-.804 6.827-.108-.236.112-.424.271-.618.279-1.65.064-2.414 1.097-2.884 2.521-1.258 3.81-2.54 7.611-3.817 11.415-.133.395-.3.778-.452 1.166l-.421.03-3.579-10.821-3.619 10.788-.354.022c-.185-.401-.412-.79-.547-1.207-1.167-3.581-2.319-7.167-3.474-10.751-.495-1.539-.99-3.069-3.012-3.167-.132-.006-.253-.229-.38-.35.158-.13.316-.373.476-.375 2.272-.024 4.546-.024 6.818.001.158.001.313.247.47.379-.169.126-.319.309-.508.367-1.82.55-1.951.761-1.378 2.526.723 2.233 1.468 4.457 2.204 6.686l.266-.03z"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#4D4D4D" d="M65.484 111.25c.279-.241.435-.494.587-.491 2.957.044 5.938-.093 8.864.247 2.768.321 4.301 2.919 3.466 5.359-.748 2.189-2.593 2.874-4.68 3.064-.881.081-1.776.013-2.824.013.093 1.453.14 2.78.275 4.098.113 1.114.863 1.56 1.923 1.65.239.021.457.288.684.442-.25.126-.498.36-.75.363-2.191.029-4.384.028-6.575.002-.263-.003-.523-.219-.784-.336.218-.165.432-.463.656-.472 1.463-.056 2.012-.964 2.03-2.235.044-3.081.04-6.162.002-9.243-.016-1.31-.649-2.148-2.072-2.206-.212-.008-.422-.13-.802-.255zm5.523 6.706c2.682.278 3.703.022 4.349-1.167.648-1.192.65-2.439-.116-3.566-1.059-1.559-2.679-1.098-4.233-1.154v5.887z"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#3279A1" d="M31.076 126.463c-2.396-.104-4.348-.856-5.794-2.647-2.053-2.542-1.741-5.994.711-8.192 2.645-2.37 7.018-2.472 9.733-.171 1.838 1.559 2.709 3.533 2.111 5.953-.675 2.73-2.601 4.192-5.218 4.856-.546.137-1.122.149-1.543.201zm4.544-6.249l-.224-.147c-.149-.709-.236-1.439-.458-2.125-.642-1.971-1.986-2.945-3.963-2.949-1.97-.004-3.295.975-3.939 2.967-.572 1.771-.498 3.526.383 5.18 1.315 2.468 4.829 2.931 6.549.736.802-1.023 1.116-2.43 1.652-3.662z"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#505050" d="M122.748 114.317l.893-.782v4.376l-.259.195c-.209-.295-.498-.562-.615-.891-.591-1.655-1.865-2.553-3.319-2.117-.499.149-1.099.649-1.232 1.11-.109.376.285 1.12.671 1.374 1.008.664 2.131 1.156 3.214 1.703 2.356 1.192 3.198 2.845 2.401 4.736-.809 1.921-3.263 2.915-5.462 2.173-.606-.206-1.167-.544-1.728-.811l-.857 1.126-.379-.116c0-1.477-.009-2.954.015-4.431.002-.143.215-.282.33-.423.18.218.448.41.527.66.523 1.656 1.53 2.756 3.325 2.94 1.023.105 2.023-.021 2.378-1.187.324-1.067-.42-1.669-1.219-2.124-.879-.5-1.808-.909-2.708-1.37-.395-.203-.798-.404-1.153-.665-1.257-.927-1.753-2.263-1.381-3.618.332-1.211 1.523-2.237 2.997-2.28 1.091-.031 2.195.25 3.561.422zm-16.269 11.027c-.166.33-.258.607-.429.821-.103.128-.356.25-.49.208-.127-.04-.262-.294-.265-.456-.021-1.299-.021-2.599.001-3.896.002-.159.178-.314.274-.471.184.117.446.193.537.362.169.314.208.696.356 1.024.668 1.482 2.021 2.409 3.573 2.184.649-.093 1.45-.586 1.772-1.138.434-.741-.086-1.504-.814-1.925-.979-.566-1.993-1.075-3.009-1.571-2.297-1.121-3.266-2.972-2.443-4.719.818-1.737 3.33-2.46 5.429-1.556.256.11.499.25.7.354l1.078-.886c.113.317.185.426.186.535.008 1.216.005 2.431.005 3.646l-.317.212c-.211-.27-.504-.509-.619-.814-.573-1.532-1.48-2.381-2.81-2.219-.624.075-1.419.504-1.726 1.018-.45.755.2 1.361.885 1.729.963.519 1.949.992 2.926 1.483 2.418 1.213 3.269 2.898 2.434 4.824-.813 1.876-3.346 2.847-5.517 2.077-.564-.199-1.087-.52-1.717-.826z"/><path fill-rule="evenodd" clip-rule="evenodd" fill="#494949" d="M65.261 1.395C38.48.917 16.103 22.648 16.096 49c-.008 27.11 21.338 48.739 48.077 48.699 26.49-.039 47.932-21.587 47.932-48.167C112.104 23.384 90.76 1.85 65.261 1.395zm-1.148 93.887c-25.326.006-45.694-20.529-45.693-46.067.001-24.88 20.685-45.48 45.674-45.489 25.432-.008 45.695 20.654 45.687 46.587-.008 24.483-20.807 44.964-45.668 44.969zm24.395-59.347c-.994-1.638-2.216-3.227-2.778-5.013-.64-2.032-1.171-4.345-.832-6.382.576-3.454 3.225-5.169 6.812-5.497C72.086.83 41.248 7.349 29.885 27.138c4.374-.203 8.55-.468 12.729-.524.791-.011 2.1.657 2.286 1.277.416 1.385-.748 1.868-1.986 1.963-1.301.102-2.604.199-4.115.314l14.935 44.494c.359-.587.507-.752.572-.945 2.762-8.255 5.54-16.505 8.232-24.784.246-.755.124-1.755-.146-2.531-1.424-4.111-3.13-8.133-4.379-12.294-.855-2.849-1.988-4.692-5.355-4.362-.574.056-1.273-1.178-1.916-1.816.777-.463 1.548-1.316 2.332-1.328a659.24 659.24 0 0120.572.006c.786.013 1.557.889 2.335 1.364-.681.622-1.267 1.554-2.063 1.794-1.276.385-2.691.312-4.218.448l14.953 44.484c2.266-7.524 4.374-14.434 6.422-21.36 1.83-6.182.74-11.957-2.567-17.403zM52.719 88.149c-.092.267-.097.563-.168 1.007 8.458 2.344 16.75 2.175 25.24-.685l-12.968-35.52c-4.151 12.064-8.131 23.63-12.104 35.198zm-6.535-1.606L26.646 32.947c-8.814 17.217-2.109 43.486 19.538 53.596zm54.452-55.403c-.27 2.994-.082 6.327-.941 9.362-2.023 7.152-4.496 14.181-6.877 21.229-2.588 7.66-5.28 15.286-7.927 22.927 12.437-7.372 19.271-18.253 20.359-32.555.62-8.14-2.188-19.412-4.614-20.963z"/></svg>`
+        },
+        {
+            name: "STACK OVERFLOW",
+            svg: `<svg xmlns="http://www.w3.org/2000/svg" height="${h_icon}" width="${w_icon}" viewBox="0 0 128 128"><path fill="#bbb" d="M101.072 82.51h11.378V128H10.05V82.51h11.377v34.117h79.644zm0 0"/><path fill="#f58025" d="m33.826 79.13 55.88 11.738 2.348-11.166-55.876-11.745Zm7.394-26.748 51.765 24.1 4.824-10.349-51.768-24.1Zm14.324-25.384L99.428 63.53l7.309-8.775-43.885-36.527ZM83.874 0l-9.167 6.81 34.08 45.802 9.163-6.81Zm-51.07 105.254h56.89V93.881h-56.89Zm0 0"/></svg>
+`
+        },
+        {
+            name: "TRELLO",
+            svg: `<svg xmlns="http://www.w3.org/2000/svg" height="${h_icon}" width="${w_icon}" viewBox="0 0 128 128"><path fill="#23719F" d="M127 16.142C127 7.779 120.221 1 111.858 1H16.142C7.779 1 1 7.779 1 16.142v95.715C1 120.221 7.779 127 16.142 127h95.716c8.363 0 15.142-6.779 15.142-15.143V16.142zM58 99.54c0 3.807-3.286 6.46-7.093 6.46H23.563C19.756 106 17 103.347 17 99.54V23.23c0-3.808 2.756-7.23 6.563-7.23h27.344C54.714 16 58 19.422 58 23.23v76.31zm55-66.456V64.97c0 3.807-2.936 7.03-6.744 7.03h-27.33C75.118 72 72 68.776 72 64.97V22.866C72 19.058 75.118 16 78.926 16h27.33c3.808 0 6.744 3.058 6.744 6.866v10.218z"/></svg>`
+        },
 
+    ]
+    let contatti = [
+        { name: "Linkedin", icona: "bi bi-linkedin", link: "https://www.linkedin.com/in/jader-daniotti-0a00b9328/" },
+        { name: "Instagram", icona: "bi bi-instagram", link: "https://www.instagram.com/jader_ness/" },
+        { name: "Whatsapp", icona: "bi bi-whatsapp", link: "https://wa.me/3513152008" },
+        { name: "Telefono", icona: "bi bi-telephone", link: "tel:+3935152008" },
+        { name: "Email", icona: "bi bi-envelope", link: "mailto:jaderdaniotti.lavoro@gmail.com" },
     ]
     return (
         <>
             <Navbar />
+
+            {/* chi sono */}
             <div className="hero h-screen" id='home'>
                 <div className="hero-content text-center">
                     <div className="max-w-md py-10">
-                        <p className="text-5xl md:text-7xl" data-aos="zoom-in" data-aos-delay="100" data-aos-duration="500">Ciao!</p>
-                        <p className="text-6xl md:text-8xl" data-aos="zoom-in" data-aos-delay="300" data-aos-duration="500">Sono</p>
-                        <h1 className="titolo-bianco text-7xl md:text-9xl " data-aos="zoom-in" data-aos-delay="500" data-aos-duration="500">Jader
+                        <p className="text-5xl md:text-7xl" data-aos="zoom-in"  data-aos-duration="500">Ciao!</p>
+                        <p className="text-6xl md:text-8xl" data-aos="zoom-in"  data-aos-duration="500">Sono</p>
+                        <h1 className="titolo-bianco text-7xl md:text-9xl " data-aos="zoom-in"  data-aos-duration="500">Jader
                             <p className="py-6 text-2xl text-bianco" >
                                 Fullstack Developer con una preferenza verso il Frontend.
                             </p>
@@ -148,7 +177,6 @@ function Home() {
                 </div>
             </div>
             <hr />
-            {/* chi sono */}
             <div className="py-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 align-center items-center justify-center  px-5 py-5 w-full text-center" id='chi-sono'>
                     <div className="text-center flex-col py-10">
@@ -158,8 +186,8 @@ function Home() {
                         </p>
                         <BigButton text="CONOSCIMI" href="/"></BigButton>
                     </div>
-                    <div className=" max-w-full p-10 object-contain" data-aos="fade-up" data-aos-delay="200" data-aos-duration="500">
-                        <img src="immagini\AVATAR\1-Photoroom.png" className='shadow shadow-fuchsia-200 rounded-full border-fuchsia-200 border-1' alt="" data-aos="zoom-in" data-aos-delay="200" data-aos-duration="500" />
+                    <div className=" max-w-full p-10 object-contain" data-aos="fade-up"  data-aos-duration="500">
+                        <img src="immagini\AVATAR\1-Photoroom.png" className='shadow shadow-fuchsia-200 rounded-full border-fuchsia-200 border-1' alt="" data-aos="zoom-in"  data-aos-duration="500" />
                     </div>
                 </div>
             </div>
@@ -171,10 +199,10 @@ function Home() {
                         <h1 className='text-5xl md:text-8xl font-bold titolo-bianco py-10' data-aos="fade-up">
                             I Miei Progetti
                         </h1>
-                        <p className="text-xl md:text-2xl  max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+                        <p className="text-xl md:text-2xl  max-w-3xl mx-auto" data-aos="fade-up" >
                             Ecco le anteprime dei miei progetti. Troverai un anteprima col video di ogni progetto, una descrizione di come è stato creato, e il link alla repository su <br />
                         </p>
-                        <p className="titolo-bianco mt-6 md:text-3xl text-5xl " data-aos="fade-up" data-aos-delay="200">
+                        <p className="titolo-bianco mt-6 md:text-3xl text-5xl " data-aos="fade-up" >
                             <a href='https://github.com/jaderdaniotti' target='_blank'  > Github <i className="bi bi-github"></i></a>
                         </p>
                     </div>
@@ -200,41 +228,113 @@ function Home() {
             <hr />
             {/* competenze */}
             <div className="py-16 ">
-                <div className="container mx-auto px-6">
+                <div className="container mx-auto ">
                     <div className="text-center mb-16">
                         <h1 className='text-5xl md:text-8xl font-bold titolo-bianco py-10' data-aos="fade-up">
                             Competenze
                         </h1>
-                        <p className="text-xl md:text-2xl  max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+                        <p className="text-xl md:text-2xl  max-w-3xl mx-auto" data-aos="fade-up" >
                             Ecco una lista di alcune delle competenze che ho acquistato nello sviluppo web e che uso nel mio quotidiano.
                         </p>
                     </div>
-                    {/* Carosello Linguaggi e Framework */}
-                    <div className="carosello-wrapper">
-                        <div className="carosello-track linguaggi-track">
-                            {linguaggiEframework.concat(linguaggiEframework).map((item, idx) => (
-                                <span key={idx} className="carosello-item">
-                                    <span dangerouslySetInnerHTML={{ __html: item.svg }} />
-                                </span>
-                            ))}
-                        </div>
-                    </div>
+                    {/* linguaggi */}
 
-                    {/* Carosello Strumenti di Sviluppo */}
-                    <div className="carosello-wrapper">
-                        <div className="carosello-track strumenti-track">
-                            {strumenti.concat(strumenti).map((item, idx) => (
-                                <span key={idx} className="carosello-item">
-                                    <span dangerouslySetInnerHTML={{ __html: item.svg }} />
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-
+                    <Marquee pauseOnHover={true} speed={70} gradient={false} >
+                        {linguaggiEframework.map((item, idx) => (
+                            <span key={idx} className="carosello-item mx-40 transition-transform hover:scale-90 duration-300 linear">
+                                <span dangerouslySetInnerHTML={{ __html: item.svg }} />
+                            </span>
+                        ))}
+                    </Marquee>
+                    <h3 className='text-3xl titolo-bianco md:text-3xl text-center font-bold py-10'>Linguaggi e Framework</h3>
+                    {/* strumenti */}
+                    <Marquee pauseOnHover={true} speed={70} gradient={false} >
+                        {strumenti.map((item, idx) => (
+                            <span key={idx} className="carosello-item mx-40">
+                                <span dangerouslySetInnerHTML={{ __html: item.svg }} />
+                            </span>
+                        ))}
+                    </Marquee>
+                    <h3 className='text-3xl titolo-bianco md:text-3xl text-center font-bold py-10'>Strumenti</h3>
 
 
                     <div className="text-center mt-16" data-aos="fade-up" >
-                        <BigButton text="PROGETTI" href="/progetti" />
+                        <BigButton text="COMPETENZE" href="/progetti" />
+                    </div>
+                </div>
+            </div >
+            <hr />
+            {/* collaborazioni */}
+            <div className="py-16 ">
+                <div className="container mx-auto ">
+                    <div className="text-center mb-16">
+                        <h1 className='text-5xl md:text-8xl font-bold titolo-bianco py-10' data-aos="fade-up">
+                            Collaborazioni
+                        </h1>
+                        <p className="text-2xl md:text-3xl  max-w-3xl mx-auto" data-aos="fade-up" >
+                            E se ti dicessi che potresti avere un sito web con un Agente Personale AI che ti aiutasse nel tuo lavoro?
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-3 mx-auto justify-center align-middle">
+                            <div className="flex content-center items-center justify-center">
+                                <img src="immagini\AVATAR\1-Photoroom.png" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
+                            </div>
+                            <div className="flex content-center items-center justify-center">
+                                <i className="bi bi-plus-lg text-5xl hover:scale-110 transition-all duration-300 linear"></i>
+                            </div>
+                            <div className="flex content-center items-center justify-center">
+                                <img src="immagini\AVATAR\auroramainlogo_dark.webp" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr className="my-5" />
+                    <p className="text-7xl md:text-8xl mt-16 titolo-bianco text-center">
+                        Jader
+                    </p>
+                    <p className="text-4xl md:text-6xl titolo-bianco text-center">
+                        x
+                    </p>
+                    <p className="text-7xl md:text-8xl titolo-bianco text-center">
+                        Aurora
+                    </p>
+                    <p className="text-3xl md:text-2xl px-2 mt-5 text-center " data-aos="fade-up" >
+                        Da oggi grazie alla collaborazione tra <span className="font-extrabold titolo-bianco text-3xl">Jader</span> e <span className="font-extrabold titolo-bianco text-3xl">Aurora</span> puoi avere un sito web con un AgentAI totalmente personalizzato, che svolge task quotidiane al posto tuo, 24/7, integrato dentro un sito costruito su misura per la tua attività!
+                    </p>
+
+                    <div className="text-center mt-16" data-aos="fade-up" >
+                        <BigButton text="COLLABORAZIONI" href="/progetti" />
+                    </div>
+                </div>
+            </div >
+            <hr />
+            {/* contatti */}
+            <div className="py-16 ">
+                <div className="container mx-auto ">
+                    <div className="text-center mb-16">
+                        <h1 className='text-5xl md:text-8xl font-bold titolo-bianco py-10' data-aos="fade-up">
+                            Contatti
+                        </h1>
+                        <div className="grid grid-cols-1 md:grid-cols-2 justify-center ">
+                            <div className="flex flex-col justify-center px-5">
+                                <p className="text-3xl md:text-3xl lg:text-4xl flex max-w-3xl text-center mb-5 mx-auto px-1" data-aos="fade-up">
+                                    Puoi contattarmi direttamente tramite il mio Agent, fissando un appuntamento con Google Calendar.
+                                </p>
+                            </div>
+                            <div className="flex flex-col justify-center">
+                                <img src="../immagini/calendario.jpg" data-aos="zoom-in" alt="" className="object-contain rounded-circle md:max-h-100" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="text-center my-5">
+                    <p className="text-4xl md:text-4xl px-2 pt-5 text-center"  >Oppure tramite chiamata, email o social network</p>
+                    <div className="flex justify-center gap-5" >
+                        {contatti.map((contatto, index) => {
+                            return (
+                                <a href={contatto.link} target="_blank" className="text-3xl mt-5 duration-300 hover:scale-110 transition-all hover:-translate-y-1" key={index} >
+                                    <i className={contatto.icona} ></i>
+                                </a>
+                            )
+                        })}
                     </div>
                 </div>
             </div >

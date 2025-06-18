@@ -19,8 +19,8 @@ function Navbar() {
         { href: "/", text: "Home" },
         { href: "/Chisono", text: "Jader" },
         { href: "/progetti", text: "Progetti" },
-        { href: "/Collaborazioni", text: "Collaborazioni" },
         { href: "/Competenze", text: "Competenze" },
+        { href: "/Collaborazioni", text: "Collaborazioni" },
         { href: "/Contatti", text: "Contatti" },
     ];
     useEffect(() => {
