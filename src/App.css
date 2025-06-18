@@ -13,7 +13,7 @@
 
 
 body {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
   background: #18122B;
   background: linear-gradient(90deg, rgba(24, 18, 43, 1) 0%, rgb(34, 28, 49) 50%, rgba(24, 18, 43, 1) 100%);
   color: #f8f8ffd9;
