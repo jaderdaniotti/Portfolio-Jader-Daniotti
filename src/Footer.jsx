@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import Aos from 'aos';
 function Footer() {
-
+    let contatti = [
+        { icona: "bi bi-linkedin", link: "https://www.linkedin.com/in/jader-daniotti-0a00b9328/" },
+        { icona: "bi bi-github", link: "https://github.com/jaderdaniotti" },
+        { icona: "bi bi-whatsapp", link: "https://wa.me/3513152008" },
+        { icona: "bi bi-instagram", link: "https://www.instagram.com/jader_ness/" },
+    ]
     Aos.init()
     return (
         <footer className="footer sm:footer-horizontal bg-chiaro text-scuro items-center p-4">

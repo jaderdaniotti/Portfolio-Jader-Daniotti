@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -9,15 +11,17 @@ function Navbar() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
-
+    
+    
+    const navigate = useNavigate();
     const handleLinkClick = () => setIsOpen(false);
     const LINK = [
-        { href: "#home", text: "Home" },
-        { href: "#chi-sono", text: "Jader" },
-        { href: "#projects", text: "Progetti" },
-        { href: "", text: "Collaborazioni" },
-        { href: "", text: "Competenze" },
-        { href: "#contact", text: "Contatti" },
+        { href: "/", text: "Home" },
+        { href: "/Chisono", text: "Jader" },
+        { href: "/progetti", text: "Progetti" },
+        { href: "/Collaborazioni", text: "Collaborazioni" },
+        { href: "/Competenze", text: "Competenze" },
+        { href: "/Contatti", text: "Contatti" },
     ];
     useEffect(() => {
         if (isOpen) {
@@ -43,12 +47,12 @@ function Navbar() {
                 <ul className="hidden md:flex items-center gap-1 font-medium">
                     {LINK.map((item, index) => (
                         <li key={index} className="relative group">
-                            <a
-                                href={item.href}
-                                className="text-scuro text-md hover:text-scuro font-semibold transition-all duration-300 hover:scale-105 block py-2 px-3 rounded-lg hover:bg-chiaro-2/10"
+                            <Link
+                                to={item.href}
+                                className="text-scuro text-lg hover:text-scuro  transition-all duration-300 hover:scale-105 block py-2 px-3 rounded-lg hover:bg-chiaro-2/10"
                             >
                                 {item.text}
-                            </a>
+                            </Link>
                             <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-scuro transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
                         </li>
                     ))}
@@ -107,13 +111,12 @@ function Navbar() {
                         <ul className="align-center flex flex-col items-center gap-4">
                             {LINK.map((item, index) => (
                                 <li key={index}>
-                                    <a
-                                        href={item.href}
+                                    <Link to={item.href}
                                         onClick={handleLinkClick}
-                                        className="block px-6 py-2 text-5xl text-scuro w-min border-b-2 border-violet-950 hover:translate-x-1 transition-all font-medium duration-300 linear "
+                                        className="block px-6 py-2 text-4xl text-scuro w-min border-b-2 border-violet-950 hover:translate-x-1 transition-all font-medium duration-300 linear "
                                     >
                                         {item.text}
-                                    </a>
+                                    </Link>
                                 </li>
                             ))}
                         </ul>

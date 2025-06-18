@@ -101,6 +101,7 @@ body {
   color: transparent;
 }
 
+
 /* #region btn */
 .cta {
   display: flex;
@@ -184,5 +185,49 @@ body {
     fill: var(--scuro);
   }
 }
+
+/* #endregion */
+
+.card-sfondo-bianco {
+  background: linear-gradient(180deg, #393053 0%, #251c43 50%, #393053 100%);
+  border: #746a94 6px solid;
+}
+
+/* #region carosello loghi */
+.animate-loop-scroll {
+  animation: loop-scroll 15s linear infinite;
+  display: flex;
+  min-width: fit-content;
+}
+@keyframes loop-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-loop-scroll:hover {
+  animation-play-state: paused;
+}
+
+.animate-loop-scroll2 {
+  animation: loop-scroll2 15s linear infinite;
+  display: flex;
+  min-width: fit-content;
+}
+@keyframes loop-scroll2 {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(50%);
+  }
+}
+.animate-loop-scroll2:hover {
+  animation-play-state: paused;
+}
+
 
 /* #endregion */

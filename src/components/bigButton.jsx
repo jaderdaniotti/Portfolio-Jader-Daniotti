@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 function BigButton({ text, href }) {
+    const navigate = useNavigate();
     return (
-        <a className="cta mx-auto w-auto" href={href} >
+        <button className="cta mx-auto w-auto" onClick={() => navigate(href)} >
             <span className="span">{text}</span>
             <span className="second">
                 <svg
@@ -31,7 +33,7 @@ function BigButton({ text, href }) {
                     </g>
                 </svg>
             </span>
-        </a>
+        </button>
     );
 }
 export default BigButton;
