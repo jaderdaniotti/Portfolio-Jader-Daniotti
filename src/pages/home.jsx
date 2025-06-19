@@ -183,7 +183,7 @@ function Home() {
                         <p className="py-6 text-3xl" data-aos="zoom-in" >
                             Ciao a tutti, mi chiamo Jader Daniotti, sono un appassionato di <br /> <span className='text-chiaro'>Web Design</span>, <br /> <span className='text-chiaro'>UI/UX</span> e <br /><span className='text-chiaro'>Programmazione</span>.
                         </p>
-                        <BigButton text="CONOSCIMI" href="/"></BigButton>
+                        <BigButton text="CONOSCIMI" href="/Chisono"></BigButton>
                     </div>
                     <div className="shadow shadow-fuchsia-200 rounded-full border-fuchsia-200 border-1 max-w-full p-10 object-contain" data-aos="fade-up" data-aos-duration="500">
                         <img src="immagini\AVATAR\1-Photoroom.png" className='hover:scale-110 hover:rotate-3 transition-all duration-300' alt="" />

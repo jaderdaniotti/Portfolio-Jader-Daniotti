@@ -1,6 +1,6 @@
 function CardAnteprimaProgetti({ title, description, imageUrl, link, linkGithub }) {
     return (
-        <div className={`group relative overflow-hidden rounded-2xl bg-chiaro shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 h-full card-sfondo-bianco`}>
+        <div className={`group relative overflow-hidden rounded-2xl bg-chiaro shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 h-full card-sfondo-bianco `}>
             {/* Immagine con overlay */}
             <div className="relative object-contain ">
                 <img
