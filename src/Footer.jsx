@@ -10,7 +10,7 @@ function Footer() {
     ]
     Aos.init()
     return (
-        <footer className="footer sm:footer-horizontal bg-chiaro text-scuro items-center p-4">
+        <footer className="footer sm:footer-horizontal bg-chiaro text-scuro items-center px-4 py-5">
 
             <nav className="grid-flow-col text-4xl gap-6 md:place-self-center md:justify-self-start">
                 {contatti.map((contatto, index) => (

@@ -70,7 +70,6 @@ function Progetti() {
             title: "VENDOR",
             description: "Sito di annunci online con funzionalità di ricerca avanzata, filtri e gestione degli annunci. ",
             imageUrl: "immagini/ANTEPRIME/VENDOR.png",
-            link: "#",
             linkGithub: "https://github.com/jaderdaniotti/VENDOR",
             frontend: [html, css, js, bootstrap],
             backend: [php, laravel, livewire, mysql],
@@ -95,10 +94,9 @@ function Progetti() {
         },
         //secondlife
         {
-            title: "SECONDLIFE CARS",
+            title: "SECONDLIFECARS",
             description: "Vetrina online di auto con funzionalità di ricerca avanzata e visualizzazione dettagli con contatto all'azienda.",
             imageUrl: "immagini/ANTEPRIME/SECONDLIFE.png",
-            link: "#",
             linkGithub: "https://github.com/jaderdaniotti/Garage-Chelini",
             frontend: [html, css, js, bootstrap],
             backend: [php, laravel, livewire, mysql],
@@ -116,7 +114,6 @@ function Progetti() {
             title: "JDEAM",
             description: "Libreria di videogiochi con possibilità di filtrare, aggiungere ai preferiti e visualizzare i dettagli dei giochi.",
             imageUrl: "immagini/ANTEPRIME/JDEAM.png",
-            link: "#",
             linkGithub: "https://github.com/jaderdaniotti/JDEAM-",
             frontend: [html, css, js, bootstrap],
             backend: [php, laravel, livewire, mysql],
@@ -137,7 +134,6 @@ function Progetti() {
             title: "AVEN",
             description: "Sito vetrina in correlato con l'uscita di un album, anteprima di video e link per ascoltare i brani.",
             imageUrl: "immagini/ANTEPRIME/AVEN.png",
-            link: "#",
             linkGithub: "https://github.com/jaderdaniotti/AVEN---L-ODIO",
             frontend: [html, css, js, bootstrap],
             backend: null,
@@ -154,10 +150,9 @@ function Progetti() {
         },
         //bbs
         {
-            title: "BBS BARBER",
+            title: "BBSBARBER",
             description: "Sito web vetrina per un Barber, anteprima di servizi e tagli, contatti e link per prenotare un appuntamento.",
             imageUrl: "immagini/ANTEPRIME/BBS.png",
-            link: "#",
             linkGithub: " https://github.com/jader/social-media-analytics",
             frontend: [html, css, js, bootstrap],
             backend: null,
@@ -184,7 +179,7 @@ function Progetti() {
                             <img
                                 src={item}
                                 alt=""
-                                className="h-32 w-auto transition-transform hover:scale-90 duration-300 ease-in-out"
+                                className="h-32 w-auto transition-transform hover:scale-95 duration-300 ease-in-out"
                             />
                         </div>
                     ))}
@@ -212,38 +207,39 @@ function Progetti() {
                             <label htmlFor={`accordion-${index}`} className="collapse-title titolo-bianco font-semibold text-xl md:text-2xl  px-4 hover:bg-scuro-1 transition-all duration-300 cursor-pointer">
                                 <h2 className="text-center text-3xl lg:text-4xl">{progetto.title}</h2>
                             </label>
-                            <div className="collapse-content px-4 py-0 bg-scuro-2 flex-col flex items-center text-center">
+                            <div className="collapse-content md:px-4 py-0 bg-scuro-2 flex flex-col items-center text-center" id={progetto.title}>
                                 <hr className="mb-5 w-full" />
                                 <h4 className="text-2xl mb-2">Descrizione del progetto:</h4>
-                                <p className="text-lg font-medium mb-4">{progetto.description}</p>
-                                <hr className="my-5 w-100" />
+                                <p className="text-lg font-medium mb-4 max-w-4xl">{progetto.description}</p>
+                                <hr className="my-5 w-full max-w-4xl" />
                                 <h4 className="text-2xl mb-2">Frontend:</h4>
-                                <ul className="flex gap-5 mb-4">
+                                <ul className="flex gap-5 mb-4 justify-center flex-wrap">
                                     {progetto.frontend.map((item, idx) => (
                                         <span key={idx} dangerouslySetInnerHTML={{ __html: item.svg }} />
                                     ))}
                                 </ul>
-                                <hr className="my-5 w-100" />
+                                <hr className="my-5 w-full max-w-4xl" />
                                 {progetto.backend ? (
                                     <>
                                         <h4 className="text-xl mb-2">Backend:</h4>
-                                        <ul className="flex gap-5 mb-4">
+                                        <ul className="flex gap-5 mb-4 justify-center flex-wrap">
                                             {progetto.backend.map((item, idx) => (
                                                 <span key={idx} dangerouslySetInnerHTML={{ __html: item.svg }} />
                                             ))}
                                         </ul>
-
                                     </>
                                 ) : null}
+                                <hr className="my-5 w-full max-w-4xl" />
                                 <h4 className="text-xl mt-4 mb-2">Immagini:</h4>
-                                <ul className="grid grid-cols-2 md:grid-cols-3 gap-2 ">
+                                <ul className="grid grid-cols-1 md:grid-cols-3 gap-2 max-w-6xl w-full px-4">
                                     {progetto.immagini.map((item, idx) => (
                                         <li key={idx}>
                                             <img src={item} alt="" className="w-full h-auto rounded-lg shadow-sm" />
                                         </li>
                                     ))}
                                 </ul>
-                                <div className="mt-4">
+                                <hr className="my-5 w-full max-w-4xl" />
+                                <div className="">
                                     {progetto.link ? (
                                         <a className="cta mx-auto w-auto" href={progetto.link} target="_blank" >
                                             <span className="span">Sito</span>
@@ -254,10 +250,7 @@ function Progetti() {
                                                     viewBox="0 0 66 43"
                                                     version="1.1"
                                                 >
-                                                    <g
-                                                        id="arrow"
-
-                                                    >
+                                                    <g id="arrow">
                                                         <path
                                                             className="one"
                                                             d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 40.1543933,3.89485454 Z"
@@ -278,7 +271,7 @@ function Progetti() {
                                             </span>
                                         </a>
                                     ) : (
-                                        <a className="cta mx-auto w-auto"href={progetto.linkGithub} target="_blank" >
+                                        <a className="cta mx-auto w-auto" href={progetto.linkGithub} target="_blank" >
                                             <span className="span">Github</span>
                                             <span className="second">
                                                 <svg
@@ -287,13 +280,10 @@ function Progetti() {
                                                     viewBox="0 0 66 43"
                                                     version="1.1"
                                                 >
-                                                    <g
-                                                        id="arrow"
-
-                                                    >
+                                                    <g id="arrow">
                                                         <path
                                                             className="one"
-                                                            d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 40.1543933,3.89485454 Z"
+                                                            d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 20.1543933,3.89485454 Z"
                                                             fill="#FFFFFF"
                                                         ></path>
                                                         <path

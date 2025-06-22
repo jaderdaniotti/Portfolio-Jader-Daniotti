@@ -8,7 +8,7 @@ function Chisono() {
             <Navbar></Navbar>
             <div className="py-10 px-5" id="indice">
                 <h1 className="text-center text-6xl md:text-8xl py-20 titolo-bianco">JADER</h1>
-                <hr className='mb-10'/>
+                <hr className='mb-10' />
                 <ul className="list mt-5 bg-chiaro-2 shadow rounded-box ">
                     <li className="p-4 pb-2 text-2xl  opacity-60 tracking-wide">Il mio percorso</li>
 
@@ -18,8 +18,8 @@ function Chisono() {
                         <div className="list-col-grow flex items-center font-semibold text-xl">
                             <div>Chi sono?</div>
                         </div>
-                        <a href="#aboutme" className="p-3 hover:scale-120 hover:translate-y-1  transition-all duration-300">
-                            <i className="bi-eye text-2xl"></i>
+                        <a href="#aboutme" className="p-3 motion-safe:animate-bounce">
+                            <i class="bi bi-arrow-down-circle text-2xl"></i>
                         </a>
                     </li>
 
@@ -29,8 +29,8 @@ function Chisono() {
                         <div className="list-col-grow flex items-center font-semibold text-xl">
                             <div>La partenza</div>
                         </div>
-                        <a href="#partenza" className="p-3 hover:scale-120 hover:translate-y-1  transition-all duration-300">
-                            <i className="bi-eye text-2xl"></i>
+                        <a href="#partenza" className="p-3 motion-safe:animate-bounce">
+                            <i class="bi bi-arrow-down-circle text-2xl"></i>
                         </a>
                     </li>
 
@@ -40,8 +40,8 @@ function Chisono() {
                         <div className="list-col-grow flex items-center font-semibold text-xl">
                             <div>Il lavoro</div>
                         </div>
-                        <a href="#lavoro" className="p-3 hover:scale-120 hover:translate-y-1  transition-all duration-300">
-                            <i className="bi-eye text-2xl"></i>
+                        <a href="#lavoro" className="p-3 motion-safe:animate-bounce">
+                            <i class="bi bi-arrow-down-circle text-2xl"></i>
                         </a>
                     </li>
 
@@ -51,8 +51,8 @@ function Chisono() {
                         <div className="list-col-grow flex items-center font-semibold text-xl">
                             <div>Dev-Mode</div>
                         </div>
-                        <a href="#devmode" className="p-3 hover:scale-120 hover:translate-y-1  transition-all duration-300">
-                            <i className="bi-eye text-2xl"></i>
+                        <a href="#devmode" className="p-3 motion-safe:animate-bounce">
+                            <i class="bi bi-arrow-down-circle text-2xl"></i>
                         </a>
                     </li>
 
@@ -62,32 +62,35 @@ function Chisono() {
                 <section className="flex flex-col items-center text-center" id="aboutme">
                     <h2 className="text-center mb-5 text-5xl md:text-6xl ">Chi sono?</h2>
                     <img src="immagini\AVATAR\10-Photoroom.png" alt="" className="mb-5 h-100 object-contain" />
-                    <p className=" text-xl  md:text-2xl text-chiaro text-center" data-aos="fade-up">
-                        Ciao! Mi chiamo
-                        <span className="titolo-bianco font-extrabold"> Jader </span>
-                        e ti do il benvenuto sul mio sito web.
-                    </p>
-                    <p className=" text-xl md:text-2xl text-chiaro text-center" data-aos="fade-up">
-                        Sono quel tipo di persona a cui piacciono le <span className="titolo-bianco font-extrabold"> sfide </span>, a cui piace imparare sempre cose nuove, prendendo spunto da ciò che lo circonda.
-                    </p>
-                    <p className=" text-xl md:text-2xl text-chiaro text-center" data-aos="fade-up">
-                        Se sei arrivato in questa sezione del sito, vuol dire che non sei solo interessato al mio lato <span className="titolo-bianco font-extrabold"> professionale </span>, ma vuoi conoscermi davvero. Cercherò di farti avere un’idea più chiara di me!
-                    </p>
+                    <div className="grid grid-cols-12 gap-4">
+                        <div className='col-span-12'>
+                            <p className=" text-xl  md:text-2xl text-chiaro text-center" >
+                                Ciao! Mi chiamo
+                                <span className="titolo-bianco font-extrabold"> Jader </span>
+                                e ti do il benvenuto sul mio sito web.
+                            </p>
+                            <p className=" text-xl md:text-2xl text-chiaro text-center" >
+                                Sono quel tipo di persona a cui piacciono le <span className="titolo-bianco font-extrabold"> sfide </span>, a cui piace imparare sempre cose nuove, prendendo spunto da ciò che lo circonda.
+                            </p>
+                            <p className=" text-xl md:text-2xl text-chiaro text-center" >
+                                Se sei arrivato in questa sezione del sito, vuol dire che non sei solo interessato al mio lato <span className="titolo-bianco font-extrabold"> professionale </span>, ma vuoi conoscermi davvero. Cercherò di farti avere un’idea più chiara di me!
+                            </p>
+                        </div>
+                    </div>
                 </section>
-
                 <hr className="my-10" />
                 {/* La partenza */}
                 <section className="flex flex-col items-center" id="partenza">
                     <h2 className="text-center mb-5 text-5xl md:text-6xl ">La partenza</h2>
                     <img src="immagini\AVATAR\9.png" alt="" className="mb-5 h-100 object-contain" />
-                    <p className=" text-xl  md:text-2xl text-chiaro text-center" data-aos="fade-up">
+                    <p className=" text-xl  md:text-2xl text-chiaro text-center" >
                         Ho cominciato il mio percorso alle superiori, in un <span className="titolo-bianco font-extrabold"> CFP </span> &#40;Corso di Formazione Professionale&#41;, studiando come elettricista. <br />
                         A quell'età non avevo ancora in mente cosa volessi fare da grande. Volevo buttarmi nel mondo del lavoro, quindi decisi di fare 3 anni su 5 in alternanza <span className="titolo-bianco font-extrabold"> scuola/lavoro</span>.
                     </p>
-                    <p className=" text-xl md:text-2xl text-chiaro text-center" data-aos="fade-up">
+                    <p className=" text-xl md:text-2xl text-chiaro text-center" >
                         A 18 anni, nel 2019, stanco della vita che conducevo, mi venne offerta un’occasione d'oro: partire per lavorare in un altro stato, in compagnia di un amico.
                     </p>
-                    <p className=" text-xl md:text-2xl text-chiaro text-center" data-aos="fade-up">
+                    <p className=" text-xl md:text-2xl text-chiaro text-center" >
                         Senza pensarci troppo, dopo qualche settimana passata a organizzare i documenti, preparare i vestiti e salutare tutti, mi ritrovai in <span className="titolo-bianco font-extrabold"> Francia </span>, più precisamente a Fontaine, periferia di Grenoble, Rhone Alpes.
                     </p>
                 </section>
@@ -97,13 +100,13 @@ function Chisono() {
                 <section className="flex flex-col items-center" id="lavoro">
                     <h2 className="text-center mb-5 text-5xl md:text-6xl ">Il lavoro</h2>
                     <img src="immagini\AVATAR\11-Photoroom.png" alt="" className="mb-5 h-100 object-contain " />
-                    <p className=" text-xl  md:text-2xl text-chiaro text-center" data-aos="fade-up">
+                    <p className=" text-xl  md:text-2xl text-chiaro text-center" >
                         Durante i primi tempi in <span className="titolo-bianco font-extrabold"> Francia </span>, partendo da zero a livello linguistico, feci pratica lavorando nei mercati il <span className="titolo-bianco font-extrabold"> weekend </span>, attività che mi permise di imparare a parlare il francese pur continuando a vendere prodotti italiani. <span className="titolo-bianco font-extrabold"> Dal lunedì al venerdì </span>, invece, giravo le regioni limitrofe lavorando nei cantieri, alternando i ruoli di <span className="titolo-bianco font-extrabold"> manovale </span> e <span className="titolo-bianco font-extrabold"> lavavetri </span>.
                     </p>
-                    <p className=" text-xl  md:text-2xl text-chiaro text-center" data-aos="fade-up">
+                    <p className=" text-xl  md:text-2xl text-chiaro text-center" >
                         Al secondo anno, ebbi l’occasione di riprendere ciò che avevo studiato in Italia, ovvero <span className="titolo-bianco font-extrabold"> l’elettricità</span>. Venni assunto da un’azienda che forniva kit di impianti elettrici, imparando in seguito a lavorare anche su impianti di <span className="titolo-bianco font-extrabold"> idraulica </span> e <span className="titolo-bianco font-extrabold"> riscaldamento </span>.
                     </p>
-                    <p className=" text-xl  md:text-2xl text-chiaro text-center" data-aos="fade-up">
+                    <p className=" text-xl  md:text-2xl text-chiaro text-center" >
                         La mia carriera durò due anni, finché poi, dopo un’allettante offerta lavorativa, entrai in un’azienda <span className="titolo-bianco font-extrabold"> leader </span> nella realizzazione di mezzi di soccorso, tra cui ambulanze e veicoli per interventi dei pompieri. Con loro partii in trasferte, fino ad arrivare a gestire la manutenzione di <span className="titolo-bianco font-extrabold"> queste ultime</span>, anche in <span className="titolo-bianco font-extrabold"> Romania </span>.
                     </p>
                 </section>
@@ -115,22 +118,22 @@ function Chisono() {
                     <span className="">
                         <img src="immagini\AVATAR\4-Photoroom (1).png" alt="" className="mb-5 h-100 object-contain rounded-4xl" />
                     </span>
-                    <p className=" text-xl  md:text-2xl text-chiaro text-center" data-aos="fade-up">
+                    <p className=" text-xl  md:text-2xl text-chiaro text-center" >
                         Dopo 5 anni, decisi di tornare in <span className="titolo-bianco font-extrabold"> Italia </span>, vicino alla mia famiglia e ai miei amici.
                     </p>
-                    <p className=" text-xl  md:text-2xl text-chiaro text-center" data-aos="fade-up">
+                    <p className=" text-xl  md:text-2xl text-chiaro text-center" >
                         Cominciai a lavorare in un’azienda come elettromeccanico, ma a settembre mi imbatto per puro caso in una pubblicità di un <span className="titolo-bianco font-extrabold"> Bootcamp </span> per diventare <span className="titolo-bianco font-extrabold"> FullStack Developer</span>.
                     </p>
-                    <p className=" text-xl  md:text-2xl text-chiaro text-center" data-aos="fade-up">
+                    <p className=" text-xl  md:text-2xl text-chiaro text-center" >
                         Ai tempi non avevo la più pallida idea di cosa significasse scrivere <span className="titolo-bianco font-extrabold"> codice</span>. Avevo creato un sito <span className="titolo-bianco font-extrabold"> ecommerce </span> qualche anno prima con <span className="titolo-bianco font-extrabold"> Shopify </span> seguendo tutorial su <span className="titolo-bianco font-extrabold"> Youtube</span>, ma non potevo nemmeno immaginare cosa sarebbe significato, di lì a qualche mese, saperlo fare scrivendo <span className="titolo-bianco font-extrabold"> codice </span> e personalizzando tutto dalla A alla Z.
                     </p>
-                    <p className=" text-xl  md:text-2xl text-chiaro text-center" data-aos="fade-up">
+                    <p className=" text-xl  md:text-2xl text-chiaro text-center" >
                         Decisi quindi di iscrivermi. Iniziai il corso a ottobre in orario part-time, la sera dopo il lavoro, finché non mi lasciai quest’ultimo a dicembre per dedicare l’intera giornata allo <span className="titolo-bianco font-extrabold"> studio </span> e alla <span className="titolo-bianco font-extrabold"> pratica</span>.
                     </p>
-                    <p className=" text-xl  md:text-2xl text-chiaro text-center" data-aos="fade-up">
+                    <p className=" text-xl  md:text-2xl text-chiaro text-center" >
                         In parallelo al corso, approfondisco gli argomenti trattati in autonomia, realizzo progetti di prova per esercitarmi e, occasionalmente, creo <span className="titolo-bianco font-extrabold"> web app </span> per <span className="titolo-bianco font-extrabold"> privati </span> o <span className="titolo-bianco font-extrabold"> collaboro </span>con amici alla realizzazione di progetti.
                     </p>
-                    <p className=" text-xl  md:text-2xl text-chiaro text-center" data-aos="fade-up">
+                    <p className=" text-xl  md:text-2xl text-chiaro text-center" >
                         Dopo vari progetti e tanti pezzi di me messi in progetti altrui, eccomi qui a costruire il sito che parla di me, <span className="titolo-bianco font-extrabold"> Jader</span>, per farti davvero capire chi sono.
                     </p>
                 </section>

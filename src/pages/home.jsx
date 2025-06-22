@@ -15,35 +15,35 @@ function Home() {
             title: "VENDOR",
             description: "Sito di annunci online con funzionalità di ricerca avanzata, filtri e gestione degli annunci. ",
             imageUrl: "immagini/ANTEPRIME/VENDOR.png",
-            link: "#",
+            link: null,
             linkGithub: "https://github.com/jaderdaniotti/VENDOR"
         },
         {
             title: "SECONDLIFE CARS",
             description: "Vetrina online di auto con funzionalità di ricerca avanzata e visualizzazione dettagli con contatto all'azienda.",
             imageUrl: "immagini/ANTEPRIME/SECONDLIFE.png",
-            link: "#",
+            link: null,
             linkGithub: "https://github.com/jaderdaniotti/Garage-Chelini"
         },
         {
             title: "JDEAM",
             description: "Libreria di videogiochi con possibilità di filtrare, aggiungere ai preferiti e visualizzare i dettagli dei giochi.",
             imageUrl: "immagini/ANTEPRIME/JDEAM.png",
-            link: "#",
+            link: null,
             linkGithub: "https://github.com/jaderdaniotti/JDEAM-"
         },
         {
             title: "L'ODIO - AVEN",
             description: "Sito vetrina in correlato con l'uscita di un album, anteprima di video e link per ascoltare i brani.",
             imageUrl: "immagini/ANTEPRIME/AVEN.png",
-            link: "#",
+            link: null,
             linkGithub: "https://github.com/jaderdaniotti/AVEN---L-ODIO"
         },
         {
             title: "BBS BARBER",
             description: "Sito web vetrina per un Barber, anteprima di servizi e tagli, contatti e link per prenotare un appuntamento.",
             imageUrl: "immagini/ANTEPRIME/BBS.png",
-            link: "#",
+            link: null,
             linkGithub: " https://github.com/jader/social-media-analytics"
         }
     ]
@@ -106,6 +106,10 @@ function Home() {
 `
         },
         {
+            name: "VISUAL STUDIO",
+            svg: `<svg xmlns="http://www.w3.org/2000/svg" height="${h_icon}" width="${w_icon}" viewBox="0 0 128 128"><path fill="#68217a" d="M95 2.3l30.5 12.3v98.7l-30.7 12.4-49-48.7-31 24.1-12.3-6.2V33.1l12.3-5.9 31 24.3zM14.8 45.7v37.5l18.5-19zm48.1 18.5l31.9 25.1V39z"/></svg>`
+        },
+        {
             name: "GITHUB",
             svg: `<svg xmlns="http://www.w3.org/2000/svg" height="${h_icon}" width="${w_icon}" viewBox="0 0 128 128"><g fill="#D8D7E0"><path fill-rule="evenodd" clip-rule="evenodd" d="M64 5.103c-33.347 0-60.388 27.035-60.388 60.388 0 26.682 17.303 49.317 41.297 57.303 3.017.56 4.125-1.31 4.125-2.905 0-1.44-.056-6.197-.082-11.243-16.8 3.653-20.345-7.125-20.345-7.125-2.747-6.98-6.705-8.836-6.705-8.836-5.48-3.748.413-3.67.413-3.67 6.063.425 9.257 6.223 9.257 6.223 5.386 9.23 14.127 6.562 17.573 5.02.542-3.903 2.107-6.568 3.834-8.076-13.413-1.525-27.514-6.704-27.514-29.843 0-6.593 2.36-11.98 6.223-16.21-.628-1.52-2.695-7.662.584-15.98 0 0 5.07-1.623 16.61 6.19C53.7 35 58.867 34.327 64 34.304c5.13.023 10.3.694 15.127 2.033 11.526-7.813 16.59-6.19 16.59-6.19 3.287 8.317 1.22 14.46.593 15.98 3.872 4.23 6.215 9.617 6.215 16.21 0 23.194-14.127 28.3-27.574 29.796 2.167 1.874 4.097 5.55 4.097 11.183 0 8.08-.07 14.583-.07 16.572 0 1.607 1.088 3.49 4.148 2.897 23.98-7.994 41.263-30.622 41.263-57.294C124.388 32.14 97.35 5.104 64 5.104z"/><path d="M26.484 91.806c-.133.3-.605.39-1.035.185-.44-.196-.685-.605-.543-.906.13-.31.603-.395 1.04-.188.44.197.69.61.537.91zm2.446 2.729c-.287.267-.85.143-1.232-.28-.396-.42-.47-.983-.177-1.254.298-.266.844-.14 1.24.28.394.426.472.984.17 1.255zM31.312 98.012c-.37.258-.976.017-1.35-.52-.37-.538-.37-1.183.01-1.44.373-.258.97-.025 1.35.507.368.545.368 1.19-.01 1.452zm3.261 3.361c-.33.365-1.036.267-1.552-.23-.527-.487-.674-1.18-.343-1.544.336-.366 1.045-.264 1.564.23.527.486.686 1.18.333 1.543zm4.5 1.951c-.147.473-.825.688-1.51.486-.683-.207-1.13-.76-.99-1.238.14-.477.823-.7 1.512-.485.683.206 1.13.756.988 1.237zm4.943.361c.017.498-.563.91-1.28.92-.723.017-1.308-.387-1.315-.877 0-.503.568-.91 1.29-.924.717-.013 1.306.387 1.306.88zm4.598-.782c.086.485-.413.984-1.126 1.117-.7.13-1.35-.172-1.44-.653-.086-.498.422-.997 1.122-1.126.714-.123 1.354.17 1.444.663zm0 0"/></g></svg>`
         },
@@ -130,10 +134,6 @@ function Home() {
         {
             name: "WINDOWS",
             svg: `<svg xmlns="http://www.w3.org/2000/svg" height="${h_icon}" width="${w_icon}" viewBox="0 0 128 128"><path fill="#00ADEF" d="M126 1.637l-67 9.834v49.831l67-.534zM1.647 66.709l.003 42.404 50.791 6.983-.04-49.057zm56.82.68l.094 49.465 67.376 9.509.016-58.863zM1.61 19.297l.047 42.383 50.791-.289-.023-49.016z"/></svg>`
-        },
-        {
-            name: "GOOGLE",
-            svg: `<svg xmlns="http://www.w3.org/2000/svg" height="${h_icon}" width="${w_icon}" viewBox="0 0 128 128"><circle fill="#fff" cx="64.149" cy="64.236" r="60.999"/><path fill-opacity=".1" d="M102.966 75.327c0-21.439-17.379-38.819-38.817-38.819s-38.818 17.38-38.818 38.819h11.09c0-15.314 12.415-27.727 27.727-27.727 15.313 0 27.727 12.413 27.727 27.727"/><circle fill-opacity=".1" cx="66.922" cy="71.999" r="21.072"/><linearGradient id="chrome-original-a" gradientUnits="userSpaceOnUse" x1="395.191" y1="484.168" x2="395.191" y2="484.723" gradientTransform="matrix(82 0 0 82 -32341.5 -39660.313)"><stop offset="0" stop-color="#81B4E0"/><stop offset="1" stop-color="#0C5A94"/></linearGradient><circle fill="url(#chrome-original-a)" cx="64.149" cy="64.235" r="22.736"/><linearGradient id="chrome-original-b" gradientUnits="userSpaceOnUse" x1="-608.91" y1="-597.648" x2="-608.91" y2="-547.185" gradientTransform="translate(675 599.775)"><stop offset="0" stop-color="#F06B59"/><stop offset="1" stop-color="#DF2227"/></linearGradient><path fill="url(#chrome-original-b)" d="M119.602 36.508C104.336 5.792 67.06-6.732 36.343 8.534A62.105 62.105 0 0012.578 29.3l24.955 43.253c-4.597-14.606 3.521-30.174 18.127-34.77a27.676 27.676 0 017.935-1.274"/><linearGradient id="chrome-original-c" gradientUnits="userSpaceOnUse" x1="-657.835" y1="-491.393" x2="-632.327" y2="-533.537" gradientTransform="translate(675 599.775)"><stop offset="0" stop-color="#388B41"/><stop offset="1" stop-color="#4CB749"/></linearGradient><path fill="url(#chrome-original-c)" d="M12.578 29.3c-19.1 28.492-11.486 67.071 17.005 86.171a62.133 62.133 0 0029.575 10.319l26.063-44.363c-9.745 11.811-27.22 13.486-39.032 3.74a27.717 27.717 0 01-8.657-12.613"/><linearGradient id="chrome-original-d" gradientUnits="userSpaceOnUse" x1="-572.385" y1="-486.91" x2="-599.557" y2="-552.345" gradientTransform="translate(675 599.775)"><stop offset="0" stop-color="#E4B022"/><stop offset=".3" stop-color="#FCD209"/></linearGradient><path fill="url(#chrome-original-d)" d="M59.158 125.791c34.204 2.585 64.027-23.047 66.613-57.25a62.097 62.097 0 00-6.17-32.031H63.595c15.312.07 27.67 12.541 27.598 27.854a27.725 27.725 0 01-5.972 17.064"/><linearGradient id="chrome-original-e" gradientUnits="userSpaceOnUse" x1="-649.391" y1="-528.885" x2="-649.391" y2="-573.247" gradientTransform="translate(675 599.775)"><stop offset="0" stop-opacity=".15"/><stop offset=".3" stop-opacity=".06"/><stop offset="1" stop-opacity=".03"/></linearGradient><path fill="url(#chrome-original-e)" d="M12.578 29.3l24.955 43.253a27.725 27.725 0 011.107-18.854L13.686 27.636"/><linearGradient id="chrome-original-f" gradientUnits="userSpaceOnUse" x1="-588.158" y1="-514.559" x2="-618.657" y2="-483.505" gradientTransform="translate(675 599.775)"><stop offset="0" stop-opacity=".15"/><stop offset=".3" stop-opacity=".06"/><stop offset="1" stop-opacity=".03"/></linearGradient><path fill="url(#chrome-original-f)" d="M59.158 125.791l26.063-44.363a27.731 27.731 0 01-16.082 9.426l-11.091 34.937"/><linearGradient id="chrome-original-g" gradientUnits="userSpaceOnUse" x1="-588.6" y1="-505.621" x2="-584.163" y2="-549.431" gradientTransform="translate(675 599.775)"><stop offset="0" stop-opacity=".15"/><stop offset=".3" stop-opacity=".06"/><stop offset="1" stop-opacity=".03"/></linearGradient><path fill="url(#chrome-original-g)" d="M119.602 36.508H63.595a27.727 27.727 0 0121.626 10.537l35.491-8.873"/></svg>`
         },
         {
             name: "WORDPRESS",
@@ -185,7 +185,7 @@ function Home() {
                         </p>
                         <BigButton text="CONOSCIMI" href="/Chisono"></BigButton>
                     </div>
-                    <div className="shadow shadow-fuchsia-200 rounded-full border-fuchsia-200 border-1 max-w-full p-10 object-contain" data-aos="fade-up" data-aos-duration="500">
+                    <div className="shadow shadow-fuchsia-200 rounded-full border-fuchsia-200 border-1 max-w-full p-10 object-contain" data-aos="fade-up" dat data-aos-duration="500">
                         <img src="immagini\AVATAR\1-Photoroom.png" className='hover:scale-110 hover:rotate-3 transition-all duration-300' alt="" />
                     </div>
                 </div>
@@ -195,20 +195,20 @@ function Home() {
             <div className="py-16 ">
                 <div className="container mx-auto px-6">
                     <div className="text-center mb-16">
-                        <h1 className='text-5xl md:text-8xl font-bold titolo-bianco py-10' data-aos="fade-up">
+                        <h1 className='text-5xl md:text-8xl font-bold titolo-bianco py-10' data-aos="fade-up" dat>
                             I Miei Progetti
                         </h1>
-                        <p className="text-xl md:text-2xl  max-w-3xl mx-auto" data-aos="fade-up" >
+                        <p className="text-xl md:text-2xl  max-w-3xl mx-auto" data-aos="fade-up" dat >
                             Ecco le anteprime dei miei progetti. Troverai un anteprima col video di ogni progetto, una descrizione di come è stato creato, e il link alla repository su <br />
                         </p>
-                        <p className="titolo-bianco mt-6 md:text-5xl text-5xl " data-aos="fade-up" >
+                        <p className="titolo-bianco mt-6 md:text-5xl text-5xl " data-aos="fade-up" dat >
                             <a href='https://github.com/jaderdaniotti' target='_blank'  > Github <i className="bi bi-github"></i></a>
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto justify-center align-middle items-stretch" id='projects'>
                         {progetti.map((progetto, index) => (
-                            <div key={index} data-aos="fade-up" >
+                            <div key={index} data-aos="fade-up" dat >
                                 <CardAnteprimaProgetti
                                     title={progetto.title}
                                     description={progetto.description}
@@ -219,7 +219,7 @@ function Home() {
                             </div>
                         ))}
                     </div>
-                    <div className="text-center mt-16" data-aos="fade-up" >
+                    <div className="text-center mt-16" data-aos="fade-up" dat >
                         <BigButton text="PROGETTI" href="/progetti" />
                     </div>
                 </div>
@@ -229,10 +229,10 @@ function Home() {
             <div className="py-16 ">
                 <div className="container mx-auto ">
                     <div className="text-center mb-16">
-                        <h1 className='text-5xl md:text-8xl font-bold titolo-bianco py-10' data-aos="fade-up">
+                        <h1 className='text-5xl md:text-8xl font-bold titolo-bianco py-10' data-aos="fade-up" dat>
                             Competenze
                         </h1>
-                        <p className="text-xl md:text-2xl  max-w-3xl mx-auto" data-aos="fade-up" >
+                        <p className="text-xl md:text-2xl  max-w-3xl mx-auto" data-aos="fade-up" dat >
                             Ecco una lista di alcune delle competenze che ho acquistato nello sviluppo web e che uso nel mio quotidiano.
                         </p>
                     </div>
@@ -257,7 +257,7 @@ function Home() {
                     <h3 className='text-3xl titolo-bianco md:text-3xl text-center font-bold py-10'>Strumenti</h3>
 
 
-                    <div className="text-center mt-16" data-aos="fade-up" >
+                    <div className="text-center mt-16" data-aos="fade-up" dat >
                         <BigButton text="COMPETENZE" href="/progetti" />
                     </div>
                 </div>
@@ -267,10 +267,10 @@ function Home() {
             <div className="py-16 ">
                 <div className="container mx-auto ">
                     <div className="text-center mb-16">
-                        <h1 className='text-5xl md:text-8xl font-bold titolo-bianco py-10' data-aos="fade-up">
+                        <h1 className='text-5xl md:text-8xl font-bold titolo-bianco py-10' data-aos="fade-up" dat>
                             Collaborazioni
                         </h1>
-                        <p className="text-2xl md:text-3xl  max-w-3xl mx-auto" data-aos="fade-up" >
+                        <p className="text-2xl md:text-3xl  max-w-3xl mx-auto" data-aos="fade-up" dat >
                             E se ti dicessi che potresti avere un sito web con un Agente Personale AI che ti aiutasse nel tuo lavoro?
                         </p>
                         <div className="grid grid-cols-1 md:grid-cols-3 mx-auto justify-center align-middle">
@@ -295,11 +295,11 @@ function Home() {
                     <p className="text-7xl md:text-8xl titolo-bianco text-center">
                         Aurora
                     </p>
-                    <p className="text-3xl md:text-2xl px-2 mt-5 text-center " data-aos="fade-up" >
+                    <p className="text-3xl md:text-2xl px-2 mt-5 text-center " data-aos="fade-up" dat >
                         Da oggi grazie alla collaborazione tra <span className="font-extrabold titolo-bianco text-3xl">Jader</span> e <span className="font-extrabold titolo-bianco text-3xl">Aurora</span> puoi avere un sito web con un AgentAI totalmente personalizzato, che svolge task quotidiane al posto tuo, 24/7, integrato dentro un sito costruito su misura per la tua attività!
                     </p>
 
-                    <div className="text-center mt-16" data-aos="fade-up" >
+                    <div className="text-center mt-16" data-aos="fade-up" dat >
                         <BigButton text="COLLABORAZIONI" href="/progetti" />
                     </div>
                 </div>
@@ -309,12 +309,12 @@ function Home() {
             <div className="py-16 ">
                 <div className="container mx-auto ">
                     <div className="text-center mb-16">
-                        <h1 className='text-5xl md:text-8xl font-bold titolo-bianco py-10' data-aos="fade-up">
+                        <h1 className='text-5xl md:text-8xl font-bold titolo-bianco py-10' data-aos="fade-up" dat>
                             Contatti
                         </h1>
                         <div className="grid grid-cols-1 md:grid-cols-2 justify-center ">
                             <div className="flex flex-col justify-center px-5">
-                                <p className="text-3xl md:text-3xl lg:text-4xl flex max-w-3xl text-center mb-5 mx-auto px-1" data-aos="fade-up">
+                                <p className="text-3xl md:text-3xl lg:text-4xl flex max-w-3xl text-center mb-5 mx-auto px-1" data-aos="fade-up" dat>
                                     Puoi contattarmi direttamente tramite il mio Agent, fissando un appuntamento con Google Calendar.
                                 </p>
                             </div>

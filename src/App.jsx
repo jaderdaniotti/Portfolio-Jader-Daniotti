@@ -11,7 +11,6 @@ import Competenze from './pages/competenze';
 import Contatti from './pages/contatti';
 
 function App() {
-
   return (
     <BrowserRouter>
       <Routes>
