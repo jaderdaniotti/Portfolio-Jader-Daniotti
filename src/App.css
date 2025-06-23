@@ -12,12 +12,12 @@
 }
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 body {
-   background: #18122B;
-  background: linear-gradient(90deg, rgba(24, 18, 43, 1) 0%, rgb(34, 28, 49) 50%, rgba(24, 18, 43, 1) 100%); 
+  background: #18122B;
+  background: linear-gradient(90deg, rgba(24, 18, 43, 1) 0%, rgb(34, 28, 49) 50%, rgba(24, 18, 43, 1) 100%);
   /* background-image: url(/immagini/sfondo.png);
   background-size: cover;
   background-repeat: no-repeat;
@@ -27,6 +27,10 @@ body {
   font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
+  letter-spacing: -0.025em;
+
+    /* -0.025em */
+  
   overflow-y: auto;
 }
 
@@ -201,6 +205,7 @@ body {
   border: #746a94 6px solid;
 }
 
-.swiper-button-prev, .swiper-button-next {
-  color: var(--chiaro)!important;
+.swiper-button-prev,
+.swiper-button-next {
+  color: var(--chiaro) !important;
 }

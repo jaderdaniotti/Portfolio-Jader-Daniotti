@@ -64,7 +64,7 @@ function Chisono() {
                     <img src="immagini\AVATAR\10-Photoroom.png" alt="" className="mb-5 h-100 object-contain" />
                     <div className="grid grid-cols-12 gap-4">
                         <div className='col-span-12'>
-                            <p className=" text-xl  md:text-2xl text-chiaro text-center" >
+                            <p className=" text-xl  md:text-2xl text-chiaro font-medium text-center" >
                                 Ciao! Mi chiamo
                                 <span className="titolo-bianco font-extrabold"> Jader </span>
                                 e ti do il benvenuto sul mio sito web.
