@@ -45,6 +45,13 @@ function Home() {
             imageUrl: "immagini/ANTEPRIME/BBS.png",
             link: null,
             linkGithub: " https://github.com/jader/social-media-analytics"
+        },
+        {
+            title: "TODO APP",
+            description: "Applicazione web per la gestione di task da svolgere.",
+            imageUrl: "immagini/ANTEPRIME/TODO.png",
+            linkGithub: "https://github.com/jaderdaniotti/ToDoList-React",
+            link: null
         }
     ]
     let linguaggiEframework = [
@@ -160,22 +167,23 @@ function Home() {
     return (
         <>
             <Navbar />
-            {/* chi sono */}
+            {/* hero */}
             <div className="hero h-screen" id='home'>
                 <div className="hero-content text-center">
                     <div className="max-w-md py-10">
-                        <p className="text-5xl tracking-tight md:text-7xl" data-aos="zoom-in" data-aos-duration="500">Ciao!</p>
-                        <p className="text-6xl tracking-tight md:text-8xl" data-aos="zoom-in" data-aos-duration="500">Sono</p>
-                        <h1 className="titolo-bianco tracking-tight text-7xl md:text-9xl " data-aos="zoom-in" data-aos-duration="500">Jader
+                        <p className="text-6xl tracking-tight md:text-7xl" data-aos="zoom-in" data-aos-duration="500">Ciao!</p>
+                        <p className="text-7xl tracking-tight md:text-8xl" data-aos="zoom-in" data-aos-duration="500">Sono</p>
+                        <h1 className="titolo-bianco tracking-tight text-8xl md:text-9xl " data-aos="zoom-in" data-aos-duration="500">Jader
                         </h1>
-                        <p className="py-6 text-2xl  text-bianco" >
+                        <p className="py-6 text-3xl font-medium text-bianco" >
                             Fullstack Developer con una preferenza verso il Frontend.
                         </p>
                     </div>
                 </div>
             </div>
             <hr />
-            <div className="py-5">
+            {/* chi sono */}
+            <section className="py-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 align-center items-center justify-center  px-5 py-5 w-full text-center" id='chi-sono'>
                     <div className="text-center flex-col py-10">
                         <h1 className="titolo-bianco tracking-tight text-7xl" data-aos="zoom-in" >Chi sono?</h1>
@@ -188,16 +196,16 @@ function Home() {
                         <img src="immagini\AVATAR\1-Photoroom.png" className='hover:scale-110 hover:rotate-3 transition-all duration-300' alt="" />
                     </div>
                 </div>
-            </div>
+            </section>
             <hr />
             {/* progetti */}
             <div className="py-16 ">
                 <div className="container mx-auto px-6">
                     <div className="text-center mb-16">
-                        <h1 className='text-5xl tracking-tight md:text-8xl font-bold titolo-bianco py-10' data-aos="fade-up" dat>
+                        <h1 className='text-5xl tracking-tight md:text-8xl font-bold titolo-bianco py-5' data-aos="fade-up" dat>
                             I Miei Progetti
                         </h1>
-                        <p className="text-xl md:text-2xl  max-w-3xl mx-auto" data-aos="fade-up" dat >
+                        <p className="text-2xl md:text-2xl font-medium max-w-3xl mx-auto" data-aos="fade-up" dat >
                             Ecco le anteprime dei miei progetti. Troverai un anteprima col video di ogni progetto, una descrizione di come è stato creato, e il link alla repository su <br />
                         </p>
                         <p className="titolo-bianco mt-6 md:text-5xl text-5xl " data-aos="fade-up" dat >
@@ -228,10 +236,10 @@ function Home() {
             <div className="py-16 ">
                 <div className="container mx-auto ">
                     <div className="text-center mb-16" data-aos="fade-up" >
-                        <h1 className='text-5xl tracking-tight md:text-8xl font-bold titolo-bianco py-10'>
+                        <h1 className='text-5xl tracking-tight md:text-8xl font-bold titolo-bianco py-5'>
                             Competenze
                         </h1>
-                        <p className="text-xl md:text-2xl  max-w-3xl mx-auto">
+                        <p className="text-2xl md:text-2xl font-medium max-w-3xl mx-auto px-5">
                             Ecco una lista di alcune delle competenze che ho acquistato nello sviluppo web e che uso nel mio quotidiano.
                         </p>
                     </div>
@@ -243,7 +251,7 @@ function Home() {
                             </span>
                         ))}
                     </Marquee>
-                    <h3 className='text-3xl titolo-bianco md:text-3xl text-center font-bold py-10'>Linguaggi e Framework</h3>
+                    <h3 className='text-3xl titolo-bianco md:text-3xl text-center font-bold py-5'>Linguaggi e Framework</h3>
                     {/* strumenti */}
                     <Marquee pauseOnHover={true} speed={70} gradient={false} >
                         {strumenti.map((item, idx) => (
@@ -252,7 +260,7 @@ function Home() {
                             </span>
                         ))}
                     </Marquee>
-                    <h3 className='text-3xl titolo-bianco md:text-3xl text-center font-bold py-10'>Strumenti</h3>
+                    <h3 className='text-3xl titolo-bianco md:text-3xl text-center font-bold py-5'>Strumenti</h3>
 
 
                     <div className="text-center mt-16">
@@ -264,28 +272,38 @@ function Home() {
             {/* collaborazioni */}
             <div className="py-16 ">
                 <div className="container mx-auto ">
-                    <div className="text-center mb-16" data-aos="fade-up">
+                    <div className="text-center " data-aos="fade-up">
                         <h1 className='text-5xl md:text-8xl tracking-tight font-bold titolo-bianco py-10'>
                             Collaborazioni
                         </h1>
-                        <p className="text-2xl md:text-3xl  max-w-3xl mx-auto">
-                            E se ti dicessi che potresti avere un sito web con un Agente Personale AI che ti aiutasse nel tuo lavoro?
-                        </p>
-                        <div className="grid grid-cols-1 md:grid-cols-3 mx-auto justify-center px-10 align-middle">
-                            <div className="flex content-center items-center justify-center">
-                                <img src="immagini\AVATAR\1-Photoroom.png" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
+                        <div className="flex flex-col min-h-[600px]">
+                            <div className="grid grid-cols-1 bg-scuro-2 md:grid-cols-3 mx-auto justify-center py-5 px-10 items-center flex-1">
+                                <div className="flex content-center items-center justify-center">
+                                    <img src="immagini\AVATAR\1-Photoroom.png" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
+                                </div>
+                                <div className="flex content-center items-center justify-center">
+                                    <p className="text-6xl md:text-8xl titolo-bianco">+</p>
+                                </div>
+                                <div className="flex content-center items-center justify-center">
+                                    <img src="immagini\6_files\Aurora logo_vettoriale copia.pdf-image-006-Photoroom.png" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
+                                </div>
                             </div>
-                            <div className="flex content-center items-center justify-center">
-                                <p className="text-6xl md:text-8xl titolo-bianco">+</p>
-                            </div>
-                            <div className="flex content-center items-center justify-center">
-                                <img src="immagini\6_files\Aurora logo_vettoriale copia.pdf-image-006-Photoroom.png" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
+                            <div className="grid grid-cols-1 bg-chiaro-2 md:grid-cols-3 mx-auto justify-center py-5 px-10 items-center flex-1">
+                                <div className="flex content-center items-center justify-center">
+                                    <img src="immagini\\logo-mart-AoPqDR7a0WUaRZb0.avif" alt="" className="object-contain hover:scale-110 transition-all duration-300 size-80 md:size-58 lg:size-auto linear" />
+                                </div>
+                                <div className="flex content-center items-center justify-center">
+                                    <p className="text-6xl md:text-8xl titolo-bianco">+</p>
+                                </div>
+                                <div className="flex content-center items-center justify-center">
+                                    <img src="immagini\AVATAR\1-Photoroom.png" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <hr className="my-5" />
-                    <section data-aos="fade-up">
-                        <p className="text-7xl md:text-8xl tracking-tight mt-16 titolo-bianco text-center">
+                    {/* aurora */}
+                    <section className="bg-scuro-2 py-10">
+                        <p className="text-7xl md:text-8xl tracking-tight  titolo-bianco text-center">
                             Jader
                         </p>
                         <p className="text-4xl md:text-6xl titolo-bianco text-center">
@@ -294,9 +312,30 @@ function Home() {
                         <p className="text-7xl md:text-8xl  titolo-bianco text-center">
                             Aurora
                         </p>
+
                         <p className="text-3xl md:text-2xl px-2 mt-5 text-center ">
                             Da oggi grazie alla collaborazione tra <span className="font-extrabold titolo-bianco text-3xl">Jader</span> e <span className="font-extrabold titolo-bianco text-3xl">Aurora</span> puoi avere un sito web con un AgentAI totalmente personalizzato, che svolge task quotidiane al posto tuo, 24/7, integrato dentro un sito costruito su misura per la tua attività!
                         </p>
+                        <div className="text-center mt-16">
+                            <BigButton text="COLLABORAZIONI" href="/progetti" />
+                        </div>
+                    </section>
+                    {/* martina */}
+                    <section className="bg-chiaro-2 py-10">
+                        <p className="text-7xl md:text-8xl tracking-tight titolo-bianco text-center">
+                            Jader
+                        </p>
+                        <p className="text-4xl md:text-6xl titolo-bianco text-center">
+                            +
+                        </p>
+                        <p className="text-7xl md:text-8xl  titolo-bianco text-center">
+                            Martina
+                        </p>
+
+                        <p className="text-3xl md:text-2xl px-2 mt-5 text-center ">
+                            Da oggi, grazie alla collaborazione tra <span className="font-extrabold titolo-bianco text-3xl">Jader</span> e <span className="font-extrabold titolo-bianco text-3xl">Martina</span>, puoi avere un sito web costruito su misura per la tua attività, con una grafica professionale e un’identità visiva unica che raccontano davvero chi sei.
+                        </p>
+
                         <div className="text-center mt-16">
                             <BigButton text="COLLABORAZIONI" href="/progetti" />
                         </div>

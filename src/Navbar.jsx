@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { href, Navigate, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 function Navbar() {
@@ -22,6 +22,7 @@ function Navbar() {
         { href: "/Competenze", text: "Competenze" },
         { href: "/Collaborazioni", text: "Collaborazioni" },
         { href: "/Contatti", text: "Contatti" },
+        { href: "/Servizi", text: "Servizi" },
     ];
     useEffect(() => {
         if (isOpen) {
@@ -44,12 +45,12 @@ function Navbar() {
                             className="w-12 h-12 md:w-16 md:h-16 rounded-full  transition-all duration-300 hover:scale-110 hover:-rotate-3 cursor-pointer "
                         />
                     </div>
-                    <ul className="hidden md:flex items-center gap-1 font-medium absolute left-1/2 -translate-x-1/2">
+                    <ul className="hidden md:flex items-center font-medium md:text-md lg:text-xl absolute left-1/2 -translate-x-1/2">
                         {LINK.map((item, index) => (
                             <li key={index} className="relative group">
                                 <Link
                                     to={item.href}
-                                    className="text-scuro text-lg hover:text-scuro  transition-all duration-300 hover:scale-105 block py-2 px-3 rounded-lg hover:bg-chiaro-2/10"
+                                    className="text-scuro text-md hover:text-scuro  transition-all duration-300 hover:scale-105 block py-2 px-3 rounded-lg hover:bg-chiaro-2/10"
                                 >
                                     {item.text}
                                 </Link>
@@ -78,7 +79,7 @@ function Navbar() {
                     )}
                     <div className={`fixed top-0 right-0 h-full w-screen max-w bg-chiaro shadow-2xl transform transition-transform duration-700 linear z-50 md:hidden ${isOpen ? 'translate-x-0' : 'translate-x-full'
                         }`}>
-                        <div className="flex justify-between items-center p-6 border-b border-chiaro-2">
+                        <div className="flex justify-between items-center px-5 border-b border-chiaro-2">
                             <img
                                 src="immagini/AVATAR/1-Photoroom.png"
                                 alt="Avatar"
@@ -112,19 +113,13 @@ function Navbar() {
                                     <li key={index}>
                                         <Link to={item.href}
                                             onClick={handleLinkClick}
-                                            className="block px-6 py-2 text-4xl text-scuro w-min border-b-2 border-violet-950 hover:translate-x-1 transition-all font-medium duration-300 linear "
+                                            className="block px-6 py-2 text-3xl md:text-2xl text-scuro w-min border-b-2 border-violet-950 hover:translate-x-1 transition-all font-medium duration-300 linear "
                                         >
                                             {item.text}
                                         </Link>
                                     </li>
                                 ))}
                             </ul>
-                        </div>
-
-                        <div className="absolute bottom-6 left-6 right-6">
-                            <div className="text-center text-2xl text-scuro">
-                                © 2025 Jader Daniotti.
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -36,10 +36,10 @@ function CardAnteprimaProgetti({ title, description, imageUrl, link, linkGithub 
             </div>
             <div className="p-6 flex flex-col justify-between ">
                 <div>
-                    <h3 className="text-2xl font-bold text-center mb-2 transition-colors duration-300">
+                    <h3 className="text-3xl font-bold text-center mb-2 transition-colors duration-300">
                         {title}
                     </h3>
-                    <p className="font-medium text-sm text-center leading-relaxed line-clamp-3">
+                    <p className="font-medium text-lg text-center leading-relaxed line-clamp-3">
                         {description}
                     </p>
                 </div>

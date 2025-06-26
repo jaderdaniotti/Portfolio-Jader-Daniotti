@@ -123,30 +123,31 @@ function Competenze() {
         <>
             <Navbar />
             <div className="py-10 px-5" id="indice">
-                <h1 className="text-center text-5xl md:text-8xl py-20 titolo-bianco">COMPETENZE</h1>
-                <hr className='mb-10' />
-                <SkillSection
-                    title="Frontend"
-                    skills={skillData.frontend}
-                    currentSkill={currentFrontend}
-                    setCurrentSkill={setCurrentFrontend}
-                />
-                <hr className='my-10' />
-                <SkillSection
-                    title="Backend"
-                    skills={skillData.backend}
-                    currentSkill={currentBackend}
-                    setCurrentSkill={setCurrentBackend}
-                />
-                <hr className='my-10' />
-                <SkillSection
-                    title="Tools"
-                    skills={skillData.tools}
-                    currentSkill={currentTool}
-                    setCurrentSkill={setCurrentTool}
-                />
-                <hr className='my-10' />
+                <h1 className="text-center text-5xl md:text-8xl titolo-bianco">COMPETENZE</h1>
             </div>
+            <hr className='mb-10' />
+            <SkillSection
+                title="Frontend"
+                skills={skillData.frontend}
+                currentSkill={currentFrontend}
+                setCurrentSkill={setCurrentFrontend}
+            />
+            <hr className='my-10' />
+            <SkillSection
+                title="Backend"
+                skills={skillData.backend}
+                currentSkill={currentBackend}
+                setCurrentSkill={setCurrentBackend}
+            />
+            <hr className='my-10' />
+            <SkillSection
+                title="Tools"
+                skills={skillData.tools}
+                currentSkill={currentTool}
+                setCurrentSkill={setCurrentTool}
+            />
+            <hr className='my-10' />
+
             <section>
                 <h2 className="text-center text-4xl md:text-6xl py-10">Altri tools</h2>
                 <div className="bg-chiaro-2 py-1">
