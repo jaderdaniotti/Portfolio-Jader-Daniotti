@@ -14,42 +14,42 @@ function Home() {
         {
             title: "VENDOR",
             description: "Sito di annunci online con funzionalità di ricerca avanzata, filtri e gestione degli annunci. ",
-            imageUrl: "immagini/ANTEPRIME/VENDOR.png",
+            imageUrl: "/immagini/ANTEPRIME/VENDOR.png",
             link: null,
             linkGithub: "https://github.com/jaderdaniotti/VENDOR"
         },
         {
             title: "SECONDLIFE CARS",
             description: "Vetrina online di auto con funzionalità di ricerca avanzata e visualizzazione dettagli con contatto all'azienda.",
-            imageUrl: "immagini/ANTEPRIME/SECONDLIFE.png",
+            imageUrl: "/immagini/ANTEPRIME/SECONDLIFE.png",
             link: null,
             linkGithub: "https://github.com/jaderdaniotti/Garage-Chelini"
         },
         {
             title: "JDEAM",
             description: "Libreria di videogiochi con possibilità di filtrare, aggiungere ai preferiti e visualizzare i dettagli dei giochi.",
-            imageUrl: "immagini/ANTEPRIME/JDEAM.png",
+            imageUrl: "/immagini/ANTEPRIME/JDEAM.png",
             link: null,
             linkGithub: "https://github.com/jaderdaniotti/JDEAM-"
         },
         {
             title: "L'ODIO - AVEN",
             description: "Sito vetrina in correlato con l'uscita di un album, anteprima di video e link per ascoltare i brani.",
-            imageUrl: "immagini/ANTEPRIME/AVEN.png",
+            imageUrl: "/immagini/ANTEPRIME/AVEN.png",
             link: null,
             linkGithub: "https://github.com/jaderdaniotti/AVEN---L-ODIO"
         },
         {
             title: "BBS BARBER",
             description: "Sito web vetrina per un Barber, anteprima di servizi e tagli, contatti e link per prenotare un appuntamento.",
-            imageUrl: "immagini/ANTEPRIME/BBS.png",
+            imageUrl: "/immagini/ANTEPRIME/BBS.png",
             link: null,
             linkGithub: " https://github.com/jader/social-media-analytics"
         },
         {
             title: "TODO APP",
             description: "Applicazione web per la gestione di task da svolgere.",
-            imageUrl: "immagini/ANTEPRIME/TODO.png",
+            imageUrl: "/immagini/ANTEPRIME/TODO.png",
             linkGithub: "https://github.com/jaderdaniotti/ToDoList-React",
             link: null
         }
@@ -357,7 +357,7 @@ function Home() {
                                 </p>
                             </div>
                             <div className="flex flex-col justify-center">
-                                <img src="../immagini/calendario.jpg" data-aos="zoom-in" alt="" className="object-contain rounded-circle md:max-h-100" />
+                                <img src="..//immagini/calendario.jpg" data-aos="zoom-in" alt="" className="object-contain rounded-circle md:max-h-100" />
                             </div>
                         </div>
                     </div>

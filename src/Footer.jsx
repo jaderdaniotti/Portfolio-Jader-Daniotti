@@ -21,7 +21,7 @@ function Footer() {
             </nav>
             <aside className="grid-flow-col gap-4 md:place-self-center text-lg md:justify-self-end flex items-center">
                 <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
-                <img src="immagini/AVATAR/1-Photoroom.png" alt="" className="w-12 h-12 md:w-20 md:h-20 rounded-full  hover:border-chiaro-2 transition-all duration-300 hover:scale-110 hover:rotate-3 cursor-pointer " />
+                <img src="/immagini/AVATAR/1-Photoroom.png" alt="" className="w-12 h-12 md:w-20 md:h-20 rounded-full  hover:border-chiaro-2 transition-all duration-300 hover:scale-110 hover:rotate-3 cursor-pointer " />
             </aside>
         </footer>
     );

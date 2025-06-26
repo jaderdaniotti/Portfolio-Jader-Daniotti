@@ -9,12 +9,12 @@ function Progetti() {
     let h_icon = 60;
     let w_icon = 60;
     let immagini = [
-        "immagini/ANTEPRIME/AVEN.png",
-        "immagini/ANTEPRIME/BBS.png",
-        "immagini/ANTEPRIME/JDEAM.png",
-        "immagini/ANTEPRIME/SECONDLIFE.png",
-        "immagini/ANTEPRIME/VENDOR.png",
-        "immagini/ANTEPRIME/TODO.png"
+        "/immagini/ANTEPRIME/AVEN.png",
+        "/immagini/ANTEPRIME/BBS.png",
+        "/immagini/ANTEPRIME/JDEAM.png",
+        "/immagini/ANTEPRIME/SECONDLIFE.png",
+        "/immagini/ANTEPRIME/VENDOR.png",
+        "/immagini/ANTEPRIME/TODO.png"
     ];
     let html = {
         name: "HTML",
@@ -75,7 +75,7 @@ function Progetti() {
         {
             title: "VENDOR",
             description: "Sito di annunci online con funzionalità di ricerca avanzata, filtri e gestione degli annunci. ",
-            imageUrl: "immagini/ANTEPRIME/VENDOR.png",
+            imageUrl: "/immagini/ANTEPRIME/VENDOR.png",
             linkGithub: "https://github.com/jaderdaniotti/VENDOR",
             frontend: [html, css, js, bootstrap],
             backend: [php, laravel, livewire, mysql],
@@ -85,16 +85,16 @@ function Progetti() {
                 '/video/VENDOR/Loading LIVEWIRE prodotti.mp4'
             ],
             immagini: [
-                'immagini/VENDOR/Canva/1.png',
-                'immagini/VENDOR/Canva/2.png',
-                'immagini/VENDOR/Canva/3.png',
-                'immagini/VENDOR/Canva/4.png',
-                'immagini/VENDOR/Canva/5.png',
-                'immagini/VENDOR/Canva/6.png',
-                'immagini/VENDOR/Canva/7.png',
-                'immagini/VENDOR/Canva/8.png',
-                'immagini/VENDOR/Canva/9.png',
-                'immagini/VENDOR/Canva/10.png'
+                '/immagini/VENDOR/Canva/1.png',
+                '/immagini/VENDOR/Canva/2.png',
+                '/immagini/VENDOR/Canva/3.png',
+                '/immagini/VENDOR/Canva/4.png',
+                '/immagini/VENDOR/Canva/5.png',
+                '/immagini/VENDOR/Canva/6.png',
+                '/immagini/VENDOR/Canva/7.png',
+                '/immagini/VENDOR/Canva/8.png',
+                '/immagini/VENDOR/Canva/9.png',
+                '/immagini/VENDOR/Canva/10.png'
             ],
             link: null,
         },
@@ -102,16 +102,16 @@ function Progetti() {
         {
             title: "SECONDLIFECARS",
             description: "Vetrina online di auto con funzionalità di ricerca avanzata e visualizzazione dettagli con contatto all'azienda.",
-            imageUrl: "immagini/ANTEPRIME/SECONDLIFE.png",
+            imageUrl: "/immagini/ANTEPRIME/SECONDLIFE.png",
             linkGithub: "https://github.com/jaderdaniotti/Garage-Chelini",
             frontend: [html, css, js, bootstrap],
             backend: [php, laravel, livewire, mysql],
             video: null,
             immagini: [
-                'immagini/SECONDLIFECARS/Canva/1.png',
-                'immagini/SECONDLIFECARS/Canva/3.png',
-                'immagini/SECONDLIFECARS/Canva/4.png',
-                'immagini/SECONDLIFECARS/Canva/5.png'
+                '/immagini/SECONDLIFECARS/Canva/1.png',
+                '/immagini/SECONDLIFECARS/Canva/3.png',
+                '/immagini/SECONDLIFECARS/Canva/4.png',
+                '/immagini/SECONDLIFECARS/Canva/5.png'
             ],
             link: "https://secondlifecars.it/"
         },
@@ -119,7 +119,7 @@ function Progetti() {
         {
             title: "JDEAM",
             description: "Libreria di videogiochi con possibilità di filtrare, aggiungere ai preferiti e visualizzare i dettagli dei giochi.",
-            imageUrl: "immagini/ANTEPRIME/JDEAM.png",
+            imageUrl: "/immagini/ANTEPRIME/JDEAM.png",
             linkGithub: "https://github.com/jaderdaniotti/JDEAM-",
             frontend: [html, css, js, bootstrap],
             backend: [php, laravel, livewire, mysql],
@@ -127,11 +127,11 @@ function Progetti() {
                 '/video/JDEAM/jdeam pc.mp4',
             ],
             immagini: [
-                'immagini/JDEAM/Canva/1.png',
-                'immagini/JDEAM/Canva/2.png',
-                'immagini/JDEAM/Canva/3.png',
-                'immagini/JDEAM/Canva/4.png',
-                'immagini/JDEAM/Canva/5.png'
+                '/immagini/JDEAM/Canva/1.png',
+                '/immagini/JDEAM/Canva/2.png',
+                '/immagini/JDEAM/Canva/3.png',
+                '/immagini/JDEAM/Canva/4.png',
+                '/immagini/JDEAM/Canva/5.png'
             ],
             link: null
         },
@@ -139,7 +139,7 @@ function Progetti() {
         {
             title: "AVEN",
             description: "Sito vetrina in correlato con l'uscita di un album, anteprima di video e link per ascoltare i brani.",
-            imageUrl: "immagini/ANTEPRIME/AVEN.png",
+            imageUrl: "/immagini/ANTEPRIME/AVEN.png",
             linkGithub: "https://github.com/jaderdaniotti/AVEN---L-ODIO",
             frontend: [html, css, js, bootstrap],
             backend: null,
@@ -148,9 +148,9 @@ function Progetti() {
                 '/video/AVEN/HOME.mp4',
             ],
             immagini: [
-                'immagini/AVEN/Canva/1.png',
-                'immagini/AVEN/Canva/2.png',
-                'immagini/AVEN/Canva/3.png',
+                '/immagini/AVEN/Canva/1.png',
+                '/immagini/AVEN/Canva/2.png',
+                '/immagini/AVEN/Canva/3.png',
             ],
             link: null
         },
@@ -158,15 +158,15 @@ function Progetti() {
         {
             title: "BBSBARBER",
             description: "Sito web vetrina per un Barber, anteprima di servizi e tagli, contatti e link per prenotare un appuntamento.",
-            imageUrl: "immagini/ANTEPRIME/BBS.png",
+            imageUrl: "/immagini/ANTEPRIME/BBS.png",
             linkGithub: " https://github.com/jader/social-media-analytics",
             frontend: [html, css, js, bootstrap],
             backend: null,
             video: null,
             immagini: [
-                'immagini/BBSBARBER/Canva/1.png',
-                'immagini/BBSBARBER/Canva/2.png',
-                'immagini/BBSBARBER/Canva/3.png',
+                '/immagini/BBSBARBER/Canva/1.png',
+                '/immagini/BBSBARBER/Canva/2.png',
+                '/immagini/BBSBARBER/Canva/3.png',
             ],
             link: "https://bbsbarber.com/"
         },
@@ -174,7 +174,7 @@ function Progetti() {
         {
             title: "TODO APP",
             description: "Applicazione web per la gestione di task da svolgere.",
-            imageUrl: "immagini/ANTEPRIME/TODO.png",
+            imageUrl: "/immagini/ANTEPRIME/TODO.png",
             linkGithub: "https://github.com/jaderdaniotti/ToDoList-React",
             frontend: [
                 react,
@@ -183,8 +183,8 @@ function Progetti() {
             backend: [express, mysql],
             video: null,
             immagini: [
-                'immagini/TODOLIST/Canva/1.png',
-                'immagini/TODOLIST/Canva/2.png',
+                '/immagini/TODOLIST/Canva/1.png',
+                '/immagini/TODOLIST/Canva/2.png',
             ],
             link: null
         }

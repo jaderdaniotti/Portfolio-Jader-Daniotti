@@ -105,18 +105,18 @@ function Competenze() {
     const [currentTool, setCurrentTool] = useState(skillData.tools[0]);
 
     const immaginiStrumenti = [
-        "immagini/STRUMENTI/canva-wordmark-2.svg",
-        "immagini/STRUMENTI/cpanel.svg",
-        "immagini/STRUMENTI/discord-wordmark-1.svg",
-        "immagini/STRUMENTI/miro-2.svg",
-        "immagini/STRUMENTI/postman.svg",
-        "immagini/STRUMENTI/git-bash.svg",
-        "immagini/STRUMENTI/gsap-greensock.svg",
-        "immagini/STRUMENTI/shopify.svg",
-        "immagini/STRUMENTI/hostinger.svg",
-        "immagini/STRUMENTI/figma-icon.svg",
-        "immagini/STRUMENTI/wordpress-icon-1.svg",
-        "immagini/STRUMENTI/zoom-communications-logo.svg"
+        "/immagini/STRUMENTI/canva-wordmark-2.svg",
+        "/immagini/STRUMENTI/cpanel.svg",
+        "/immagini/STRUMENTI/discord-wordmark-1.svg",
+        "/immagini/STRUMENTI/miro-2.svg",
+        "/immagini/STRUMENTI/postman.svg",
+        "/immagini/STRUMENTI/git-bash.svg",
+        "/immagini/STRUMENTI/gsap-greensock.svg",
+        "/immagini/STRUMENTI/shopify.svg",
+        "/immagini/STRUMENTI/hostinger.svg",
+        "/immagini/STRUMENTI/figma-icon.svg",
+        "/immagini/STRUMENTI/wordpress-icon-1.svg",
+        "/immagini/STRUMENTI/zoom-communications-logo.svg"
     ];
 
     return (

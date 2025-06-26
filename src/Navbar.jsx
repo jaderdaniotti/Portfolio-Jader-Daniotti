@@ -40,7 +40,7 @@ function Navbar() {
                 <div className="container mx-auto px-4 flex items-center justify-between relative">
                     <div className="flex-shrink-0">
                         <img
-                            src="immagini/AVATAR/1-Photoroom.png"
+                            src="/immagini/AVATAR/1-Photoroom.png"
                             alt="Jader"
                             className="w-12 h-12 md:w-16 md:h-16 rounded-full  transition-all duration-300 hover:scale-110 hover:-rotate-3 cursor-pointer "
                         />
@@ -81,7 +81,7 @@ function Navbar() {
                         }`}>
                         <div className="flex justify-between items-center px-5 border-b border-chiaro-2">
                             <img
-                                src="immagini/AVATAR/1-Photoroom.png"
+                                src="/immagini/AVATAR/1-Photoroom.png"
                                 alt="Avatar"
                                 className="w-25 h-25 rounded-full "
                             />
