@@ -317,7 +317,7 @@ function Home() {
                             Da oggi grazie alla collaborazione tra <span className="font-extrabold titolo-bianco text-3xl">Jader</span> e <span className="font-extrabold titolo-bianco text-3xl">Aurora</span> puoi avere un sito web con un AgentAI totalmente personalizzato, che svolge task quotidiane al posto tuo, 24/7, integrato dentro un sito costruito su misura per la tua attività!
                         </p>
                         <div className="text-center mt-16">
-                            <BigButton text="COLLABORAZIONI" href="/progetti" />
+                            <BigButton text="COLLABORAZIONI" href="/Collaborazioni" />
                         </div>
                     </section>
                     {/* martina */}
@@ -337,7 +337,7 @@ function Home() {
                         </p>
 
                         <div className="text-center mt-16">
-                            <BigButton text="COLLABORAZIONI" href="/progetti" />
+                            <BigButton text="COLLABORAZIONI" href="/Collaborazioni" />
                         </div>
                     </section>
                 </div>
