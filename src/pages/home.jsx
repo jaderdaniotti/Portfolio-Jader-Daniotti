@@ -52,7 +52,14 @@ function Home() {
             imageUrl: "/immagini/ANTEPRIME/TODO.png",
             linkGithub: "https://github.com/jaderdaniotti/ToDoList-React",
             link: null
-        }
+        },
+        {
+            title: "JSTORE",
+            description: "Ecommerce Fake per la vendita di prodotti chiamati tramite API.",
+            imageUrl: "/immagini/ANTEPRIME/JSTORE.png",
+            linkGithub: "https://github.com/jaderdaniotti/JFakeStore",
+            link: null
+        },
     ]
     let linguaggiEframework = [
         {
