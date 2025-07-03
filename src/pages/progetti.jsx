@@ -214,7 +214,6 @@ function Progetti() {
             description: "Ecommerce Fake per la vendita di prodotti chiamati tramite API.",
             imageUrl: "/immagini/ANTEPRIME/JSTORE.png",
             linkGithub: "https://github.com/jaderdaniotti/JFakeStore",
-            link: null,
             frontend: [
                 react,
                 tailwind,
