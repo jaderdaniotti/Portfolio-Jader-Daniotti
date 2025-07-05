@@ -1,13 +1,1 @@
-# SPA routing - redirect all routes to index.html
-/*    /index.html   200
-
-# Redirect old URLs to new ones (if any)
-# /old-page /new-page 301
-
-# Security headers
-/*
-  X-Frame-Options: DENY
-  X-XSS-Protection: 1; mode=block
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=() 
+/*    /index.html   200 
