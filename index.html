@@ -1,28 +1,156 @@
 <!doctype html>
-<html lang="en">
+<html lang="it">
 
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jader</title>
+  <title>Jader Daniotti - Fullstack Developer & Web Designer | Portfolio</title>
   <meta name="description"
     content="Jader Daniotti - Fullstack Developer specializzato in Frontend, UI/UX, Web Design e soluzioni digitali personalizzate. Scopri portfolio, collaborazioni e servizi." />
   <meta name="keywords"
-    content="Jader Daniotti, Fullstack Developer, Web Design, UI/UX, Frontend, Portfolio, Sviluppo Web, Collaborazioni, AgentAI, Grafica, Siti Web" />
+    content="Jader Daniotti, Fullstack Developer, Web Design, UI/UX, Frontend, Portfolio, Sviluppo Web, Collaborazioni, AgentAI, Grafica, Siti Web, React, Laravel, PHP, JavaScript" />
   <meta name="author" content="Jader Daniotti" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow" />
+  <meta name="bingbot" content="index, follow" />
+  <link rel="canonical" href="https://jaderdaniotti.netlify.app/" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jaderdaniotti.netlify.app/" />
   <meta property="og:title" content="Jader Daniotti - Fullstack Developer & Web Designer" />
   <meta property="og:description"
     content="Scopri il portfolio, i servizi e le collaborazioni di Jader Daniotti: sviluppo web, grafica, AI e molto altro." />
-  <meta property="og:image" content="/favicon.png" />
-  <meta property="og:url" content="https://jaderdaniotti.netlify.app/" />
-  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://jaderdaniotti.netlify.app/favicon.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Jader Daniotti Portfolio" />
+  <meta property="og:locale" content="it_IT" />
+  <meta property="og:locale:alternate" content="en_US" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://jaderdaniotti.netlify.app/" />
+  <meta property="twitter:title" content="Jader Daniotti - Fullstack Developer & Web Designer" />
+  <meta property="twitter:description"
+    content="Scopri il portfolio, i servizi e le collaborazioni di Jader Daniotti: sviluppo web, grafica, AI e molto altro." />
+  <meta property="twitter:image" content="https://jaderdaniotti.netlify.app/favicon.png" />
+  <meta property="twitter:creator" content="@jader_ness" />
+  
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Jader Portfolio" />
+  <link rel="apple-touch-icon" href="/favicon.png" />
+  <meta name="msapplication-TileColor" content="#ffffff" />
+  <meta name="msapplication-TileImage" content="/favicon.png" />
+  
+  <!-- Additional SEO Meta Tags -->
+  <meta name="application-name" content="Jader Daniotti Portfolio" />
+  <meta name="generator" content="React, Vite" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Jader Daniotti",
+      "jobTitle": "Fullstack Developer",
+      "url": "https://jaderdaniotti.netlify.app",
+      "sameAs": [
+        "https://github.com/jaderdaniotti",
+        "https://www.linkedin.com/in/jader-daniotti-0a00b9328/",
+        "https://www.instagram.com/jader_ness/"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Freelance"
+      },
+      "knowsAbout": [
+        "Web Development",
+        "Frontend Development",
+        "UI/UX Design",
+        "React",
+        "Laravel",
+        "PHP",
+        "JavaScript",
+        "HTML",
+        "CSS",
+        "Bootstrap",
+        "Tailwind CSS"
+      ],
+      "description": "Fullstack Developer specializzato in Frontend, UI/UX, Web Design e soluzioni digitali personalizzate",
+      "image": "https://jaderdaniotti.netlify.app/favicon.png",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IT"
+      }
+    }
+  </script>
+  
+  <!-- Organization Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Jader Daniotti Portfolio",
+      "url": "https://jaderdaniotti.netlify.app",
+      "logo": "https://jaderdaniotti.netlify.app/favicon.png",
+      "description": "Portfolio di Jader Daniotti - Fullstack Developer specializzato in Frontend, UI/UX, Web Design e soluzioni digitali personalizzate",
+      "sameAs": [
+        "https://github.com/jaderdaniotti",
+        "https://www.linkedin.com/in/jader-daniotti-0a00b9328/",
+        "https://www.instagram.com/jader_ness/"
+      ]
+    }
+  </script>
+  
+  <!-- Website Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Jader Daniotti Portfolio",
+      "url": "https://jaderdaniotti.netlify.app",
+      "description": "Portfolio di Jader Daniotti - Fullstack Developer specializzato in Frontend, UI/UX, Web Design e soluzioni digitali personalizzate",
+      "author": {
+        "@type": "Person",
+        "name": "Jader Daniotti"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://jaderdaniotti.netlify.app/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+  
+  <!-- Preload critical resources -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://www.itsaurora.ai">
+  <link rel="dns-prefetch" href="https://unpkg.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Michroma&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins&display=swap"
     rel="stylesheet">
+  
+  <!-- Preload critical images -->
+  <link rel="preload" as="image" href="/favicon.png">
+  <link rel="preload" as="image" href="/immagini/ANTEPRIME/VENDOR.png">
+  
+  <!-- Security Headers -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
 </head>
 
 <body>

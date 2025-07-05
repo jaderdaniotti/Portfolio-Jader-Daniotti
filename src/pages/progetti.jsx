@@ -4,6 +4,7 @@ import CardAnteprimaProgetti from '../components/cardAnteprimaProgetti'
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import Marquee from "react-fast-marquee";
+import SEOHead from '../components/SEOHead';
 
 function Progetti() {
     let h_icon = 60;
@@ -235,6 +236,11 @@ function Progetti() {
 
     return (
         <>
+            <SEOHead 
+                title="Progetti - Jader Daniotti Portfolio"
+                description="Scopri i progetti di Jader Daniotti: VENDOR, SECONDLIFECARS, JDEAM, AVEN, BBSBARBER, TODO APP, JSTORE. Sviluppo web con React, Laravel, PHP e JavaScript."
+                keywords="progetti web, VENDOR, SECONDLIFECARS, JDEAM, AVEN, BBSBARBER, TODO APP, JSTORE, React, Laravel, PHP, JavaScript, sviluppo web"
+            />
             <Navbar></Navbar>
 
             <div className="py-10 " id="indice">

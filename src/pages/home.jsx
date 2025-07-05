@@ -4,6 +4,7 @@ import CardAnteprimaProgetti from '../components/cardAnteprimaProgetti'
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import Marquee from "react-fast-marquee";
+import SEOHead from '../components/SEOHead';
 
 function Home() {
 
@@ -173,6 +174,11 @@ function Home() {
     ]
     return (
         <>
+            <SEOHead 
+                title="Jader Daniotti - Fullstack Developer & Web Designer | Portfolio"
+                description="Portfolio di Jader Daniotti - Fullstack Developer specializzato in Frontend, UI/UX, Web Design e soluzioni digitali personalizzate. Scopri i progetti, le competenze e i servizi."
+                keywords="Jader Daniotti, Fullstack Developer, Web Design, UI/UX, Frontend, Portfolio, Sviluppo Web, React, Laravel, PHP, JavaScript, HTML, CSS"
+            />
             <Navbar />
             {/* hero */}
             <div className="hero h-screen" id='home'>

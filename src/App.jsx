@@ -14,11 +14,11 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path='/Chisono' element={<Chisono />} />
-        <Route path='/Collaborazioni' element={<Collaborazioni />} />
-        <Route path='/Competenze' element={<Competenze />} />
-        <Route path='/Contatti' element={<Contatti />} />
-        <Route path='/Servizi' element={<Servizi />} />
+        <Route path='/chisono' element={<Chisono />} />
+        <Route path='/collaborazioni' element={<Collaborazioni />} />
+        <Route path='/competenze' element={<Competenze />} />
+        <Route path='/contatti' element={<Contatti />} />
+        <Route path='/servizi' element={<Servizi />} />
         <Route path="/progetti" element={<Progetti />} />
       </Routes>
     </BrowserRouter>

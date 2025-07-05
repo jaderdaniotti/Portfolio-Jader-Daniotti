@@ -1,5 +1,7 @@
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import SEOHead from '../components/SEOHead';
+
 function Contatti() {
 
 
@@ -14,6 +16,11 @@ function Contatti() {
 
   return (
     <>
+      <SEOHead 
+        title="Contatti - Jader Daniotti | Contattami per Progetti Web"
+        description="Contatta Jader Daniotti per progetti web e collaborazioni. Email, telefono, WhatsApp, LinkedIn e Instagram. Scarica il CV e iniziamo a lavorare insieme!"
+        keywords="contatti, email, telefono, WhatsApp, LinkedIn, Instagram, CV, curriculum vitae, progetti web"
+      />
       <Navbar></Navbar>
       <div className="py-10 " id="contattisection">
         <h1 className="text-center text-6xl md:text-8xl tracking-tight titolo-bianco">

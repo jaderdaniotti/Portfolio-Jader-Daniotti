@@ -2,9 +2,15 @@
 import BigButton from '../components/bigButton'
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import SEOHead from '../components/SEOHead';
 function Chisono() {
     return (
         <>
+            <SEOHead 
+                title="Chi Sono - Jader Daniotti Portfolio"
+                description="Scopri la storia di Jader Daniotti: dal CFP come elettricista in Italia, al lavoro in Francia, fino al Bootcamp FullStack Developer. Percorso di crescita e passione per il web development."
+                keywords="Jader Daniotti, storia, percorso, Francia, elettricista, FullStack Developer, Bootcamp, web development, crescita professionale"
+            />
             <Navbar></Navbar>
             <div className="py-10 px-5" id="indice">
                 <h1 className="text-center text-6xl md:text-8xl titolo-bianco">JADER</h1>

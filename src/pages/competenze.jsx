@@ -4,6 +4,7 @@ import Footer from "../Footer";
 import { useState } from "react";
 import SkillSection from "../components/skillSection";
 import Marquee from "react-fast-marquee";
+import SEOHead from '../components/SEOHead';
 
 function Competenze() {
 
@@ -121,6 +122,11 @@ function Competenze() {
 
     return (
         <>
+            <SEOHead 
+                title="Competenze - Jader Daniotti | Fullstack Developer Skills"
+                description="Scopri le competenze tecniche di Jader Daniotti: HTML, CSS, JavaScript, React, Laravel, PHP e molti altri strumenti di sviluppo web."
+                keywords="competenze, skills, HTML, CSS, JavaScript, React, Laravel, PHP, sviluppo web, frontend, backend, tools"
+            />
             <Navbar />
             <div className="py-10 px-5" id="indice">
                 <h1 className="text-center text-5xl md:text-8xl titolo-bianco">COMPETENZE</h1>

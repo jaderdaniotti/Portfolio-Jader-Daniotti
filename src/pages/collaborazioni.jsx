@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import CardServizi from "../components/cardServizi";
+import SEOHead from '../components/SEOHead';
 
 function Collaborazioni() {
   let cardServizi = {
@@ -206,6 +207,11 @@ function Collaborazioni() {
   };
   return (
     <>
+      <SEOHead 
+        title="Collaborazioni - Jader Daniotti | Servizi di Sviluppo Web"
+        description="Collabora con Jader Daniotti per progetti web personalizzati. Servizi per studenti, freelancer, piccole imprese e artisti. Sviluppo siti web e soluzioni digitali."
+        keywords="collaborazioni, servizi web, sviluppo siti, portfolio, freelancer, piccola impresa, artista, ecommerce, landing page"
+      />
       <Navbar />
       {/* titolo */}
       <div className="py-10 px-5" id="">

@@ -1,6 +1,7 @@
 import Navbar from "../Navbar"
 import Footer from "../Footer"
 import CardServizi from "../components/cardServizi";
+import SEOHead from '../components/SEOHead';
 
 function Servizi() {
     let cardServizi = {
@@ -177,6 +178,11 @@ function Servizi() {
     };
     return (
         <>
+            <SEOHead 
+                title="Servizi - Jader Daniotti | Sviluppo Web e Soluzioni Digitali"
+                description="Servizi di sviluppo web personalizzati: portfolio, landing page, siti aziendali, e-commerce. Soluzioni per studenti, freelancer, piccole imprese e artisti."
+                keywords="servizi web, sviluppo siti, portfolio, landing page, e-commerce, siti aziendali, freelancer, piccola impresa, artista"
+            />
             <Navbar></Navbar>
             <div className="py-10 px-5">
                 <h1 className="text-center text-4xl md:text-7xl lg:text-8xl tracking-tight titolo-bianco">
