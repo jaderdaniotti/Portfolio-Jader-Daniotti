@@ -5,6 +5,8 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import Marquee from "react-fast-marquee";
 import SEOHead from '../components/SEOHead';
+import DotGrid from '../components/DotGrid';
+
 
 function Home() {
 
@@ -388,6 +390,7 @@ function Home() {
                     </div>
                 </div>
             </div >
+
             <Footer />
         </>
     )

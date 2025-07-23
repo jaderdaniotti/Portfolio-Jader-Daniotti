@@ -5,6 +5,7 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import Marquee from "react-fast-marquee";
 import SEOHead from '../components/SEOHead';
+import { useState, useEffect } from 'react';
 
 function Progetti() {
     let h_icon = 60;
@@ -234,6 +235,15 @@ function Progetti() {
         },
     ]
 
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        setLoading(true);
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1200); // Simula caricamento dati
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
         <>
             <SEOHead 
@@ -259,19 +269,24 @@ function Progetti() {
                 ))}
             </Marquee>
             <hr className='my-10' />
-            {/* card */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto justify-center align-middle items-stretch px-2" id='projects'>
-                {progetti.map((progetto, index) => (
-                    <div key={index} className="flex flex-col gap-3">
-                        <CardAnteprimaProgetti
-                            title={progetto.title}
-                            description={progetto.description}
-                            imageUrl={progetto.imageUrl}
-                            link={progetto.link}
-                            linkGithub={progetto.linkGithub}
-                        />
+            {/* spinner e card */}
+            <div style={{ minHeight: 200 }}>
+                <div className="spinner" style={{ display: loading ? 'block' : 'none', margin: '40px auto' }}></div>
+                <div style={{ display: loading ? 'none' : 'block' }}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto justify-center align-middle items-stretch px-2" id='projects'>
+                        {progetti.map((progetto, index) => (
+                            <div key={index} className="flex flex-col gap-3">
+                                <CardAnteprimaProgetti
+                                    title={progetto.title}
+                                    description={progetto.description}
+                                    imageUrl={progetto.imageUrl}
+                                    link={progetto.link}
+                                    linkGithub={progetto.linkGithub}
+                                />
+                            </div>
+                        ))}
                     </div>
-                ))}
+                </div>
             </div>
             <hr className='my-10' />
             {/* accordion */}

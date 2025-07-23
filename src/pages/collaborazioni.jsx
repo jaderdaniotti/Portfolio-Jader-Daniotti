@@ -299,15 +299,15 @@ function Collaborazioni() {
       <section>
         {/* Grafica */}
         <section className="flex flex-col justify-center px-5 items-center">
-          <h2 className="mt-3 text-4xl md:text-6xl flex items-center font-semibold">
+          <h2 className="mt-3 text-4xl md:text-6xl flex items-center font-semibold titolo-bianco">
             GRAFICA
           </h2>
-          <ul className="text-center mt-2 px-5">
+          <ul className=" mt-2 px-5">
             <li className="text-2xl md:text-4xl">
               <h5 className="mt-3 font-medium tracking-tight">
                 Identità Visiva
               </h5>
-              <p className="text-lg md:text-2xl mt-1 font-normal">
+              <p className="text-lg md:text-2xl mt-1 font-light">
                 Trasformo la tua storia in un design che emoziona, creando un’immagine visiva che ti rappresenti al meglio.
               </p>
             </li>
@@ -315,7 +315,7 @@ function Collaborazioni() {
               <h5 className="mt-3 font-medium tracking-tight">
                 Design Personalizzato
               </h5>
-              <p className="text-lg md:text-2xl mt-1 font-normal">
+              <p className="text-lg md:text-2xl mt-1 font-light">
                 Niente template: realizzo grafiche su misura, pensate per valorizzare davvero la tua identità.
               </p>
             </li>
@@ -323,7 +323,7 @@ function Collaborazioni() {
               <h5 className="mt-3 font-medium tracking-tight">
                 Collaborazione Creativa
               </h5>
-              <p className="text-lg md:text-2xl mt-1 font-normal">
+              <p className="text-lg md:text-2xl mt-1 font-light">
                 Ti affianco in ogni passo, dalla brand identity ai contenuti, per una comunicazione efficace e coerente.
               </p>
             </li>
@@ -352,12 +352,12 @@ function Collaborazioni() {
           <h2 className="mt-3 text-4xl md:text-6xl flex items-center font-semibold">
             AGENT AI
           </h2>
-          <ul className="text-center mt-2 px-5">
+          <ul className="mt-2 px-5">
             <li className="text-2xl md:text-4xl">
               <h5 className="mt-3 font-medium tracking-tight">
                 Identità dell'Agent
               </h5>
-              <p className="text-lg md:text-2xl mt-1 font-normal">
+              <p className="text-lg md:text-2xl mt-1 font-light">
                 Creo un'identità visiva unica per il tuo AI Agent, rendendolo riconoscibile,
                 coerente e memorabile. Dall'avatar alla palette colori, ogni dettaglio comunica
                 chi è il tuo assistente virtuale.
@@ -367,7 +367,7 @@ function Collaborazioni() {
               <h5 className="mt-3 font-medium tracking-tight">
                 Pensato per te
               </h5>
-              <p className="text-lg md:text-2xl mt-1 font-normal">
+              <p className="text-lg md:text-2xl mt-1 font-light">
                 L'Agent AI non è stato pensato solo per essere un plus, è stato pensato anche per farti risparmiare tempo facendo task professionali al posto tuo, istruito da te, 24/7. 
               </p>
             </li>
@@ -375,7 +375,7 @@ function Collaborazioni() {
               <h5 className="mt-3 font-medium tracking-tight">
                 Comunicazione Umana + AI
               </h5>
-              <p className="text-lg md:text-2xl mt-1 font-normal">
+              <p className="text-lg md:text-2xl mt-1 font-light">
                 Lavoriamo insieme per costruire una comunicazione armonica tra te, il tuo pubblico
                 e l'AI. Dalla definizione del tone of voice alla creazione di contenuti social e visual,
                 tutto è pensato per dare vita a un Agent davvero utile e umano.

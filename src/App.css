@@ -197,7 +197,6 @@ body {
     fill: var(--scuro);
   }
 }
-
 /* #endregion */
 
 .card-sfondo-bianco {
@@ -208,4 +207,17 @@ body {
 .swiper-button-prev,
 .swiper-button-next {
   color: var(--chiaro) !important;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0,0,0,0.1);
+  border-top-color: #1A73E8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: none;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
