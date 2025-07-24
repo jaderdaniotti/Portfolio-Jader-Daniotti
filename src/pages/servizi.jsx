@@ -190,9 +190,9 @@ function Servizi() {
                 </h1>
             </div>
             <hr className="mb-10 " />
-            <div className="px-2   py-8 flex flex-col gap-10">
-                <h2 className="text-6xl md:text-6xl font-bold text-bianco tracking-tight text-center">
-                    Creazione siti web
+            <div className="px-4   py-8 flex flex-col gap-10">
+                <h2 className="text-xl px-10 md:px-20 md:text-4xl font-bold text-bianco tracking-tight text-center">
+                    Dai il via alla tua impresa con un sito web! Qui trovi i miei servizi per te.
                 </h2>
                 {Object.entries(cardServizi).map(([chiave, valore]) => (
                     <section

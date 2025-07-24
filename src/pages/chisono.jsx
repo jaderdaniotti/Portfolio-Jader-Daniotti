@@ -65,76 +65,76 @@ function Chisono() {
 
             </ul>
             {/* Chi sono? */}
-            <section className="flex flex-col py-8 bg-scuro text-chiaro items-center text-center" id="aboutme">
+            <section className="flex flex-col px-5 md:px-20 py-8 bg-scuro text-chiaro items-center text-center" id="aboutme">
                 <h2 className="text-center mb-5 text-5xl md:text-6xl ">Chi sono?</h2>
-                <img src="immagini\AVATAR\10-Photoroom.png" alt="" className="mb-5 h-100 object-contain" />
+                <img src="immagini\AVATAR\10-Photoroom.png" alt="" className="mb-5 h-75 object-contain" />
                 <div className="grid grid-cols-12 gap-4">
                     <div className='col-span-12'>
-                        <p className=" text-xl md:text-2xl  text-center font-medium px-2" >
+                        <p className=" text-md md:text-xl  text-center font-medium px-2" >
                             Ciao! Mi chiamo
                             <span className="font-bold"> Jader </span>
                             e ti do il benvenuto sul mio sito web.
                         </p>
-                        <p className=" text-xl md:text-2xl  text-center font-medium px-2" >
+                        <p className=" text-md md:text-xl  text-center font-medium px-2" >
                             Sono quel tipo di persona a cui piacciono le <span className="font-bold"> sfide</span>, a cui piace imparare sempre cose nuove, prendendo spunto da ciò che lo circonda.
                         </p>
-                        <p className=" text-xl md:text-2xl  text-center font-medium px-2" >
+                        <p className=" text-md md:text-xl  text-center font-medium px-2" >
                             Se sei arrivato in questa sezione del sito, vuol dire che non sei solo interessato al mio lato <span className="font-bold"> professionale</span>, ma vuoi conoscermi davvero. Cercherò di farti avere un’idea più chiara di me!
                         </p>
                     </div>
                 </div>
             </section>
             {/* La partenza */}
-            <section className="flex flex-col py-8 bg-chiaro-2 text-scuro items-center" id="partenza">
+            <section className="flex flex-col px-5 md:px-20 py-8 bg-chiaro-2 text-scuro items-center" id="partenza">
                 <h2 className="text-center mb-5 text-5xl md:text-6xl ">La partenza</h2>
-                <img src="immagini\AVATAR\9.png" alt="" className="mb-5 h-100 object-contain" />
-                <p className=" text-xl  md:text-2xl  text-center font-medium px-2" >
+                <img src="immagini\AVATAR\9.png" alt="" className="mb-5 h-75 object-contain" />
+                <p className=" text-md  md:text-xl  text-center font-medium px-2" >
                     Ho cominciato il mio percorso alle superiori, in un <span className="font-bold"> CFP </span> &#40;Corso di Formazione Professionale&#41;, studiando come elettricista. <br />
                     A quell'età non avevo ancora in mente cosa volessi fare da grande. Volevo buttarmi nel mondo del lavoro, quindi decisi di fare 3 anni su 5 in alternanza <span className="font-bold"> scuola/lavoro</span>.
                 </p>
-                <p className=" text-xl md:text-2xl text-center font-medium px-2" >
+                <p className=" text-md md:text-xl text-center font-medium px-2" >
                     A 18 anni, nel 2019, stanco della vita che conducevo, mi venne offerta un’occasione d'oro: partire per lavorare in un altro stato, in compagnia di un amico.
                 </p>
-                <p className=" text-xl md:text-2xl text-center font-medium px-2" >
+                <p className=" text-md md:text-xl text-center font-medium px-2" >
                     Senza pensarci troppo, dopo qualche settimana passata a organizzare i documenti, preparare i vestiti e salutare tutti, mi ritrovai in <span className="font-bold"> Francia </span>, più precisamente a Fontaine, periferia di Grenoble, Rhone Alpes.
                 </p>
             </section>
             {/* Il lavoro */}
-            <section className="flex flex-col py-8 bg-scuro text-chiaro  items-center" id="lavoro">
+            <section className="flex flex-col px-5 md:px-20 py-8 bg-scuro text-chiaro  items-center" id="lavoro">
                 <h2 className="text-center mb-5 text-5xl md:text-6xl ">Il lavoro</h2>
-                <img src="immagini\AVATAR\11-Photoroom.png" alt="" className="mb-5 h-100 object-contain " />
-                <p className=" text-xl  md:text-2xl  text-center font-medium px-2" >
+                <img src="immagini\AVATAR\11-Photoroom.png" alt="" className="mb-5 h-75 object-contain " />
+                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
                     Durante i primi tempi in <span className="font-bold"> Francia </span>, partendo da zero a livello linguistico, feci pratica lavorando nei mercati il <span className="font-bold"> weekend </span>, attività che mi permise di imparare a parlare il francese pur continuando a vendere prodotti italiani. <span className="font-bold"> Dal lunedì al venerdì </span>, invece, giravo le regioni limitrofe lavorando nei cantieri, alternando i ruoli di <span className="font-bold"> manovale </span> e <span className="font-bold"> lavavetri </span>.
                 </p>
-                <p className=" text-xl  md:text-2xl  text-center font-medium px-2" >
+                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
                     Al secondo anno, ebbi l’occasione di riprendere ciò che avevo studiato in Italia, ovvero <span className="font-bold"> l’elettricità</span>. Venni assunto da un’azienda che forniva kit di impianti elettrici, imparando in seguito a lavorare anche su impianti di <span className="font-bold"> idraulica </span> e <span className="font-bold"> riscaldamento </span>.
                 </p>
-                <p className=" text-xl  md:text-2xl  text-center font-medium px-2" >
+                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
                     La mia carriera durò due anni, finché poi, dopo un’allettante offerta lavorativa, entrai in un’azienda <span className="font-bold"> leader </span> nella realizzazione di mezzi di soccorso, tra cui ambulanze e veicoli per interventi dei pompieri. Con loro partii in trasferte, fino ad arrivare a gestire la manutenzione di <span className="font-bold"> queste ultime</span>, anche in <span className="font-bold"> Romania </span>.
                 </p>
             </section>
             {/* Dev-Mode */}
-            <section className="flex flex-col py-8 bg-chiaro-2 text-scuro items-center rounded-b-2xl" id="devmode">
+            <section className="flex flex-col px-5 md:px-20 py-8 bg-chiaro-2 text-scuro items-center rounded-b-2xl" id="devmode">
                 <h2 className="text-center mb-5 text-5xl md:text-6xl ">Dev-Mode</h2>
                 <span className="">
-                    <img src="immagini\AVATAR\4-Photoroom (1).png" alt="" className="mb-5 h-100 object-contain rounded-4xl" />
+                    <img src="immagini\AVATAR\4-Photoroom (1).png" alt="" className="mb-5 h-75 object-contain rounded-4xl" />
                 </span>
-                <p className=" text-xl  md:text-2xl  text-center font-medium px-2" >
+                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
                     Dopo 5 anni, decisi di tornare in <span className="font-bold"> Italia </span>, vicino alla mia famiglia e ai miei amici.
                 </p>
-                <p className=" text-xl  md:text-2xl  text-center font-medium px-2" >
+                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
                     Cominciai a lavorare in un’azienda come elettromeccanico, ma a settembre mi imbatto per puro caso in una pubblicità di un <span className="font-bold"> Bootcamp </span> per diventare <span className="font-bold"> FullStack Developer</span>.
                 </p>
-                <p className=" text-xl  md:text-2xl  text-center font-medium px-2" >
+                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
                     Ai tempi non avevo la più pallida idea di cosa significasse scrivere <span className="font-bold"> codice</span>. Avevo creato un sito <span className="font-bold"> ecommerce </span> qualche anno prima con <span className="font-bold"> Shopify </span> seguendo tutorial su <span className="font-bold"> Youtube</span>, ma non potevo nemmeno immaginare cosa sarebbe significato, di lì a qualche mese, saperlo fare scrivendo <span className="font-bold"> codice </span> e personalizzando tutto dalla A alla Z.
                 </p>
-                <p className=" text-xl  md:text-2xl  text-center font-medium px-2" >
+                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
                     Decisi quindi di iscrivermi. Iniziai il corso a ottobre in orario part-time, la sera dopo il lavoro, finché non mi lasciai quest’ultimo a dicembre per dedicare l’intera giornata allo <span className="font-bold"> studio </span> e alla <span className="font-bold"> pratica</span>.
                 </p>
-                <p className=" text-xl  md:text-2xl  text-center font-medium px-2" >
+                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
                     In parallelo al corso, approfondisco gli argomenti trattati in autonomia, realizzo progetti di prova per esercitarmi e, occasionalmente, creo <span className="font-bold"> web app </span> per <span className="font-bold"> privati </span> o <span className="font-bold"> collaboro </span>con amici alla realizzazione di progetti.
                 </p>
-                <p className=" text-xl  md:text-2xl  text-center font-medium px-2" >
+                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
                     Dopo vari progetti e tanti pezzi di me messi in progetti altrui, eccomi qui a costruire il sito che parla di me, <span className="font-bold"> Jader</span>, per farti davvero capire chi sono.
                 </p>
             </section>

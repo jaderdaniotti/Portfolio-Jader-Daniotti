@@ -246,7 +246,7 @@ function Collaborazioni() {
             >
               <img
                 src="immagini\\logo-mart-AoPqDR7a0WUaRZb0.avif"
-                alt=""
+                alt="Logo Martina - Graphic Designer"
                 className="size-70 object-contain"
               />
             </a>
@@ -255,7 +255,7 @@ function Collaborazioni() {
             <a href="#" target="_blank" rel="noopener noreferrer">
               <img
                 src="immagini\\AVATAR\\1-Photoroom.png"
-                alt=""
+                alt="Avatar Jader Daniotti"
                 className="size-70 object-contain"
               />
             </a>
@@ -268,7 +268,7 @@ function Collaborazioni() {
             >
               <img
                 src="immagini\\Aurora logo_vettoriale copia.pdf-image-002-Photoroom.png"
-                alt=""
+                alt="Logo Aurora Technologies"
                 className="size-70 object-contain"
               />
             </a>
@@ -334,7 +334,7 @@ function Collaborazioni() {
             <img
               src="immagini\www.graphicsmarti.com_.png"
               className="object-contain size-200 h-min rounded-xl"
-              alt=""
+              alt="Screenshot sito web Martina - graphicsmarti.com"
             />
             <a
               href="https://www.graphicsmarti.com/"
@@ -388,7 +388,7 @@ function Collaborazioni() {
             <img
               src="immagini\www.itsaurora.ai_dashboard.png"
               className="object-contain size-200 h-min rounded-xl"
-              alt=""
+              alt="Screenshot dashboard Aurora Technologies - itsaurora.ai"
             />
             <a
               href="https://www.itsaurora.ai/"

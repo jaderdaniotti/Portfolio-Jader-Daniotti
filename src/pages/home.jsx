@@ -328,8 +328,8 @@ function Home() {
                             Aurora
                         </p>
 
-                        <p className="text-3xl md:text-2xl px-2 mt-5 text-center ">
-                            Da oggi grazie alla collaborazione tra <span className="font-extrabold titolo-bianco text-3xl">Jader</span> e <span className="font-extrabold titolo-bianco text-3xl">Aurora</span> puoi avere un sito web con un AgentAI totalmente personalizzato, che svolge task quotidiane al posto tuo, 24/7, integrato dentro un sito costruito su misura per la tua attività!
+                        <p className="text-lg md:text-xl px-10 md:px-20 mt-5 text-center ">
+                            Da oggi grazie alla collaborazione tra <span className="font-extrabold titolo-bianco text-2xl">Jader</span> e <span className="font-extrabold titolo-bianco text-2xl">Aurora</span> puoi avere un sito web con un AgentAI totalmente personalizzato, che svolge task quotidiane al posto tuo, 24/7, integrato dentro un sito costruito su misura per la tua attività!
                         </p>
                         <div className="text-center mt-16">
                             <BigButton text="COLLABORAZIONI" href="/Collaborazioni" />
@@ -347,8 +347,8 @@ function Home() {
                             Martina
                         </p>
 
-                        <p className="text-3xl md:text-2xl px-2 mt-5 text-center ">
-                            Da oggi, grazie alla collaborazione tra <span className="font-extrabold titolo-bianco text-3xl">Jader</span> e <span className="font-extrabold titolo-bianco text-3xl">Martina</span>, puoi avere un sito web costruito su misura per la tua attività, con una grafica professionale e un’identità visiva unica che raccontano davvero chi sei.
+                        <p className="text-lg md:text-xl px-10 md:px-20 mt-5 text-center ">
+                            Da oggi, grazie alla collaborazione tra <span className="font-extrabold titolo-bianco text-2xl">Jader</span> e <span className="font-extrabold titolo-bianco text-2xl">Martina</span>, puoi avere un sito web costruito su misura per la tua attività, con una grafica professionale e un'identità visiva unica che raccontano davvero chi sei.
                         </p>
 
                         <div className="text-center mt-16">
