@@ -63,6 +63,13 @@ function Home() {
             linkGithub: "https://github.com/jaderdaniotti/JFakeStore",
             link: null
         },
+        {
+            title: "JDEAM2",
+            description: "Come jdeam, ma meglio.",
+            imageUrl: "/immagini/ANTEPRIME/JDEAM2.png",
+            linkGithub: "https://github.com/jaderdaniotti/JDEAM2",
+            link: null
+        },
     ]
     let linguaggiEframework = [
         {

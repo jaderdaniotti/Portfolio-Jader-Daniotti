@@ -17,7 +17,8 @@ function Progetti() {
         "/immagini/ANTEPRIME/SECONDLIFE.png",
         "/immagini/ANTEPRIME/VENDOR.png",
         "/immagini/ANTEPRIME/TODO.png",
-        "/immagini/ANTEPRIME/JSTORE.png"
+        "/immagini/ANTEPRIME/JSTORE.png",
+        "/immagini/ANTEPRIME/JDEAM2.png"
     ];
     let html = {
         name: "HTML",
@@ -233,6 +234,29 @@ function Progetti() {
             ],
             link: null
         },
+        // jdeam2
+        {
+            title: "JDEAM2",
+            description: "Come jdeam, ma meglio, con un design migliore e chat real time.",
+            imageUrl: "/immagini/ANTEPRIME/JDEAM2.png",
+            linkGithub: "https://github.com/jaderdaniotti/JDEAM2",
+            frontend: [
+                react,
+                tailwind,
+            ],
+            backend: [supabase],
+            video: null,
+            immagini: [
+                '/immagini/JDEAM2/ANTEPRIME/1.png',
+                '/immagini/JDEAM2/ANTEPRIME/2.png',
+                '/immagini/JDEAM2/ANTEPRIME/3.png',
+                '/immagini/JDEAM2/ANTEPRIME/4.png',
+                '/immagini/JDEAM2/ANTEPRIME/5.png',
+                '/immagini/JDEAM2/ANTEPRIME/6.png',
+                '/immagini/JDEAM2/ANTEPRIME/7.png',
+            ],
+            link: null
+        },
     ]
 
     const [loading, setLoading] = useState(true);
@@ -246,7 +270,7 @@ function Progetti() {
 
     return (
         <>
-            <SEOHead 
+            <SEOHead
                 title="Progetti - Jader Daniotti Portfolio"
                 description="Scopri i progetti di Jader Daniotti: VENDOR, SECONDLIFECARS, JDEAM, AVEN, BBSBARBER, TODO APP, JSTORE. Sviluppo web con React, Laravel, PHP e JavaScript."
                 keywords="progetti web, VENDOR, SECONDLIFECARS, JDEAM, AVEN, BBSBARBER, TODO APP, JSTORE, React, Laravel, PHP, JavaScript, sviluppo web"
