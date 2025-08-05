@@ -252,8 +252,6 @@ function Progetti() {
                 '/immagini/JDEAM2/ANTEPRIME/3.png',
                 '/immagini/JDEAM2/ANTEPRIME/4.png',
                 '/immagini/JDEAM2/ANTEPRIME/5.png',
-                '/immagini/JDEAM2/ANTEPRIME/6.png',
-                '/immagini/JDEAM2/ANTEPRIME/7.png',
             ],
             link: null
         },
