@@ -45,7 +45,7 @@ function Contatti() {
         <h2 className="text-4xl md:text-6xl font-bold text-bianco tracking-tight text-center">
           Lavoriamo insieme!
         </h2>
-        <p className="text-2xl md:text-4xl text-bianco text-center tracking-tight">
+        <p className="text-2xl md:text-4xl text-bianco font-medium text-center tracking-tight">
           Il mio profilo ti interessa? <br /> Scarica il mio cv per saperne
           ancora di più di me!
         </p>
@@ -84,6 +84,53 @@ function Contatti() {
           </span>
         </a>
       </div>
+
+      {/* Sezione Certificati */}
+      <hr className="my-10" />
+      <div className="px-4 py-8">
+        <h2 className="text-4xl md:text-6xl font-bold text-bianco tracking-tight text-center mb-8">
+          I Miei Certificati
+        </h2>
+        <p className="text-xl md:text-2xl text-bianco font-medium text-center tracking-tight mb-12 max-w-4xl mx-auto">
+          Ecco i certificati dei corsi di programmazione che ho completato. 
+          Questi attestano le mie competenze e il mio impegno nell'apprendimento continuo.
+        </p>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+          {/* Primo Certificato */}
+          <div className="bg-scuro-2 rounded-lg p-6 shadow-xl border border-gray-700">
+            <div className="aspect-video w-full">
+              <iframe
+                src="https://www.credential.net/embed/f52ddb24-da77-405a-bfda-84cb94a59dcf"
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                allowFullScreen
+                className="rounded-lg"
+                title="Certificato Corso di Programmazione"
+              >
+              </iframe>
+            </div>
+          </div>
+
+          {/* Secondo Certificato */}
+          <div className="bg-scuro-2 rounded-lg p-6 shadow-xl border border-gray-700">
+            <div className="aspect-video w-full">
+              <iframe
+                src="https://www.credential.net/embed/542f41ff-b55f-4a6f-8dcf-3502cba73654"
+                width="100%"
+                height="100%"
+                frameBorder="0"
+                allowFullScreen
+                className="rounded-lg"
+                title="Certificato Corso di Programmazione Avanzato"
+              >
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <hr className="my-10" />
 
       <Footer></Footer>
