@@ -221,3 +221,12 @@ body {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+.animazioneloader {
+  animation: animazioneloader 3s linear infinite;
+}
+
+@keyframes animazioneloader {
+  from { scale: 0.7; }
+  to { scale: 0.2; }
+}

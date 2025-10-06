@@ -10,9 +10,15 @@ import Chisono from './pages/chisono';
 import Competenze from './pages/competenze';
 import Contatti from './pages/contatti';
 import Servizi from "./pages/servizi";
+import Admin from "./pages/Admin";
+import FloatingDashboardButton from "./components/FloatingDashboardButton";
+import { useUmamiTracking } from './utils/umami';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+
+  // Inizializza il tracking Umami
+  useUmamiTracking();
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
@@ -32,7 +38,9 @@ function App() {
             <Route path='/contatti' element={<Contatti />} />
             <Route path='/servizi' element={<Servizi />} />
             <Route path="/progetti" element={<Progetti />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
+          <FloatingDashboardButton />
         </BrowserRouter>
       )}
     </>
