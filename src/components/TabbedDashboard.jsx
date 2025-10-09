@@ -19,7 +19,11 @@ import {
   Save,
   X,
   Globe,
-  LogOut
+  LogOut,
+  Image,
+  Link,
+  Tags,
+  Type
 } from 'lucide-react';
 import {
   Chart as ChartJS,
@@ -34,6 +38,7 @@ import {
   ArcElement,
 } from 'chart.js';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import { FileText } from 'lucide-react';
 
 ChartJS.register(
   CategoryScale,
@@ -53,6 +58,7 @@ const TabbedDashboard = ({ onLogout }) => {
   const [projects, setProjects] = useState([]);
   const [technologies, setTechnologies] = useState([]);
   const [tools, setTools] = useState([]);
+  const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingItem, setEditingItem] = useState(null);
   const [editForm, setEditForm] = useState({});
@@ -62,6 +68,7 @@ const TabbedDashboard = ({ onLogout }) => {
     { id: 'stack', name: 'Stack', icon: Code },
     { id: 'strumenti', name: 'Strumenti', icon: Wrench },
     { id: 'progetti', name: 'Progetti', icon: Rocket },
+    { id: 'templates', name: 'Templates', icon: FileText },
   ];
 
   const stackTabs = [
@@ -77,15 +84,17 @@ const TabbedDashboard = ({ onLogout }) => {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [projectsRes, technologiesRes, toolsRes] = await Promise.all([
+      const [projectsRes, technologiesRes, toolsRes, templatesRes] = await Promise.all([
         supabase.from('projects').select('*').order('order_index'),
         supabase.from('technologies').select('*').order('order_index'),
-        supabase.from('tools').select('*').order('order_index')
+        supabase.from('tools').select('*').order('order_index'),
+        supabase.from('templates').select('*').order('created_at', { ascending: false })
       ]);
 
       setProjects(projectsRes.data || []);
       setTechnologies(technologiesRes.data || []);
       setTools(toolsRes.data || []);
+      setTemplates(templatesRes.data || []);
     } catch (error) {
       console.error('Errore nel caricamento dati:', error);
     } finally {
@@ -108,11 +117,31 @@ const TabbedDashboard = ({ onLogout }) => {
     try {
       const { type, id } = editingItem;
       const tableName = type === 'project' ? 'projects' : 
-                      type === 'technology' ? 'technologies' : 'tools';
+                      type === 'technology' ? 'technologies' : 
+                      type === 'tool' ? 'tools' : 'templates';
+      
+      // Prepara i dati da aggiornare rimuovendo campi non necessari
+      const updateData = { ...editForm };
+      delete updateData.id;
+      delete updateData.type;
+      delete updateData.created_at;
+      delete updateData.user_id;
+      
+      // Validazione per templates
+      if (type === 'template') {
+        if (!updateData.name || !updateData.site_url) {
+          alert('Nome e URL del sito sono obbligatori');
+          return;
+        }
+        // Assicura che tags sia un array
+        if (!updateData.tags || !Array.isArray(updateData.tags)) {
+          updateData.tags = [];
+        }
+      }
       
       const { error } = await supabase
         .from(tableName)
-        .update(editForm)
+        .update(updateData)
         .eq('id', id);
 
       if (error) throw error;
@@ -122,6 +151,7 @@ const TabbedDashboard = ({ onLogout }) => {
       setEditForm({});
     } catch (error) {
       console.error('Errore nel salvataggio:', error);
+      alert('Errore nel salvataggio: ' + error.message);
     }
   };
 
@@ -130,7 +160,8 @@ const TabbedDashboard = ({ onLogout }) => {
 
     try {
       const tableName = type === 'project' ? 'projects' : 
-                      type === 'technology' ? 'technologies' : 'tools';
+                      type === 'technology' ? 'technologies' : 
+                      type === 'tool' ? 'tools' : 'templates';
       
       const { error } = await supabase
         .from(tableName)
@@ -140,15 +171,23 @@ const TabbedDashboard = ({ onLogout }) => {
       if (error) throw error;
 
       await loadData();
+      
+      // Se stavamo modificando l'elemento eliminato, resetta il form
+      if (editingItem?.id === id) {
+        setEditingItem(null);
+        setEditForm({});
+      }
     } catch (error) {
       console.error('Errore nell\'eliminazione:', error);
+      alert('Errore nell\'eliminazione: ' + error.message);
     }
   };
 
   const handleAdd = async (type) => {
     try {
       const tableName = type === 'project' ? 'projects' : 
-                      type === 'technology' ? 'technologies' : 'tools';
+                      type === 'technology' ? 'technologies' : 
+                      type === 'tool' ? 'tools' : 'templates';
       
       const defaultData = type === 'project' ? {
         title: 'Nuovo Progetto',
@@ -163,11 +202,16 @@ const TabbedDashboard = ({ onLogout }) => {
         percent: 50,
         order_index: technologies.length + 1,
         svg_code: '<svg></svg>'
-      } : {
+      } : type === 'tool' ? {
         name: 'Nuovo Strumento',
         percent: 50,
         order_index: tools.length + 1,
         svg_code: '<svg></svg>'
+      } : {
+        name: 'Nuovo Template',
+        site_url: 'https://example.com',
+        cover_url: 'https://via.placeholder.com/300x200',
+        tags: []
       };
 
       const { error } = await supabase
@@ -250,7 +294,7 @@ const TabbedDashboard = ({ onLogout }) => {
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Analytics</h2>
                 <div className="flex items-center space-x-4">
-                  <div className="grid grid-cols-4 gap-4">
+                  <div className="grid grid-cols-5 gap-4">
                     <div className="bg-blue-50 p-4 rounded-lg text-center">
                       <p className="text-sm font-medium text-blue-600">Progetti</p>
                       <p className="text-2xl font-bold text-blue-900">{projects.length}</p>
@@ -262,6 +306,10 @@ const TabbedDashboard = ({ onLogout }) => {
                     <div className="bg-purple-50 p-4 rounded-lg text-center">
                       <p className="text-sm font-medium text-purple-600">Strumenti</p>
                       <p className="text-2xl font-bold text-purple-900">{tools.length}</p>
+                    </div>
+                    <div className="bg-pink-50 p-4 rounded-lg text-center">
+                      <p className="text-sm font-medium text-pink-600">Templates</p>
+                      <p className="text-2xl font-bold text-pink-900">{templates.length}</p>
                     </div>
                     <div className="bg-orange-50 p-4 rounded-lg text-center">
                       <p className="text-sm font-medium text-orange-600">Competenze Medie</p>
@@ -598,6 +646,258 @@ const TabbedDashboard = ({ onLogout }) => {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            </div>
+          )}
+
+          {/* Templates Tab */}
+          {activeTab === 'templates' && (
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Templates</h2>
+              
+              {/* Form in alto - larghezza piena */}
+              <div className="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-xl p-6 mb-8 shadow-sm">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center space-x-3">
+                    <div className={`p-3 rounded-lg ${editingItem?.type === 'template' ? 'bg-green-100' : 'bg-chiaro-2 bg-opacity-20'}`}>
+                      {editingItem?.type === 'template' ? (
+                        <Edit className="w-6 h-6 text-green-600" />
+                      ) : (
+                        <Plus className="w-6 h-6 text-chiaro" />
+                      )}
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-gray-900">
+                        {editingItem?.type === 'template' ? 'Modifica Template' : 'Crea Nuovo Template'}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        {editingItem?.type === 'template' ? 'Aggiorna le informazioni del template' : 'Compila i campi per aggiungere un nuovo template'}
+                      </p>
+                    </div>
+                  </div>
+                  {editingItem?.type === 'template' && (
+                    <button
+                      onClick={() => {
+                        setEditingItem(null);
+                        setEditForm({});
+                      }}
+                      className="text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  )}
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                  <div className="lg:col-span-1">
+                    <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                      <Type className="w-4 h-4 mr-2 text-chiaro" />
+                      Nome Template *
+                    </label>
+                    <input
+                      type="text"
+                      value={editForm.name || ''}
+                      onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                      className="w-full px-4 py-3 border-2 border-gray-200 text-scuro font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
+                      placeholder="Es: Portfolio Moderno"
+                    />
+                  </div>
+                  
+                  <div className="lg:col-span-1">
+                    <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                      <Link className="w-4 h-4 mr-2 text-chiaro" />
+                      URL del Sito *
+                    </label>
+                    <input
+                      type="url"
+                      value={editForm.site_url || ''}
+                      onChange={(e) => setEditForm({...editForm, site_url: e.target.value})}
+                      className="w-full px-4 py-3 border-2 border-gray-200 text-scuro font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
+                      placeholder="https://esempio.com"
+                    />
+                  </div>
+                  
+                  <div className="lg:col-span-1">
+                    <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                      <Image className="w-4 h-4 mr-2 text-chiaro" />
+                      URL Immagine Copertina
+                    </label>
+                    <input
+                      type="url"
+                      value={editForm.cover_url || ''}
+                      onChange={(e) => setEditForm({...editForm, cover_url: e.target.value})}
+                      className="w-full px-4 py-3 border-2 border-gray-200 text-scuro font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
+                      placeholder="https://esempio.com/img.jpg"
+                    />
+                  </div>
+                  
+                  <div className="lg:col-span-1">
+                    <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                      <Tags className="w-4 h-4 mr-2 text-chiaro" />
+                      Tags
+                    </label>
+                    <input
+                      type="text"
+                      value={editForm.tags?.join(', ') || ''}
+                      onChange={(e) => setEditForm({...editForm, tags: e.target.value.split(',').map(t => t.trim()).filter(t => t)})}
+                      className="w-full px-4 py-3 border-2 border-gray-200 text-scuro font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
+                      placeholder="react, tailwind, nextjs"
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                  <p className="text-sm text-gray-500">
+                    <span className="text-red-500">*</span> Campi obbligatori
+                  </p>
+                  {editingItem?.type === 'template' ? (
+                    <div className="flex space-x-3">
+                      <button
+                        onClick={() => {
+                          setEditingItem(null);
+                          setEditForm({});
+                        }}
+                        className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-semibold flex items-center transition-colors"
+                      >
+                        <X className="w-4 h-4 mr-2" />
+                        Annulla
+                      </button>
+                      <button
+                        onClick={handleSave}
+                        className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-semibold flex items-center shadow-md hover:shadow-lg transition-all"
+                      >
+                        <Save className="w-4 h-4 mr-2" />
+                        Salva Modifiche
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={async () => {
+                        if (!editForm.name || !editForm.site_url) {
+                          alert('Nome e URL del sito sono obbligatori');
+                          return;
+                        }
+                        try {
+                          const { error } = await supabase
+                            .from('templates')
+                            .insert({
+                              name: editForm.name,
+                              site_url: editForm.site_url,
+                              cover_url: editForm.cover_url || null,
+                              tags: editForm.tags || []
+                            });
+                          
+                          if (error) throw error;
+                          
+                          await loadData();
+                          setEditForm({});
+                        } catch (error) {
+                          console.error('Errore nella creazione:', error);
+                          alert('Errore nella creazione del template');
+                        }
+                      }}
+                      className="px-8 py-3 bg-chiaro hover:bg-chiaro-2 text-white rounded-lg text-sm font-semibold flex items-center shadow-md hover:shadow-lg transition-all"
+                    >
+                      <Plus className="w-5 h-5 mr-2" />
+                      Crea Template
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Lista Templates sotto */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                    <FileText className="w-5 h-5 mr-2 text-chiaro" />
+                    Templates Salvati ({templates.length})
+                  </h3>
+                </div>
+                
+                {templates.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
+                    {templates.map((template) => (
+                      <div 
+                        key={template.id} 
+                        className={`border-2 rounded-xl overflow-hidden bg-white hover:shadow-lg transition-all duration-300 ${
+                          editingItem?.id === template.id 
+                            ? 'ring-4 ring-chiaro ring-opacity-50 border-chiaro shadow-lg scale-105' 
+                            : 'border-gray-200 hover:border-chiaro'
+                        }`}
+                      >
+                        {template.cover_url && (
+                          <div className="p-1 w-full bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden relative group">
+                            <img 
+                              src={template.cover_url} 
+                              alt={template.name}
+                              className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                              onError={(e) => {
+                                e.target.src = 'https://via.placeholder.com/400x225?text=Immagine+non+disponibile';
+                              }}
+                            />
+                            {editingItem?.id === template.id && (
+                              <div className="absolute top-2 right-2 bg-chiaro text-white px-2 py-1 rounded-md text-xs font-semibold flex items-center">
+                                <Edit className="w-3 h-3 mr-1" />
+                                In modifica
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        <div className="p-4">
+                          <h3 className="font-bold text-gray-900 mb-3 text-base flex items-center">
+                            <Type className="w-4 h-4 mr-2 text-chiaro flex-shrink-0" />
+                            <span className="truncate">{template.name}</span>
+                          </h3>
+                          <a 
+                            href={template.site_url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-sm text-chiaro hover:text-chiaro-2 font-medium flex items-center mb-3 hover:underline transition-colors"
+                          >
+                            <Globe className="w-4 h-4 mr-2 flex-shrink-0" />
+                            <span className="truncate">Visita sito</span>
+                          </a>
+                          {template.tags && template.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mb-3">
+                              {template.tags.map((tag, index) => (
+                                <span 
+                                  key={index}
+                                  className="px-2 py-1 text-xs bg-chiaro bg-opacity-10 text-chiaro font-medium rounded-full border border-chiaro border-opacity-20"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          <div className="flex space-x-2 pt-3 border-t border-gray-100">
+                            <button 
+                              onClick={() => handleEdit(template, 'template')}
+                              className="flex-1 bg-scuro-2 hover:bg-scuro text-white py-2 rounded-lg text-sm font-semibold flex items-center justify-center transition-colors"
+                            >
+                              <Edit className="w-4 h-4 mr-1" />
+                              Modifica
+                            </button>
+                            <button 
+                              onClick={() => handleDelete(template.id, 'template')}
+                              className="flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-2 rounded-lg text-sm font-semibold flex items-center justify-center transition-colors"
+                            >
+                              <Trash2 className="w-4 h-4 mr-1" />
+                              Elimina
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-16 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
+                    <div className="bg-gray-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FileText className="w-10 h-10 text-gray-400" />
+                    </div>
+                    <p className="text-lg font-semibold text-gray-600 mb-2">Nessun template ancora</p>
+                    <p className="text-sm text-gray-500">Usa il form qui sopra per creare il tuo primo template</p>
+                  </div>
+                )}
               </div>
             </div>
           )}

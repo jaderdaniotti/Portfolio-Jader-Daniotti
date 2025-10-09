@@ -1,0 +1,18 @@
+# Copia questo contenuto nel tuo file .env per configurare Umami
+
+# Configurazione Supabase (esistente)
+VITE_SUPABASE_URL=your_supabase_url_here
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+VITE_SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
+
+# Configurazione Umami (NUOVO)
+VITE_UMAMI_URL=https://cloud.umami.is
+VITE_UMAMI_USER=jaderdaniotti.lavoro@gmail.com
+VITE_UMAMI_PASS=Milanista
+VITE_UMAMI_WEBSITE_ID=7d73d61b-bf78-4311-b809-8cfb1110966d
+
+# Istruzioni:
+# 1. Copia tutto il contenuto di questo file
+# 2. Incollalo nel tuo file .env (nella root del progetto)
+# 3. Avvia il server con: npm run dev
+# 4. Vai su http://localhost:5173/admin e controlla la tab Analytics
