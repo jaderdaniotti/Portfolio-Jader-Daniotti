@@ -283,7 +283,7 @@ const TabbedDashboard = ({ onLogout }) => {
                  <h2 className="text-2xl font-bold text-gray-900">Stack Tecnologico</h2>
                  <button 
                    onClick={() => handleAdd('technology')}
-                   className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
+                   className="bg-scuro-2 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
                  >
                    <Plus className="w-4 h-4 mr-2" />
                    Aggiungi Tecnologia
@@ -322,13 +322,13 @@ const TabbedDashboard = ({ onLogout }) => {
                           type="text"
                           value={editForm.name || ''}
                           onChange={(e) => setEditForm({...editForm, name: e.target.value})}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                          className="w-full px-3 py-2 border text-scuro font-medium border-gray-300 rounded-md text-sm"
                           placeholder="Nome tecnologia"
                         />
                         <select
                           value={editForm.category || ''}
                           onChange={(e) => setEditForm({...editForm, category: e.target.value})}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                          className="w-full px-3 py-2 border text-scuro font-medium border-gray-300 rounded-md text-sm"
                         >
                           <option value="frontend">Frontend</option>
                           <option value="backend">Backend</option>
@@ -338,7 +338,7 @@ const TabbedDashboard = ({ onLogout }) => {
                           type="number"
                           value={editForm.percent || ''}
                           onChange={(e) => setEditForm({...editForm, percent: parseInt(e.target.value)})}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                          className="w-full px-3 py-2 border text-scuro font-medium border-gray-300 rounded-md text-sm"
                           placeholder="Percentuale"
                           min="0"
                           max="100"
@@ -346,14 +346,14 @@ const TabbedDashboard = ({ onLogout }) => {
                         <div className="flex space-x-2">
                           <button
                             onClick={handleSave}
-                            className="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center"
+                            className="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
                           >
                             <Save className="w-4 h-4 mr-1" />
                             Salva
                           </button>
                           <button
                             onClick={() => setEditingItem(null)}
-                            className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center"
+                            className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
                           >
                             <X className="w-4 h-4 mr-1" />
                             Annulla
@@ -381,7 +381,7 @@ const TabbedDashboard = ({ onLogout }) => {
                         <div className="mb-2">
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div 
-                              className="bg-indigo-600 h-2 rounded-full" 
+                              className="bg-chiaro-2 h-2 rounded-full" 
                               style={{ width: `${tech.percent}%` }}
                             ></div>
                           </div>
@@ -425,7 +425,7 @@ const TabbedDashboard = ({ onLogout }) => {
                 <h2 className="text-2xl font-bold text-gray-900">Strumenti di Lavoro</h2>
                 <button 
                   onClick={() => handleAdd('tool')}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
+                  className="bg-scuro-2 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Aggiungi Strumento
@@ -440,14 +440,14 @@ const TabbedDashboard = ({ onLogout }) => {
                           type="text"
                           value={editForm.name || ''}
                           onChange={(e) => setEditForm({...editForm, name: e.target.value})}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                          className="w-full px-3 py-2 border text-scuro font-medium border-gray-300 rounded-md text-sm"
                           placeholder="Nome strumento"
                         />
                         <input
                           type="number"
                           value={editForm.percent || ''}
                           onChange={(e) => setEditForm({...editForm, percent: parseInt(e.target.value)})}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                          className="w-full px-3 py-2 border text-scuro font-medium border-gray-300 rounded-md text-sm"
                           placeholder="Percentuale"
                           min="0"
                           max="100"
@@ -455,14 +455,14 @@ const TabbedDashboard = ({ onLogout }) => {
                         <div className="flex space-x-2">
                           <button
                             onClick={handleSave}
-                            className="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center"
+                            className="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
                           >
                             <Save className="w-4 h-4 mr-1" />
                             Salva
                           </button>
                           <button
                             onClick={() => setEditingItem(null)}
-                            className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center"
+                            className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
                           >
                             <X className="w-4 h-4 mr-1" />
                             Annulla
@@ -481,7 +481,7 @@ const TabbedDashboard = ({ onLogout }) => {
                         <div className="mb-2">
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div 
-                              className="bg-indigo-600 h-2 rounded-full" 
+                              className="bg-chiaro-2 h-2 rounded-full" 
                               style={{ width: `${tool.percent}%` }}
                             ></div>
                           </div>
@@ -581,7 +581,7 @@ const TabbedDashboard = ({ onLogout }) => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                           <button 
                             onClick={() => handleEdit(project, 'project')}
-                            className="text-indigo-600 hover:text-indigo-900 mr-3 flex items-center"
+                            className="text-scuro font-medium border-r-1 pr-2 text-sm flex items-center"
                           >
                             <Edit className="w-4 h-4 mr-1" />
                             Modifica

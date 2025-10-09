@@ -51,18 +51,67 @@ export const portfolioAPI = {
     }
   },
 
-  // Recupera competenze
-  async getSkills() {
+  // Recupera tools
+  async getTools() {
     try {
       const { data, error } = await supabase
-        .from('skills')
+        .from('tools')
         .select('*')
-        .order('order_index', { ascending: true })
+        .order('percent', { ascending: false })
 
       if (error) throw error
       return { success: true, data: data || [] }
     } catch (error) {
-      console.error('Errore nel recupero competenze:', error)
+      console.error('Errore nel recupero tools:', error)
+      return { success: false, error: error.message }
+    }
+  },
+
+  // Recupera tecnologie
+  async getTechnologies() {
+    try {
+      const { data, error } = await supabase
+        .from('technologies')
+        .select('*')
+        .order('percent', { ascending: false })
+
+      if (error) throw error
+      return { success: true, data: data || [] }
+    } catch (error) {
+      console.error('Errore nel recupero tecnologie:', error)
+      return { success: false, error: error.message }
+    }
+  },
+
+  // Recupera tecnologie per categoria (frontend, backend, database)
+  async getTechnologiesByCategory(category) {
+    try {
+      const { data, error } = await supabase
+        .from('technologies')
+        .select('*')
+        .eq('category', category)
+        .order('percent', { ascending: false })
+
+      if (error) throw error
+      return { success: true, data: data || [] }
+    } catch (error) {
+      console.error(`Errore nel recupero tecnologie ${category}:`, error)
+      return { success: false, error: error.message }
+    }
+  },
+
+  // Recupera tools
+  async getTools() {
+    try {
+      const { data, error } = await supabase
+        .from('tools')
+        .select('*')
+        .order('percent', { ascending: false })
+
+      if (error) throw error
+      return { success: true, data: data || [] }
+    } catch (error) {
+      console.error('Errore nel recupero tools:', error)
       return { success: false, error: error.message }
     }
   },
