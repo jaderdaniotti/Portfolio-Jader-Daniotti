@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../config/supabase';
 import { portfolioEvents } from '../utils/umami';
 import jader from '../../immagini/AVATAR/1.jpg';
+import { Link } from 'react-router-dom';
 
 const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');

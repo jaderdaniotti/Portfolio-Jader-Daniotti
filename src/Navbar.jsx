@@ -34,7 +34,6 @@ function Navbar() {
         { href: "/Collaborazioni", text: "Collaborazioni" },
         { href: "/Contatti", text: "Contatti" },
         { href: "/Servizi", text: "Servizi" },
-        ...(isAdmin ? [{ href: "/admin", text: "Pannello", admin: true }] : []),
     ];
 
     useEffect(() => {

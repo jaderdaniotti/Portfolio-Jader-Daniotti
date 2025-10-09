@@ -106,7 +106,7 @@ const UmamiAPIData = () => {
             <select 
               value={dateRange} 
               onChange={(e) => setDateRange(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black font-medium"
             >
               <option value="7d">Ultimi 7 giorni</option>
               <option value="30d">Ultimi 30 giorni</option>
