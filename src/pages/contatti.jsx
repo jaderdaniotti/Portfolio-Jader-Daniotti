@@ -6,12 +6,42 @@ function Contatti() {
 
 
   let contatti = [
-    { icona: `bi bi-envelope-at-fill`, link: "mailto:jaderdaniotti.lavoro@gmail.com" },
-    { icona: `bi bi-phone`, link: "sms:+393513152008" },
-    { icona: `bi bi-chat`, link: "tel:+393513152008" },
-    { icona: `bi bi-linkedin`, link: "https://www.linkedin.com/in/jader-daniotti-0a00b9328/" },
-    { icona: `bi bi-whatsapp`, link: "https://wa.me/3513152008" },
-    { icona: `bi bi-instagram`, link: "https://www.instagram.com/jader_ness/" },
+    { 
+      icona: `bi bi-envelope-at-fill`, 
+      link: "mailto:jaderdaniotti.lavoro@gmail.com",
+      name: "Email",
+      description: "Scrivimi una email"
+    },
+    { 
+      icona: `bi bi-phone`, 
+      link: "tel:+393513152008",
+      name: "Telefono",
+      description: "Chiamami direttamente"
+    },
+    { 
+      icona: `bi bi-chat`, 
+      link: "sms:+393513152008",
+      name: "SMS",
+      description: "Mandami un messaggio"
+    },
+    { 
+      icona: `bi bi-linkedin`, 
+      link: "https://www.linkedin.com/in/jader-daniotti-0a00b9328/",
+      name: "LinkedIn",
+      description: "Connettiamoci"
+    },
+    { 
+      icona: `bi bi-whatsapp`, 
+      link: "https://wa.me/3513152008",
+      name: "WhatsApp",
+      description: "Chatta con me"
+    },
+    { 
+      icona: `bi bi-instagram`, 
+      link: "https://www.instagram.com/jader_ness/",
+      name: "Instagram",
+      description: "Seguimi"
+    },
   ]
 
   return (
@@ -28,17 +58,33 @@ function Contatti() {
         </h1>
       </div>
       <hr className="mb-10" />
-      <div className="grid grid-cols-3 md:grid-cols-6 text-center px-10 gap-10">
-        {contatti.map((contatto, index) => (
-          <a
-            href={contatto.link}
-            className="duration-300 text-5xl md:text-6xl hover:scale-110 transition-all hover:-translate-y-1"
-            target="_blank"
-            key={index}
-          >
-            <i className={contatto.icona}></i>
-          </a>
-        ))}
+      <div className="px-6 py-8">
+        <p className="text-xl px-10 md:px-20 md:text-4xl font-bold text-bianco tracking-tight text-center">
+          Scegli il modo per entrare in contatto.
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl py-10 mx-auto">
+          {contatti.map((contatto, index) => (
+            <a
+              href={contatto.link}
+              className="bg-chiaro rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-95 hover:-translate-y-2 group linear"
+              target="_blank"
+              key={index}
+            >
+              <div className="text-center">
+                <div className="bg-scuro rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 group-hover:bg-scuro-2 transition-colors duration-300">
+                  <i className={`${contatto.icona} text-bianco text-3xl`}></i>
+                </div>
+                <h3 className="text-bianco font-semibold text-lg mb-2 group-hover:text-scuro-2 transition-colors duration-300">
+                  {contatto.name}
+                </h3>
+                <p className="text-bianco text-sm font-medium opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                  {contatto.description}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
       <hr className="my-10" />
       <div className="px-4 py-8 flex flex-col gap-6">

@@ -401,12 +401,26 @@ function Home() {
                     </div>
                 </div>
                 <div className="text-center my-5">
-                    <p className="text-4xl md:text-4xl px-2 pt-5 text-center"  >Oppure tramite chiamata, email o social network</p>
-                    <div className="flex justify-center gap-5" >
+                    <p className="text-4xl md:text-4xl px-2 pt-5 text-center mb-8"  >Oppure tramite chiamata, email o social network</p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-4xl mx-auto px-6" >
                         {contatti.map((contatto, index) => {
                             return (
-                                <a href={contatto.link} target="_blank" className="text-3xl md:text-5xl mt-5 duration-300 hover:scale-110 transition-all hover:-translate-y-1" key={index} >
-                                    <i className={contatto.icona} ></i>
+                                <a 
+                                    href={contatto.link} 
+                                    target="_blank" 
+                                    className="bg-chiaro rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-2 group" 
+                                    key={index}
+                                    data-aos="fade-up"
+                                    data-aos-delay={index * 100}
+                                >
+                                    <div className="text-center">
+                                        <div className="bg-scuro rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3 group-hover:bg-scuro-2 transition-colors duration-300">
+                                            <i className={`${contatto.icona} text-bianco text-2xl`}></i>
+                                        </div>
+                                        <h3 className="text-bianco font-semibold text-sm md:text-base group-hover:text-scuro-2 transition-colors duration-300">
+                                            {contatto.name}
+                                        </h3>
+                                    </div>
                                 </a>
                             )
                         })}

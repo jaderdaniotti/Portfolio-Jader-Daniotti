@@ -3,6 +3,7 @@ import './App.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from 'react';
 import GlobalLoader from './components/GlobalLoader';
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/home'
 import Progetti from './pages/progetti'
 import Collaborazioni from './pages/collaborazioni';
@@ -11,6 +12,7 @@ import Competenze from './pages/competenze';
 import Contatti from './pages/contatti';
 import Servizi from "./pages/servizi";
 import Admin from "./pages/Admin";
+import Work from "./pages/work";
 import FloatingDashboardButton from "./components/FloatingDashboardButton";
 import { useUmamiTracking } from './utils/umami';
 
@@ -30,8 +32,10 @@ function App() {
       
       {!isLoading && (
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path='/work' element={<Work />} />
             <Route path='/chisono' element={<Chisono />} />
             <Route path='/collaborazioni' element={<Collaborazioni />} />
             <Route path='/competenze' element={<Competenze />} />

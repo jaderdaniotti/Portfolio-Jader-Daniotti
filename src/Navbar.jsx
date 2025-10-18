@@ -28,7 +28,8 @@ function Navbar() {
     const handleLinkClick = () => setIsOpen(false);
     const LINK = [
         { href: "/", text: "Home" },
-        { href: "/Chisono", text: "Jader" },
+        { href: "/work", text: "Work"},
+        // { href: "/Chisono", text: "Jader" },
         { href: "/progetti", text: "Progetti" },
         { href: "/Competenze", text: "Competenze" },
         { href: "/Collaborazioni", text: "Collaborazioni" },

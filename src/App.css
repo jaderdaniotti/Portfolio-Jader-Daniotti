@@ -75,6 +75,38 @@ body {
   color: var(--chiaro-2);
 }
 
+.border-chiaro{
+  border: 2px solid var(--chiaro);
+}
+.border-chiaro-2{
+  border: 2px solid var(--chiaro-2);
+}
+.border-scuro{
+  border: 2px solid var(--scuro);
+}
+.border-scuro-2{
+  border: 2px solid var(--scuro-2);
+}
+
+/* #endregion */
+
+/* #region gradienti */
+.bg-gradient-chiaro {
+  background: linear-gradient(135deg, var(--chiaro) 0%, var(--chiaro-2) 100%);
+}
+
+.bg-gradient-chiaro2 {
+  background: linear-gradient(135deg, var(--chiaro-2) 0%, var(--scuro-2) 100%);
+}
+
+.bg-gradient-scuro {
+  background: linear-gradient(135deg, var(--scuro) 0%, var(--scuro-2) 100%);
+}
+
+.bg-gradient-scuro2 {
+  background: linear-gradient(135deg, var(--scuro-2) 0%, var(--chiaro-2) 100%);
+}
+
 /* #endregion */
 
 /* #region font */
