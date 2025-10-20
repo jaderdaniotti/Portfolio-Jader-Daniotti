@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { supabase } from '../config/supabase';
 import { portfolioEvents } from '../utils/umami';
-import jader from '../../immagini/AVATAR/1.jpg';
+// rimpiazzato con 3D room
+import SciFiRoom3D from './SciFiRoom3D';
 import { Link } from 'react-router-dom';
+import BigButton from './BigButton';
 
 const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
@@ -12,9 +14,9 @@ const Login = ({ onLoginSuccess }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async (e) => {
-        e.preventDefault();
-        setLoading(true);
-        setError('');
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
     try {
       // Controlla se l'utente esiste nel database
@@ -43,98 +45,109 @@ const Login = ({ onLoginSuccess }) => {
     } finally {
       setLoading(false);
     }
-    };
+  };
 
-    return (
-        <div className="min-h-screen montserrat items-center justify-center bg-white  grid md:grid-cols-2">
-            <img src={jader} alt="Logo" className="w-full h-full object-cover" />
-            <div className="max-w-md w-full p-8 flex justify-center items-center space-y-8">
-                <section className='shadow-lg rounded-md p-4'>
-                <div className=''>
-                    <h2 className="mt-6  montserrat text-center text-3xl font-bold text-gray-900">
-                        Accesso al pannello
-                    </h2>
-                    <hr className='my-4 text-scuro' />
-                    <p className="text-center text-md text-gray-600">
-                        Accedi alla dashboard per aggiungere contenuti, modificare, eliminare e visualizzare le analytics del sito.  
-                    </p>
-                </div>
+  return (
+    <div className="min-h-screen montserrat items-center justify-center bg-bianco flex flex-col">
+      <div className="w-full h-full z-99 md:px-5">
+        <SciFiRoom3D />
+      </div>
+      <hr className='w-full my-4 text-scuro' />
+      <div id='login' className="md:max-w-3/4 w-full p-8 flex justify-center items-center space-y-8">
+        <section className=' rounded-md p-4 pb-5'>
+          <h2 className="mt-6 inter  text-center text-7xl font-bold text-gray-900">
+            Accesso al pannello
+          </h2>
+          <hr className='my-4 text-scuro' />
+          <p className="text-center text-scuro font-normal text-3xl">
+            Oltre questa sezione c'è il pannello di <span className='font-medium italic'>Jader</span>, per aggiungere dinamicamente progetti e competenze nel sito, controllare le analytics del sito e molto altro.
+          </p>
+          <div className=''>
+          </div>
 
-                <form className="mt-8 space-y-6" onSubmit={handleLogin}>
-                    <div className="rounded-md shadow-sm space-y-">
-                        <div>
-                            <label htmlFor="email" className="sr-only">
-                                Email
-                            </label>
-                            <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                                placeholder="Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
-                        </div>
-            <div className="relative">
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                autoComplete="current-password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+          <form className="mt-8 space-y-6" onSubmit={handleLogin}>
+            <div className="rounded-md  grid grid-cols-1 md:grid-cols-2 gap-5 space-y-2">
+              <div className='relative'>
+                <span className='absolute -top-1/3 -left-4 bg-gradient-scuro z-99 px-3 text-2xl font-light text-bianco rounded-tl-md'>Email</span>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border-scuro border-1 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-2xl font-light "
+                  placeholder=""
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="relative">
+              <span className='absolute -top-1/3 -left-4 bg-gradient-scuro z-99 px-3 text-2xl font-light text-bianco rounded-tl-md'>Password</span>
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border-scuro border-1 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-2xl font-light "
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {error}
+              </div>
+            )}
+
+            <div className='flex flex-col justify-center items-center gap-1'>
               <button
-                type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                onClick={() => setShowPassword(!showPassword)}
+                type="submit"
+                disabled={loading}
+                className="cta mt-5 mb-5 mx-auto w-auto"
               >
-                {showPassword ? (
-                  <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
-                  </svg>
-                ) : (
-                  <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                )}
-              </button>
-            </div>
-                    </div>
+                <span className="span">{loading ? 'Accesso' : 'Accedi'}</span>
+                <span className="second">
+                    <svg
+                        width="50px"
+                        height="20px"
+                        viewBox="0 0 66 43"
+                        version="1.1"
+                    >
+                        <g
+                            id="arrow"
 
-                    {error && (
-                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                            {error}
-                        </div>
-                    )}
-
-                    <div>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md bg-scuro-2 text-white hover:bg-scuro-2 transition-all duration-300 hover:scale-95"
                         >
-                            {loading ? 'Accesso in corso...' : 'Accedi'}
-                        </button>
-                        <Link to="/" className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md bg-scuro-2 text-white hover:bg-scuro-2 transition-all duration-300 hover:scale-95 mt-1'>Torna al sito</Link>
-                    </div>
-                </form>
-                <hr className='my-4 text-scuro' /> 
-                <p className='text-center text-sm mt-3 font-medium text-gray-600'>* Area riservata </p>
-                </section>
+                            <path
+                                className="one"
+                                d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 40.1543933,3.89485454 Z"
+                                fill="#FFFFFF"
+                            ></path>
+                            <path
+                                className="two"
+                                d="M20.1543933,3.89485454 L23.9763149,0.139296592 C24.1708311,-0.0518420739 24.4826329,-0.0518571125 24.6771675,0.139262789 L45.6916134,20.7848311 C46.0855801,21.1718824 46.0911863,21.8050225 45.704135,22.1989893 C45.7000188,22.2031791 45.6958657,22.2073326 45.6916762,22.2114492 L24.677098,42.8607841 C24.4825957,43.0519059 24.1708242,43.0519358 23.9762853,42.8608513 L20.1545186,39.1069479 C19.9575152,38.9134427 19.9546793,38.5968729 20.1481845,38.3998695 C20.1502893,38.3977268 20.1524132,38.395603 20.1545562,38.3934985 L36.9937789,21.8567812 C37.1908028,21.6632968 37.193672,21.3467273 37.0001876,21.1497035 C36.9980647,21.1475418 36.9959223,21.1453995 36.9937605,21.1432767 L20.1545208,4.60825197 C19.9574869,4.41477773 19.9546013,4.09820839 20.1480756,3.90117456 C20.1501626,3.89904911 20.1522686,3.89694235 20.1543933,3.89485454 Z"
+                                fill="#FFFFFF"
+                            ></path>
+                            <path
+                                className="three"
+                                d="M0.154393339,3.89485454 L3.97631488,0.139296592 C4.17083111,-0.0518420739 4.48263286,-0.0518571125 4.67716753,0.139262789 L25.6916134,20.7848311 C26.0855801,21.1718824 26.0911863,21.8050225 25.704135,22.1989893 C25.7000188,22.2031791 25.6958657,22.2073326 25.6916762,22.2114492 L4.67709797,42.8607841 C4.48259567,43.0519059 4.17082418,43.0519358 3.97628526,42.8608513 L0.154518591,39.1069479 C-0.0424848215,38.9134427 -0.0453206733,38.5968729 0.148184538,38.3998695 C0.150289256,38.3977268 0.152413239,38.395603 0.154556228,38.3934985 L16.9937789,21.8567812 C17.1908028,21.6632968 17.193672,21.3467273 17.0001876,21.1497035 C16.9980647,21.1475418 16.9959223,21.1453995 16.9937605,21.1432767 L0.15452076,4.60825197 C-0.0425130651,4.41477773 -0.0453986756,4.09820839 0.148075568,3.90117456 C0.150162624,3.89904911 0.152268631,3.89694235 0.154393339,3.89485454 Z"
+                                fill="#FFFFFF"
+                            ></path>
+                        </g>
+                    </svg>
+                </span>
+                
+              </button>
+              <BigButton text='Torna al sito' href='/' />
             </div>
-        </div>
-    );
+          </form>
+        </section>
+      </div>
+    </div>
+  );
 };
 
 export default Login;

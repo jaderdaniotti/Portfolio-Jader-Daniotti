@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Aos from 'aos';
 function Footer() {
     let contatti = [
@@ -20,7 +21,15 @@ function Footer() {
                 ))}
             </nav>
             <aside className="grid-flow-col gap-4 md:place-self-center text-lg md:justify-self-end flex items-center">
+                <div className="flex flex-col">
                 <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
+                <Link 
+                    to="/credits" target="_blank" 
+                    className="text-scuro hover:text-scuro/70 font-medium md:text-end transition-colors duration-300 hover:underline"
+                >
+                    Crediti
+                </Link>
+                </div>
                 <img src="/immagini/AVATAR/1-Photoroom.png" alt="" className="w-12 h-12 md:w-20 md:h-20 rounded-full  hover:border-chiaro-2 transition-all duration-300 hover:scale-110 hover:rotate-3 cursor-pointer " />
             </aside>
         </footer>

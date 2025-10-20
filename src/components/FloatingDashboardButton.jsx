@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard } from 'lucide-react';
 
 const FloatingDashboardButton = () => {
   const [isAdmin, setIsAdmin] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     // Controlla se l'utente è admin
@@ -17,6 +18,11 @@ const FloatingDashboardButton = () => {
       }
     }
   }, []);
+
+  // Nasconde il pulsante sulla rotta /admin
+  if (location.pathname === '/admin') {
+    return null;
+  }
 
   return (
     <Link

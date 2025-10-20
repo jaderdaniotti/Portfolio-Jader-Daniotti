@@ -188,18 +188,18 @@ function Home() {
                         <div className="order-1 lg:order-2 overflow-visible">
                             {/* iPhone 3D */}
                             <hr className="py-5" />
-                            <div className="rounded-2xl p-4 phone-3d-container bg-gradient-chiaro2 w-[100vw]  mb-8">
+                            <div className="rounded-2xl p-4 phone-3d-container  w-[100vw]  mb-8">
                                 <Phone3D />
                             </div>
                             <hr className="py-5" />
-                            {/* Mouse 3D */}
-                            <div className="rounded-2xl p-4 phone-3d-container bg-gradient-scuro w-[100vw]  mb-8">
-                                <Mouse3D />
+                            {/* Laptop 3D */}
+                            <div className="rounded-2xl p-4 phone-3d-container bg-gradient-bianco w-[100vw]  mb-8">
+                                <Laptop3D />
                             </div>
                             <hr className="py-5" />
-                            {/* Laptop 3D */}
-                            <div className="rounded-2xl p-4 phone-3d-container bg-gradient-chiaro2 w-[100vw]  mb-8">
-                                <Laptop3D />
+                            {/* Mouse 3D */}
+                            <div className="rounded-2xl p-4 phone-3d-container  w-[100vw]  mb-8">
+                                <Mouse3D />
                             </div>
                             <hr className="py-5" />
                         </div>
@@ -428,7 +428,7 @@ function Home() {
                         </div>
                     </div>
                     {/* aurora */}
-                    <section className="bg-scuro-2 py-10">
+                    <section className="bg-gradient-scuro2 py-10">
                         <p className="text-7xl md:text-8xl tracking-tight  titolo-bianco text-center">
                             Jader
                         </p>
@@ -447,7 +447,7 @@ function Home() {
                         </div>
                     </section>
                     {/* martina */}
-                    <section className="bg-chiaro-2 py-10">
+                    <section className="bg-gradient-chiaro2 py-10">
                         <p className="text-7xl md:text-8xl tracking-tight titolo-bianco text-center">
                             Jader
                         </p>

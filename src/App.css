@@ -110,6 +110,10 @@ body {
   background: linear-gradient(135deg, var(--scuro-2) 0%, var(--chiaro-2) 100%);
 }
 
+.bg-gradient-bianco {
+  background: linear-gradient(135deg, var(--bianco) 0%, var(--chiaro) 100%);
+}
+
 /* #endregion */
 
 /* #region font */

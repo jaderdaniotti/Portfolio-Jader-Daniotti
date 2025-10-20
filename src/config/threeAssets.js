@@ -3,12 +3,14 @@
 import phoneModelUrl from '../assets/3D/apple_iphone_15_pro_max_black.glb';
 import mouseModelUrl from '../assets/3D/computer_mouse_a4tech_bloody_v7.glb';
 import laptopModelUrl from '../assets/3D/laptop.glb';
+import cyberCoreUrl from '../assets/3D/cyber_core.glb';
 
 // Esporta gli URL dei modelli 3D per uso centralizzato
 export const threeAssetUrls = {
     phone: phoneModelUrl,
     mouse: mouseModelUrl,
     laptop: laptopModelUrl,
+    sciFiRoom: cyberCoreUrl,
 };
 
 // Metadati dei modelli per debug e informazioni
@@ -36,6 +38,15 @@ export const threeAssetMetadata = {
         autoRotateSpeed: 0.4,
         minDistance: 2,
         maxDistance: 5,
+    },
+    sciFiRoom: {
+        name: 'Cyber Core',
+        // Scala conservativa; il modello verrà centrato e adattato
+        scale: [0.8, 0.8, 0.8],
+        cameraPosition: [0, 0, 3],
+        autoRotateSpeed: 0.3,
+        minDistance: 1.5,
+        maxDistance: 6,
     },
 };
 
