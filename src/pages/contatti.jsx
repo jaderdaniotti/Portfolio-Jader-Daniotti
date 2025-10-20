@@ -78,9 +78,6 @@ function Contatti() {
                 <h3 className="text-bianco font-semibold text-lg mb-2 group-hover:text-scuro-2 transition-colors duration-300">
                   {contatto.name}
                 </h3>
-                <p className="text-bianco text-sm font-medium opacity-80 group-hover:opacity-100 transition-opacity duration-300">
-                  {contatto.description}
-                </p>
               </div>
             </a>
           ))}

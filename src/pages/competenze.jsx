@@ -115,7 +115,7 @@ function Competenze() {
             <hr className='mb-10' />
             
             {loading ? (
-                <div className="text-center py-20">
+                <div className="text-center w-[100vw] h-[100vh] flex items-center justify-center py-20">
                     <div className="loading loading-spinner loading-xl"></div>
                 </div>
             ) : (

@@ -1,76 +1,63 @@
 import { useState, useEffect } from 'react';
+import { useGLTF } from '@react-three/drei';
+import { threeAssetUrls, threeAssetMetadata } from '../config/threeAssets';
 
-export const useResourcePreloader = (resources) => {
+export const useResourcePreloader = () => {
     const [loading, setLoading] = useState(true);
     const [progress, setProgress] = useState(0);
     const [currentResource, setCurrentResource] = useState('');
 
     useEffect(() => {
-        const preloadResources = async () => {
-            if (!resources || resources.length === 0) {
-                setLoading(false);
-                return;
-            }
+        const preloadAll = async () => {
+            // Definisce tutte le risorse 3D da precaricare
+            const allResources = [
+                { name: threeAssetMetadata.phone.name, type: 'glb', url: threeAssetUrls.phone },
+                { name: threeAssetMetadata.laptop.name, type: 'glb', url: threeAssetUrls.laptop },
+                { name: threeAssetMetadata.mouse.name, type: 'glb', url: threeAssetUrls.mouse },
+            ];
 
-            const totalResources = resources.length;
-            let loadedResources = 0;
+            const total = allResources.length;
+            let loaded = 0;
 
             const updateProgress = (resourceName) => {
-                loadedResources++;
-                setProgress((loadedResources / totalResources) * 100);
+                loaded++;
+                setProgress(Math.round((loaded / total) * 100));
                 setCurrentResource(resourceName);
             };
 
             try {
-                // Precarica tutte le risorse
-                const resourcePromises = resources.map((resource) => {
-                    return new Promise((resolve) => {
-                        if (resource.type === 'image') {
-                            const img = new Image();
-                            img.onload = () => {
-                                updateProgress(`Caricamento: ${resource.name}`);
-                                resolve();
-                            };
-                            img.onerror = () => {
-                                updateProgress(`Errore: ${resource.name}`);
-                                resolve(); // Continua anche se c'è un errore
-                            };
-                            img.src = resource.url;
-                        } else if (resource.type === 'font') {
-                            // Per i font, simuliamo il caricamento
-                            setTimeout(() => {
-                                updateProgress(`Font: ${resource.name}`);
-                                resolve();
-                            }, 100);
-                        } else {
-                            // Per altri tipi di risorse
-                            setTimeout(() => {
-                                updateProgress(`Risorsa: ${resource.name}`);
-                                resolve();
-                            }, 50);
+                // Precarica tutti i modelli 3D
+                for (const res of allResources) {
+                    if (res.type === 'glb') {
+                        try {
+                            useGLTF.preload(res.url);
+                            updateProgress(`Modello 3D: ${res.name}`);
+                        } catch (e) {
+                            console.warn('Preload GLB fallito:', res.url, e);
+                            updateProgress(`Errore modello 3D: ${res.name}`);
                         }
-                    });
-                });
-
-                await Promise.all(resourcePromises);
+                        // Piccolo delay tra ogni modello per evitare sovraccarico
+                        await new Promise(resolve => setTimeout(resolve, 200));
+                    }
+                }
 
                 // Simula un piccolo delay per mostrare il 100%
-                await new Promise(resolve => setTimeout(resolve, 300));
+                await new Promise(resolve => setTimeout(resolve, 500));
                 updateProgress('Completato!');
 
-                // Nasconde il loader
+                // Nasconde il loader dopo un breve delay
                 setTimeout(() => {
                     setLoading(false);
                 }, 500);
 
             } catch (error) {
-                console.error('Errore durante il precaricamento:', error);
+                console.error('Errore durante il precaricamento dei modelli 3D:', error);
                 setLoading(false);
             }
         };
 
-        preloadResources();
-    }, [resources]);
+        preloadAll();
+    }, []);
 
     return { loading, progress, currentResource };
 };

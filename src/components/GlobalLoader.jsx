@@ -1,12 +1,9 @@
 import { useResourcePreloader } from '../hooks/useResourcePreloader';
-import { getAllResourcesOrdered } from '../config/resources';
 import caduta from '../../immagini/caduta.png'
 
 const GlobalLoader = ({ onLoadingComplete }) => {
-    // Ottiene tutte le risorse ordinate per priorità
-    const resources = getAllResourcesOrdered();
-    
-    const { loading} = useResourcePreloader(resources);
+    // Precarica automaticamente tutti i modelli 3D
+    const { loading } = useResourcePreloader();
 
     // Quando il loading è completato, chiama la callback
     if (!loading && onLoadingComplete) {

@@ -34,7 +34,7 @@ function Navbar() {
         { href: "/Competenze", text: "Competenze" },
         { href: "/Collaborazioni", text: "Collaborazioni" },
         { href: "/Contatti", text: "Contatti" },
-        { href: "/Servizi", text: "Servizi" },
+        // { href: "/Servizi", text: "Servizi" },
     ];
 
     useEffect(() => {
@@ -48,7 +48,7 @@ function Navbar() {
 
     return (
         <>
-            <nav className={`sticky top-0 left-0 right-0 w-full z-40 transition-all duration-300 ${scrolled ? 'bg-chiaro shadow-lg py-1' : 'bg-chiaro py-2'
+            <nav className={`sticky z-[999] top-0 left-0 right-0 w-full  transition-all duration-300 ${scrolled ? 'bg-chiaro shadow-lg py-1' : 'bg-chiaro py-2'
                 }`}>
                 <div className="container mx-auto px-4 flex items-center justify-between relative">
                     <div className="flex-shrink-0">

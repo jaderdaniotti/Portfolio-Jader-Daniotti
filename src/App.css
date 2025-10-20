@@ -13,11 +13,13 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: visible;
 }
 
 body {
   background: #18122B;
-  background: linear-gradient(90deg, rgba(24, 18, 43, 1) 0%, rgb(34, 28, 49) 50%, rgba(24, 18, 43, 1) 100%);
+  background: linear-gradient(135deg, var(--scuro) 0%, var(--scuro-2) 100%);
+  background-attachment: fixed;
   /* background-image: url(//immagini/sfondo.png);
   background-size: cover;
   background-repeat: no-repeat;
@@ -32,6 +34,7 @@ body {
     /* -0.025em */
   
   overflow-y: auto;
+  overflow-x: visible;
 }
 
 /* #region colori */
@@ -134,6 +137,14 @@ body {
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
+}
+
+.inter {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: -0.025em;
 }
 
 /* #endregion */
@@ -255,7 +266,7 @@ body {
 }
 
 .animazioneloader {
-  animation: animazioneloader 3s linear infinite;
+  animation: animazioneloader 10s linear infinite;
 }
 
 @keyframes animazioneloader {
@@ -285,4 +296,26 @@ body {
 .carosello-item:hover svg {
   transform: scale(1.1);
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+/* Stili per il componente 3D */
+.phone-3d-container {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow: visible !important;
+  display: flex;            /* centra il contenuto orizzontalmente e verticalmente */
+  align-items: center;      /* centratura verticale */
+  justify-content: center;  /* centratura orizzontale */
+}
+
+.phone-3d-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: contain;
+  overflow: visible !important;
+  align-items: center !important;
 }

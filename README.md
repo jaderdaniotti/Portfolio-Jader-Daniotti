@@ -261,3 +261,133 @@ Questo progetto è di proprietà di Jader Daniotti. Tutti i diritti riservati.
 **Ultimo aggiornamento**: Dicembre 2024
 **Versione**: 2.0.0
 **Status**: Production Ready ✅
+
+---
+
+## 🎯 3D Components: Architettura, Caricamento e Fix del Primo Load
+
+Questo capitolo spiega in modo chiaro per Project Manager e Dev come funzionano i componenti 3D (Phone, Mouse, Laptop), come avviene il loro caricamento, perché al primo caricamento a volte non compaiono e cosa fare per risolvere definitivamente.
+
+### Stack 3D in breve
+- **React Three Fiber (R3F)**: renderer React per Three.js (`<Canvas />`, `useFrame`).
+- **drei**: utility e helpers (es. `useGLTF`, `OrbitControls`, `Environment`, `PresentationControls`).
+- **Modelli GLB**: caricati via `useGLTF` con caching interno di drei.
+
+### Dove sono i componenti 3D
+- `src/components/Phone3D.jsx`
+- `src/components/Mouse3D.jsx`
+- `src/components/Laptop3D.jsx`
+
+Struttura comune:
+- Precaricamento modello via `useGLTF.preload(...)` a livello modulo.
+- `Model` che usa `useGLTF(url, true)` e applica piccole ottimizzazioni (bounding, shadows, rotazione in `useFrame`).
+- `Canvas` con luci di base, `Environment`, `PresentationControls` e `OrbitControls`.
+- `Suspense` con fallback, `ErrorBoundary` e fallback semplice in caso di errore/timeout.
+
+### Come avviene oggi il caricamento
+1. In `home.jsx` viene usato l'hook `useResourcePreloader` per mostrare una barra di “preparazione modelli 3D”.
+2. L’hook esegue `useGLTF.preload(resource.url)` usando URL assoluti in `/assets/3D/...` (cartella pubblica).
+3. I componenti 3D invece importano i GLB da `src/assets/3D/...` (import Vite che produce URL bundlati e hashati in build) e poi chiamano `useGLTF(importUrl, true)`.
+4. Si renderizza `<Canvas>` con `Suspense`: quando il modello è davvero pronto, appare la scena; in caso contrario, si vede il fallback.
+
+### Perché al primo load può non funzionare (sintomi riportati)
+- Al primo caricamento della Home, a volte i modelli 3D non compaiono; cambiando pagina e tornando, funzionano; con reload, di nuovo problemi.
+
+Cause principali individuate:
+- **Cache disallineata (URL diversi)**: il preloader usa path pubblici (`/assets/3D/...`), i componenti usano URL generati dal bundler (import da `src/assets/...`). Il caching di `useGLTF` è per-URL, quindi il “precarico” non serve ai componenti (due URL diversi ⇒ due cache diverse ⇒ doppio fetch, timing e race conditions).
+- **StrictMode in sviluppo**: React 18 StrictMode ri-monta i componenti in dev, quindi il Canvas/renderer può inizializzarsi due volte. Con `frameloop="demand"` e carichi concorrenti, può sembrare che non parta finché non si cambia route.
+- **Preloader non attende realmente i GLB**: `useGLTF.preload` attiva il loader interno, ma l’hook attuale risolve la Promise subito dopo la chiamata, quindi la UI di “preparazione” può chiudersi prima che i GLB siano in cache per i componenti.
+- **Percorsi e duplicazione asset**: GLB presenti sia in `public/assets/3D` che in `src/assets/3D`. Se si mescolano approcci (public URL vs import Vite), si perde il beneficio del caching condiviso.
+
+### Effetti collaterali osservabili
+- Fallback che rimane visibile al primo load; al cambio pagina/tornando, il modello appare.
+- Reload che fa perdere lo stato della cache di drei su alcuni URL, riproponendo il problema.
+
+### Linee guida per una soluzione stabile
+1. **Unificare le sorgenti dei GLB**
+   - Scegliere un SOLO modo di risolvere i GLB: o tutti via `import` (Vite) o tutti via `public/` path assoluti. Consigliato: via `import`, perché:
+     - URL unici e cacheable dal bundler
+     - hashing in produzione
+     - referenze consistenti in tutto il codice
+
+2. **Allineare il Preloader agli stessi URL dei componenti**
+   - Esportare gli URL dei modelli da un modulo condiviso e riusarli sia nel preloader sia nei componenti 3D.
+
+3. **Usare `<Preload all />` dentro ogni `<Canvas>`**
+   - Componente di drei che garantisce il prefetch delle risorse usate nella scena prima del render finale.
+
+4. **Evitare StrictMode-only glitches in dev**
+   - In sviluppo, StrictMode ri-monta; per verificare, si può temporaneamente rimuovere StrictMode o passare `frameloop="always"` per debugging, poi ripristinare `demand` con invalidazioni gestite da `useFrame`/autoRotate.
+
+5. **Non duplicare GLB tra `public/` e `src/`**
+   - Tenere i modelli in `src/assets/3D` e rimuovere le copie da `public/` (o viceversa) per evitare incongruenze.
+
+### Modello di implementazione consigliato
+
+1) Creare una mappa centralizzata degli asset 3D (stessi URL ovunque):
+
+```javascript
+// src/config/threeAssets.js
+import phoneModelUrl from '../assets/3D/apple_iphone_15_pro_max_black.glb';
+import mouseModelUrl from '../assets/3D/computer_mouse_a4tech_bloody_v7.glb';
+import laptopModelUrl from '../assets/3D/laptop.glb';
+
+export const threeAssetUrls = {
+  phone: phoneModelUrl,
+  mouse: mouseModelUrl,
+  laptop: laptopModelUrl,
+};
+```
+
+2) Usare questi URL sia nel preloader che nei componenti 3D:
+
+```javascript
+// src/hooks/useResourcePreloader.js (estratto)
+import { threeAssetUrls } from '../config/threeAssets';
+import { useGLTF } from '@react-three/drei';
+
+// Esempio: precarica esplicitamente gli stessi URL
+useGLTF.preload(threeAssetUrls.phone);
+useGLTF.preload(threeAssetUrls.mouse);
+useGLTF.preload(threeAssetUrls.laptop);
+```
+
+```javascript
+// src/components/Phone3D.jsx (estratto)
+import { threeAssetUrls } from '../config/threeAssets';
+useGLTF.preload(threeAssetUrls.phone);
+const { scene } = useGLTF(threeAssetUrls.phone, true);
+```
+
+3) Aggiungere `<Preload all />` nel Canvas:
+
+```jsx
+import { Preload } from '@react-three/drei';
+
+<Canvas frameloop="demand" dpr={[1, 1.5]} camera={{ position: [0, 0, 3], fov: 100 }}>
+  {/* luci, controls, ecc. */}
+  <Preload all />
+</Canvas>
+```
+
+4) Semplificare il preloader pagina per i GLB
+- Opzione A: lasciare solo il preloader immagini/font nell’hook e affidare il preload dei GLB a: `useGLTF.preload(...)` + `<Preload all />`.
+- Opzione B: se si vuole mostrare progress reale dei GLB, usare il `useProgress` di drei al posto di simulazioni.
+
+### Check-list rapida per la correzione
+- [ ] Creata `src/config/threeAssets.js` con gli import Vite dei 3 GLB.
+- [ ] Aggiornati `Phone3D.jsx`, `Mouse3D.jsx`, `Laptop3D.jsx` a usare gli stessi URL da `threeAssetUrls` (sia per `preload` che per `useGLTF`).
+- [ ] Aggiornato `useResourcePreloader` per non usare `/assets/3D/...` assoluti; opzionalmente rimosso il precaricamento GLB da lì.
+- [ ] Aggiunto `<Preload all />` dentro i `<Canvas>`.
+- [ ] Rimosse copie duplicate dei GLB da `public/` (se si scelgono asset in `src/`).
+- [ ] Testato in dev con/ senza StrictMode per escludere glitch di doppio mount.
+
+### Effetto dei fix
+- Il pre-caricamento sarà coerente e realmente efficace (stessa chiave URL ⇒ cache condivisa).
+- I modelli compariranno correttamente al primo load della Home senza dover cambiare pagina.
+- Il reload non romperà più la visualizzazione (cache e pipeline di caricamento allineate).
+
+### Nota sulle performance
+- `frameloop="demand"` è ideale per risparmiare CPU/GPU. Con rotazioni animate via `useFrame`, la scena invalida i frame correttamente.
+- Tenere `dpr` massimo a 1.5, evitare shadow map pesanti e texture enormi.
+

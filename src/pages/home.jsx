@@ -6,6 +6,9 @@ import Footer from "../Footer";
 import Marquee from "react-fast-marquee";
 import SEOHead from '../components/SEOHead';
 import DotGrid from '../components/DotGrid';
+import Phone3D from '../components/Phone3D';
+import Mouse3D from '../components/Mouse3D';
+import Laptop3D from '../components/Laptop3D';
 import { portfolioAPI } from '../config/supabase';
 
 
@@ -14,9 +17,6 @@ function Home() {
     const [tecnologie, setTecnologie] = useState([]);
     const [tools, setTools] = useState([]);
     const [loading, setLoading] = useState(true);
-    
-    let h_icon = 75;
-    let w_icon = 75;
 
     // Fetch delle tecnologie dal database
     useEffect(() => {
@@ -25,10 +25,6 @@ function Home() {
                 const result = await portfolioAPI.getTechnologies();
                 if (result.success) {
                     setTecnologie(result.data);
-                    if (result.data.length > 0) {
-                        console.log('Prima tecnologia:', result.data[0]);
-                        console.log('SVG della prima tecnologia:', result.data[0].svg_code);
-                    }
                 } else {
                     console.error('Errore nel caricamento tecnologie:', result.error);
                 }
@@ -48,10 +44,6 @@ function Home() {
                 const result = await portfolioAPI.getTools();
                 if (result.success) {
                     setTools(result.data);
-                    if (result.data.length > 0) {
-                        console.log('Primo tool:', result.data[0]);
-                        console.log('SVG della primo tool:', result.data[0].svg_code);
-                    }
                 } else {
                     console.error('Errore nel caricamento tecnologie:', result.error);
                 }
@@ -171,8 +163,104 @@ function Home() {
                         </p>
                         <BigButton text="CONOSCIMI" href="/Chisono"></BigButton>
                     </div>
-                    <div className="shadow shadow-fuchsia-200 rounded-full border-fuchsia-200 border-1 max-w-full p-10 object-contain" data-aos="fade-up" dat data-aos-duration="500">
+                    <div className="shadow shadow-fuchsia-200 rounded-full border-fuchsia-200 border-1 max-w-full p-10 object-contain" data-aos="fade-up" data-aos-duration="200">
                         <img src="immagini\AVATAR\1-Photoroom.png" className='hover:scale-110 hover:rotate-3 transition-all duration-300' alt="" />
+                    </div>
+                </div>
+            </section>
+            <hr />
+            {/* 3D */}
+            <section className="py-5 min-h-screen  overflow-visible">
+                <div className="container mx-auto px-6 overflow-visible">
+                    <div className="text-center mb-16">
+                        <h1 className='text-5xl tracking-tight md:text-8xl font-bold titolo-bianco py-5' data-aos="fade-up">
+                            Tecnologia 3D
+                        </h1>
+                        <p className="text-2xl text-center md:text-2xl font-medium max-w-3xl mx-auto text-chiaro" data-aos="fade-up">
+                            Esplora le possibilità della tecnologia 3D nel web moderno. 
+                            iPhone, Mouse e Laptop sono stati integrati utilizzando React Three Fiber.
+                        </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 gap-8 items-start overflow-visible">
+                       
+                        
+                        <div className="order-1 lg:order-2 overflow-visible">
+                            {/* iPhone 3D */}
+                            <hr className="py-5" />
+                            <div className="rounded-2xl p-4 phone-3d-container bg-gradient-chiaro2 w-[100vw]  mb-8">
+                                <Phone3D />
+                            </div>
+                            <hr className="py-5" />
+                            {/* Mouse 3D */}
+                            <div className="rounded-2xl p-4 phone-3d-container bg-gradient-scuro w-[100vw]  mb-8">
+                                <Mouse3D />
+                            </div>
+                            <hr className="py-5" />
+                            {/* Laptop 3D */}
+                            <div className="rounded-2xl p-4 phone-3d-container bg-gradient-chiaro2 w-[100vw]  mb-8">
+                                <Laptop3D />
+                            </div>
+                            <hr className="py-5" />
+                        </div>
+
+                        <div className="order-2 ">
+                            <div className=" rounded-2xl p-8 ">
+                                {/* Card Features Responsive */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                                    {/* Card 1 - Rotazione */}
+                                    <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border border-chiaro/20 rounded-xl p-4 sm:p-6 hover:from-scuro/30 hover:to-scuro/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-chiaro/10">
+                                        <div className="flex flex-col items-center justify-center text-center space-y-3">
+                                            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-chiaro/10 rounded-full flex items-center justify-center">
+                                                <i className="bi bi-arrow-clockwise text-chiaro text-xl sm:text-2xl"></i>
+                                            </div>
+                                            <span className="text-bianco font-medium text-sm sm:text-base lg:text-lg leading-tight">
+                                                Rotazione automatica e controlli manuali
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Card 2 - Zoom */}
+                                    <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border border-chiaro/20 rounded-xl p-4 sm:p-6 hover:from-scuro/30 hover:to-scuro/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-chiaro/10">
+                                        <div className="flex flex-col items-center justify-center text-center space-y-3">
+                                            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-chiaro/10 rounded-full flex items-center justify-center">
+                                                <i className="bi bi-zoom-in text-chiaro text-xl sm:text-2xl"></i>
+                                            </div>
+                                            <span className="text-bianco font-medium text-sm sm:text-base lg:text-lg leading-tight">
+                                                Zoom e navigazione fluida
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Card 3 - Performance */}
+                                    <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border border-chiaro/20 rounded-xl p-4 sm:p-6 hover:from-scuro/30 hover:to-scuro/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-chiaro/10">
+                                        <div className="flex flex-col items-center justify-center text-center space-y-3">
+                                            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-chiaro/10 rounded-full flex items-center justify-center">
+                                                <i className="bi bi-lightning text-chiaro text-xl sm:text-2xl"></i>
+                                            </div>
+                                            <span className="text-bianco font-medium text-sm sm:text-base lg:text-lg leading-tight">
+                                                Rendering ottimizzato per le performance
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* Card 4 - Illuminazione */}
+                                    <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border border-chiaro/20 rounded-xl p-4 sm:p-6 hover:from-scuro/30 hover:to-scuro/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-chiaro/10">
+                                        <div className="flex flex-col items-center justify-center text-center space-y-3">
+                                            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-chiaro/10 rounded-full flex items-center justify-center">
+                                                <i className="bi bi-palette text-chiaro text-xl sm:text-2xl"></i>
+                                            </div>
+                                            <span className="text-bianco font-medium text-sm sm:text-base lg:text-lg leading-tight">
+                                                Illuminazione realistica e ombre
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="mt-8">
+                                    <BigButton text="SCOPRI DI PIÙ" href="/progetti" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -181,20 +269,20 @@ function Home() {
             <div className="py-16 ">
                 <div className="container mx-auto px-6">
                     <div className="text-center mb-16">
-                        <h1 className='text-5xl tracking-tight md:text-8xl font-bold titolo-bianco py-5' data-aos="fade-up" dat>
+                        <h1 className='text-5xl tracking-tight md:text-8xl font-bold titolo-bianco py-5' data-aos="fade-up">
                             I Miei Progetti
                         </h1>
-                        <p className="text-2xl md:text-2xl font-medium max-w-3xl mx-auto" data-aos="fade-up" dat >
+                        <p className="text-2xl md:text-2xl font-medium max-w-3xl mx-auto" data-aos="fade-up">
                             Ecco le anteprime dei miei progetti. Troverai un anteprima col video di ogni progetto, una descrizione di come è stato creato, e il link alla repository su <br />
                         </p>
-                        <p className="titolo-bianco mt-6 md:text-5xl text-5xl " data-aos="fade-up" dat >
+                        <p className="titolo-bianco mt-6 md:text-5xl text-5xl " data-aos="fade-up">
                             <a href='https://github.com/jaderdaniotti' target='_blank'  > Github <i className="bi bi-github"></i></a>
                         </p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto justify-center align-middle items-stretch" id='projects'>
                         {progetti.map((progetto, index) => (
-                            <div key={index} data-aos="fade-up" dat >
+                            <div key={index} data-aos="fade-up">
                                 <CardAnteprimaProgetti
                                     title={progetto.title}
                                     description={progetto.description}
@@ -385,12 +473,12 @@ function Home() {
             <div className="py-16 ">
                 <div className="container mx-auto ">
                     <div className="text-center mb-16">
-                        <h1 className='text-5xl md:text-8xl font-bold titolo-bianco tracking-tight py-10' data-aos="fade-up" dat>
+                        <h1 className='text-5xl md:text-8xl font-bold titolo-bianco tracking-tight py-10' data-aos="fade-up">
                             Contatti
                         </h1>
                         <div className="grid grid-cols-1 md:grid-cols-2 justify-center ">
                             <div className="flex flex-col justify-center px-5">
-                                <p className="text-3xl md:text-3xl lg:text-4xl flex max-w-3xl text-center mb-5 mx-auto px-1" data-aos="fade-up" dat>
+                                <p className="text-3xl md:text-3xl lg:text-4xl flex max-w-3xl text-center mb-5 mx-auto px-1" data-aos="fade-up">
                                     Puoi contattarmi direttamente tramite il mio Agent, fissando un appuntamento con Google Calendar.
                                 </p>
                             </div>
