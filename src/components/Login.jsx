@@ -4,7 +4,7 @@ import { portfolioEvents } from '../utils/umami';
 // rimpiazzato con 3D room
 import SciFiRoom3D from './SciFiRoom3D';
 import { Link } from 'react-router-dom';
-import BigButton from './BigButton';
+import BigButton from './bigButton';
 
 const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
