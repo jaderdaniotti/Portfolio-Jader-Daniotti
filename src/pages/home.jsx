@@ -496,7 +496,7 @@ function Home() {
                                 <a 
                                     href={contatto.link} 
                                     target="_blank" 
-                                    className="bg-chiaro rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-2 group" 
+                                    className=" rounded-lg p-6  transition-all duration-300 hover:scale-105 hover:-translate-y-2 group" 
                                     key={index}
                                     data-aos="fade-up"
                                     data-aos-delay={index * 100}
@@ -505,7 +505,7 @@ function Home() {
                                         <div className="bg-scuro rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3 group-hover:bg-scuro-2 transition-colors duration-300">
                                             <i className={`${contatto.icona} text-bianco text-2xl`}></i>
                                         </div>
-                                        <h3 className="text-bianco font-semibold text-sm md:text-base group-hover:text-scuro-2 transition-colors duration-300">
+                                        <h3 className="text-bianco font-normal text-2xl mb-2 group-hover:text-scuro-2 transition-colors duration-300">
                                             {contatto.name}
                                         </h3>
                                     </div>

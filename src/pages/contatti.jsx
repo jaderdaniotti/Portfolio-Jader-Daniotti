@@ -67,7 +67,7 @@ function Contatti() {
           {contatti.map((contatto, index) => (
             <a
               href={contatto.link}
-              className="bg-chiaro rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-95 hover:-translate-y-2 group linear"
+              className=" rounded-xl p-8 transition-all duration-300 hover:scale-95 hover:-translate-y-2 group linear"
               target="_blank"
               key={index}
             >
@@ -75,7 +75,7 @@ function Contatti() {
                 <div className="bg-scuro rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 group-hover:bg-scuro-2 transition-colors duration-300">
                   <i className={`${contatto.icona} text-bianco text-3xl`}></i>
                 </div>
-                <h3 className="text-bianco font-semibold text-lg mb-2 group-hover:text-scuro-2 transition-colors duration-300">
+                <h3 className="text-bianco font-normal text-2xl mb-2 group-hover:text-scuro-2 transition-colors duration-300">
                   {contatto.name}
                 </h3>
               </div>

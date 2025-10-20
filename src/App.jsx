@@ -12,7 +12,7 @@ import Competenze from './pages/competenze';
 import Contatti from './pages/contatti';
 import Servizi from "./pages/servizi";
 import Admin from "./pages/Admin";
-import Work from "./pages/work";
+import Work from "./pages/Work";
 import Credits from "./pages/Credits";
 import FloatingDashboardButton from "./components/FloatingDashboardButton";
 import { useUmamiTracking } from './utils/umami';
