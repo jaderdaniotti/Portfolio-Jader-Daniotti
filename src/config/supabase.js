@@ -9,13 +9,37 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.error('❌ Credenziali Supabase mancanti! Controlla il file .env')
 }
 
-// Crea il client Supabase per operazioni pubbliche
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Singleton pattern per evitare istanze multiple di GoTrueClient
+let supabaseInstance = null
+let supabaseAdminInstance = null
 
-// Crea il client Supabase per operazioni amministrative (se necessario)
-export const supabaseAdmin = supabaseServiceKey 
-  ? createClient(supabaseUrl, supabaseServiceKey)
-  : null
+// Crea il client Supabase per operazioni pubbliche (singleton)
+function getSupabaseClient() {
+  if (!supabaseInstance && supabaseUrl && supabaseAnonKey) {
+    supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        storageKey: 'sb-' + supabaseUrl.split('//')[1].split('.')[0] + '-auth-token',
+        storage: window.localStorage
+      }
+    })
+  }
+  return supabaseInstance
+}
+
+// Crea il client Supabase per operazioni amministrative (singleton)
+function getSupabaseAdminClient() {
+  if (!supabaseAdminInstance && supabaseServiceKey && supabaseUrl) {
+    supabaseAdminInstance = createClient(supabaseUrl, supabaseServiceKey)
+  }
+  return supabaseAdminInstance
+}
+
+// Esporta i client come proprietà (mantiene compatibilità con il codice esistente)
+export const supabase = getSupabaseClient()
+export const supabaseAdmin = getSupabaseAdminClient()
 
 // Funzioni per il portfolio
 export const portfolioAPI = {

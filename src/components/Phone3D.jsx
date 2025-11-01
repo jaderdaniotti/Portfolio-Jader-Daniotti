@@ -1,6 +1,6 @@
 import React, { useRef, useState, Suspense, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useGLTF, OrbitControls, Environment, PresentationControls, Preload } from '@react-three/drei';
+import { useGLTF, Environment, PresentationControls, Preload } from '@react-three/drei';
 import * as THREE from 'three';
 import { threeAssetUrls, threeAssetMetadata } from '../config/threeAssets';
 import { Smartphone } from 'lucide-react';
@@ -199,22 +199,15 @@ function Phone3D() {
                         <pointLight position={[-10, -10, -10]} intensity={0.5} />
                         <Environment preset="studio" />
                         <PresentationControls
-                            global
+                            global={false}
                             rotation={[0, 0, 0]}
                             polar={[-Math.PI / 3, Math.PI / 3]}
                             azimuth={[-Math.PI / 1.4, Math.PI / 1.4]}
+                            snap={false}
+                            enabled={true}
                         >
                             <PhoneModel onLoad={() => setIsLoaded(true)} />
                         </PresentationControls>
-                        <OrbitControls
-                            enableZoom
-                            enableRotate
-                            enablePan={false}
-                            autoRotate
-                            autoRotateSpeed={threeAssetMetadata.phone.autoRotateSpeed}
-                            minDistance={threeAssetMetadata.phone.minDistance}
-                            maxDistance={threeAssetMetadata.phone.maxDistance}
-                        />
                         <Preload all />
                     </Canvas>
                 </Suspense>

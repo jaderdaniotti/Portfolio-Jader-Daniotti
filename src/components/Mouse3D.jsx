@@ -1,6 +1,6 @@
 import React, { useRef, useState, Suspense, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useGLTF, OrbitControls, Environment, PresentationControls, Preload } from '@react-three/drei';
+import { useGLTF, Environment, PresentationControls, Preload } from '@react-three/drei';
 import * as THREE from 'three';
 import { threeAssetUrls, threeAssetMetadata } from '../config/threeAssets';
 import { Mouse } from 'lucide-react';
@@ -187,22 +187,15 @@ function Mouse3D() {
                         <pointLight position={[-10, -10, -10]} intensity={0.5} />
                         <Environment preset="studio" />
                         <PresentationControls
-                            global
+                            global={false}
                             rotation={[0, 0, 0]}
                             polar={[-Math.PI / 3, Math.PI / 3]}
                             azimuth={[-Math.PI / 1.4, Math.PI / 1.4]}
+                            snap={false}
+                            enabled={true}
                         >
                             <MouseModel onLoad={() => setIsLoaded(true)} />
                         </PresentationControls>
-                        <OrbitControls
-                            enableZoom
-                            enableRotate
-                            enablePan={false}
-                            autoRotate
-                            autoRotateSpeed={threeAssetMetadata.mouse.autoRotateSpeed}
-                            minDistance={threeAssetMetadata.mouse.minDistance}
-                            maxDistance={threeAssetMetadata.mouse.maxDistance}
-                        />
                         <Preload all />
                     </Canvas>
                 </Suspense>

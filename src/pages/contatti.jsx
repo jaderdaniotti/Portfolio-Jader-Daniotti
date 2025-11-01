@@ -1,8 +1,12 @@
+import { useState } from "react";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import SEOHead from '../components/SEOHead';
 
 function Contatti() {
+  const [activeTab, setActiveTab] = useState('whatsapp');
+  const [message, setMessage] = useState('');
+  const [nome, setNome] = useState('');
 
 
   let contatti = [
@@ -52,13 +56,13 @@ function Contatti() {
         keywords="contatti, email, telefono, WhatsApp, LinkedIn, Instagram, CV, curriculum vitae, progetti web"
       />
       <Navbar></Navbar>
-      <div className="py-10 " id="contattisection">
+      {/* <div className="py-10 " id="contattisection">
         <h1 className="text-center text-6xl md:text-8xl tracking-tight titolo-bianco">
           CONTATTI
         </h1>
       </div>
-      <hr className="mb-10" />
-      <div className="px-6 py-8">
+      <hr className="mb-10" /> */}
+      {/* <div className="px-6 py-8">
         <p className="text-xl px-10 md:px-20 md:text-4xl font-bold text-bianco tracking-tight text-center">
           Scegli il modo per entrare in contatto.
         </p>
@@ -82,7 +86,127 @@ function Contatti() {
             </a>
           ))}
         </div>
+      </div> */}
+      
+      {/* Form Personalizzato con Tabs */}
+      <div className="px-4 py-8 max-w-4xl mx-auto">
+        <h2 className="text-5xl md:text-6xl font-bold text-bianco tracking-tight text-center mb-8">
+          Cosa aspetti? <span className="italic">Contattami!</span>
+        </h2>
+        
+        {/* Tabs */}
+        <div className="flex justify-center gap-2 mb-8 px-3">
+          <button
+            onClick={() => setActiveTab('whatsapp')}
+            className={`px-3 py-1 rounded-lg font-semibold text-md transition-all duration-300 flex items-center gap-2 ${
+              activeTab === 'whatsapp'
+                ? 'bg-chiaro text-scuro shadow-lg scale-105'
+                : 'bg-scuro-2 text-bianco hover:bg-scuro hover:scale-100'
+            }`}
+          >
+            <i className="bi bi-whatsapp text-2xl"></i>
+            <span>WhatsApp</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('sms')}
+            className={`px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 flex items-center gap-2 ${
+              activeTab === 'sms'
+                ? 'bg-chiaro text-scuro shadow-lg scale-105'
+                : 'bg-scuro-2 text-bianco hover:bg-scuro hover:scale-100'
+            }`}
+          >
+            <i className="bi bi-chat-dots text-2xl"></i>
+            <span>SMS</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('email')}
+            className={`px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 flex items-center gap-2 ${
+              activeTab === 'email'
+                ? 'bg-chiaro text-scuro shadow-lg scale-105'
+                : 'bg-scuro-2 text-bianco hover:bg-scuro hover:scale-100'
+            }`}
+          >
+            <i className="bi bi-envelope-at-fill text-2xl"></i>
+            <span>Email</span>
+          </button>
+        </div>
+
+        {/* Form */}
+        <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border border-chiaro/20 rounded-xl p-6 sm:p-8">
+          <div className="space-y-8 relative">
+            {/* Campo Nome (solo per Email) */}
+            {activeTab === 'email' && (
+              <div>
+                <label className="block text-bianco py-1 mb-2 absolute -top-3 -left-3 bg-scuro-2 z-99 px-3 text-xl font-light text-bianco rounded-lg border border-chiaro/20">
+                  Nome
+                </label>
+                <input
+                  type="text"
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-scuro-2 border border-chiaro/20 text-bianco placeholder-chiaro/50 focus:outline-none focus:ring-2 focus:ring-chiaro/50 focus:border-transparent transition-all font-normal pt-8"
+                />
+              </div>
+            )}
+
+            {/* Campo Messaggio */}
+            <div className="relative">
+              <label className="block text-bianco py-1 mb-2 absolute -top-3 -left-3 bg-scuro-2 z-99 px-3 text-xl font-light text-bianco rounded-lg border border-chiaro/20">
+                Messaggio
+              </label>
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                rows={6}
+                className="w-full px-4 py-3 rounded-lg bg-scuro-2 border border-chiaro/20 text-bianco placeholder-chiaro/50 focus:outline-none focus:ring-2 focus:ring-chiaro/50 focus:border-transparent transition-all resize-none font-normal pt-8"
+              />
+            </div>
+
+            {/* Bottone Invia */}
+            <button
+              onClick={() => {
+                if (!message.trim()) {
+                  alert('Per favore, inserisci un messaggio');
+                  return;
+                }
+
+                const encodedMessage = encodeURIComponent(message.trim());
+                let link = '';
+
+                if (activeTab === 'whatsapp') {
+                  link = `https://wa.me/3513152008?text=${encodedMessage}`;
+                } else if (activeTab === 'sms') {
+                  link = `sms:+393513152008?body=${encodedMessage}`;
+                } else if (activeTab === 'email') {
+                  const subject = encodeURIComponent('Contatto dal Portfolio');
+                  const emailBody = nome.trim()
+                    ? encodeURIComponent(`Ciao Jader,\n\n${message.trim()}\n\nCordiali saluti,\n${nome.trim()}`)
+                    : encodedMessage;
+                  link = `mailto:jaderdaniotti.lavoro@gmail.com?subject=${subject}&body=${emailBody}`;
+                }
+
+                if (link) {
+                  window.open(link, '_blank');
+                }
+              }}
+              className="w-full py-4 px-6 bg-chiaro text-scuro font-medium text-lg rounded-lg hover:bg-chiaro/90 transition-all duration-300 hover:scale-98 hover:shadow-lg hover:shadow-chiaro/20 flex items-center justify-center gap-2"
+            >
+              <span>Invia</span>
+            </button>
+
+            {/* Info */}
+            <p className="text-chiaro/70 text-sm font-normal text-center">
+              {activeTab === 'whatsapp' &&
+                'Cliccando su "Invia", si aprirà WhatsApp con il tuo messaggio già compilato.'}
+              {activeTab === 'sms' &&
+                'Cliccando su "Invia", si aprirà l\'app Messaggi con il tuo messaggio già compilato (solo su mobile).'}
+              {activeTab === 'email' &&
+                'Cliccando su "Invia", si aprirà la tua app email con il messaggio già compilato.'}
+            </p>
+          </div>
+        </div>
       </div>
+{/* 
       <hr className="my-10" />
       <div className="px-4 py-8 flex flex-col gap-6">
         <h2 className="text-4xl md:text-6xl font-bold text-bianco tracking-tight text-center">
@@ -126,7 +250,7 @@ function Contatti() {
             </svg>
           </span>
         </a>
-      </div>
+      </div> */}
 
       {/* Sezione Certificati */}
       <hr className="my-10" />

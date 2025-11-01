@@ -39,7 +39,7 @@ function Home() {
     }, []);
 
     useEffect(() => {
-        const fetchTools = async () =>{
+        const fetchTools = async () => {
             try {
                 const result = await portfolioAPI.getTools();
                 if (result.success) {
@@ -51,7 +51,7 @@ function Home() {
                 console.error('Errore nella fetch tools:', error);
             } finally {
                 setLoading(false);
-            
+
             }
         };
         fetchTools();
@@ -132,7 +132,7 @@ function Home() {
     ]
     return (
         <>
-            <SEOHead 
+            <SEOHead
                 title="Jader Daniotti - Fullstack Developer & Web Designer | Portfolio"
                 description="Portfolio di Jader Daniotti - Fullstack Developer specializzato in Frontend, UI/UX, Web Design e soluzioni digitali personalizzate. Scopri i progetti, le competenze e i servizi."
                 keywords="Jader Daniotti, Fullstack Developer, Web Design, UI/UX, Frontend, Portfolio, Sviluppo Web, React, Laravel, PHP, JavaScript, HTML, CSS"
@@ -177,14 +177,14 @@ function Home() {
                             Tecnologia 3D
                         </h1>
                         <p className="text-2xl text-center md:text-2xl font-medium max-w-3xl mx-auto text-chiaro" data-aos="fade-up">
-                            Esplora le possibilità della tecnologia 3D nel web moderno. 
+                            Esplora le possibilità della tecnologia 3D nel web moderno.
                             iPhone, Mouse e Laptop sono stati integrati utilizzando React Three Fiber.
                         </p>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 gap-8 items-start overflow-visible">
-                       
-                        
+
+
                         <div className="order-1 lg:order-2 overflow-visible">
                             {/* iPhone 3D */}
                             <hr className="py-5" />
@@ -207,54 +207,38 @@ function Home() {
                         <div className="order-2 ">
                             <div className=" rounded-2xl p-8 ">
                                 {/* Card Features Responsive */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                                    {/* Card 1 - Rotazione */}
-                                    <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border border-chiaro/20 rounded-xl p-4 sm:p-6 hover:from-scuro/30 hover:to-scuro/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-chiaro/10">
-                                        <div className="flex flex-col items-center justify-center text-center space-y-3">
-                                            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-chiaro/10 rounded-full flex items-center justify-center">
-                                                <i className="bi bi-arrow-clockwise text-chiaro text-xl sm:text-2xl"></i>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10">
+                                    {
+                                        [
+                                            {
+                                                title: "Rotazione automatica e controlli manuali",
+                                                icon: "text-bianco text-xl sm:text-2xl bi bi-arrow-clockwise",
+                                            },
+                                            {
+                                                title: "Zoom e navigazione fluida",
+                                                icon: "text-bianco text-xl sm:text-2xl bi bi-zoom-in",
+                                            },
+                                            {
+                                                title: "Illuminazione realistica e ombre",
+                                                icon: "text-bianco text-xl sm:text-2xl bi bi-palette",
+                                            },
+                                            {
+                                                title: "Rendering ottimizzato per le performance",
+                                                icon: "text-bianco text-xl sm:text-2xl bi bi-lightning",
+                                            },
+                                        ].map((feature, index) => (
+                                            <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border border-chiaro/20 rounded-xl p-4 sm:p-9 hover:from-scuro/30 hover:to-scuro/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-chiaro/10 relative" key={index}>
+                                                <div className="w-12 h-12 sm:w-14 sm:h-14 bg-chiaro/10 rounded-full flex items-center justify-center absolute -top-8 left-1/2 -translate-x-1/2 bg-scuro-2 border-bianco border">
+                                                    <i className={feature.icon}></i>
+                                                </div>
+                                                <div className="flex items-center justify-center text-center ">
+                                                    <span className="text-bianco font-medium text-md sm:text-base lg:text-xl leading-tight">
+                                                        {feature.title}
+                                                    </span>
+                                                </div>
                                             </div>
-                                            <span className="text-bianco font-medium text-sm sm:text-base lg:text-lg leading-tight">
-                                                Rotazione automatica e controlli manuali
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    {/* Card 2 - Zoom */}
-                                    <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border border-chiaro/20 rounded-xl p-4 sm:p-6 hover:from-scuro/30 hover:to-scuro/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-chiaro/10">
-                                        <div className="flex flex-col items-center justify-center text-center space-y-3">
-                                            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-chiaro/10 rounded-full flex items-center justify-center">
-                                                <i className="bi bi-zoom-in text-chiaro text-xl sm:text-2xl"></i>
-                                            </div>
-                                            <span className="text-bianco font-medium text-sm sm:text-base lg:text-lg leading-tight">
-                                                Zoom e navigazione fluida
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    {/* Card 3 - Performance */}
-                                    <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border border-chiaro/20 rounded-xl p-4 sm:p-6 hover:from-scuro/30 hover:to-scuro/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-chiaro/10">
-                                        <div className="flex flex-col items-center justify-center text-center space-y-3">
-                                            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-chiaro/10 rounded-full flex items-center justify-center">
-                                                <i className="bi bi-lightning text-chiaro text-xl sm:text-2xl"></i>
-                                            </div>
-                                            <span className="text-bianco font-medium text-sm sm:text-base lg:text-lg leading-tight">
-                                                Rendering ottimizzato per le performance
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    {/* Card 4 - Illuminazione */}
-                                    <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border border-chiaro/20 rounded-xl p-4 sm:p-6 hover:from-scuro/30 hover:to-scuro/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-chiaro/10">
-                                        <div className="flex flex-col items-center justify-center text-center space-y-3">
-                                            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-chiaro/10 rounded-full flex items-center justify-center">
-                                                <i className="bi bi-palette text-chiaro text-xl sm:text-2xl"></i>
-                                            </div>
-                                            <span className="text-bianco font-medium text-sm sm:text-base lg:text-lg leading-tight">
-                                                Illuminazione realistica e ombre
-                                            </span>
-                                        </div>
-                                    </div>
+                                        ))
+                                    }
                                 </div>
                                 <div className="mt-8">
                                     <BigButton text="SCOPRI DI PIÙ" href="/progetti" />
@@ -324,7 +308,7 @@ function Home() {
                                 if (svgContent) {
                                     // Rimuovi dimensioni esistenti e aggiungi quelle standardizzate
                                     svgContent = svgContent.replace(
-                                        /(width|height)="[^"]*"/g, 
+                                        /(width|height)="[^"]*"/g,
                                         ''
                                     );
                                     // Aggiungi dimensioni uniformi
@@ -333,7 +317,7 @@ function Home() {
                                         `<svg width="75" height="75" `
                                     );
                                 }
-                                
+
                                 return (
                                     <div key={idx} className="carosello-item mx-10">
                                         <div dangerouslySetInnerHTML={{ __html: svgContent }} />
@@ -363,7 +347,7 @@ function Home() {
                                 if (svgContent) {
                                     // Rimuovi dimensioni esistenti e aggiungi quelle standardizzate
                                     svgContent = svgContent.replace(
-                                        /(width|height)="[^"]*"/g, 
+                                        /(width|height)="[^"]*"/g,
                                         ''
                                     );
                                     // Aggiungi dimensioni uniformi
@@ -372,7 +356,7 @@ function Home() {
                                         `<svg width="75" height="75" `
                                     );
                                 }
-                                
+
                                 return (
                                     <div key={idx} className="carosello-item mx-10">
                                         <div dangerouslySetInnerHTML={{ __html: svgContent }} />
@@ -493,10 +477,10 @@ function Home() {
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-4xl mx-auto px-6" >
                         {contatti.map((contatto, index) => {
                             return (
-                                <a 
-                                    href={contatto.link} 
-                                    target="_blank" 
-                                    className=" rounded-lg p-6  transition-all duration-300 hover:scale-105 hover:-translate-y-2 group" 
+                                <a
+                                    href={contatto.link}
+                                    target="_blank"
+                                    className=" rounded-lg p-6  transition-all duration-300 hover:scale-105 hover:-translate-y-2 group"
                                     key={index}
                                     data-aos="fade-up"
                                     data-aos-delay={index * 100}

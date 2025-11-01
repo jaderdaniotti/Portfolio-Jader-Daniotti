@@ -54,43 +54,43 @@ function Work() {
         {
             step: 1,
             title: "Contatto Iniziale",
-            description: "Mi contatti tramite WhatsApp, email o social per discutere delle tue esigenze web",
+            description: "Tramite WhatsApp, email o social per discutere delle tue esigenze web.",
             icon: Phone,
         },
         {
             step: 2,
             title: "Consulenza Gratuita",
-            description: "Analizziamo insieme le tue necessità e definiamo gli obiettivi del sito web",
+            description: "Analizziamo insieme le tue necessità e definiamo gli obiettivi del sito web.",
             icon: Headset,
         },
         {
             step: 3,
             title: "Personalizzazione",
-            description: "Adattiamo il design ai tuoi colori, logo e contenuti specifici",
+            description: "Adattiamo il design ai tuoi colori, logo e contenuti specifici.",
             icon: Palette,
         },
         {
             step: 4,
             title: "Sviluppo",
-            description: "Creiamo il sito con le tecnologie più moderne e ottimizzazioni SEO",
+            description: "Creiamo il sito con le tecnologie più moderne e ottimizzazioni SEO.",
             icon: Code,
         },
         {
             step: 5,
             title: "Dominio e Hosting",
-            description: "Configuriamo il dominio personalizzato e l'hosting per il tuo sito",
+            description: "Configuriamo il dominio personalizzato e l'hosting per il tuo sito.",
             icon: Globe,
         },
         {
             step: 6,
             title: "Test e Ottimizzazione",
-            description: "Testiamo tutto su diversi dispositivi e ottimizziamo le performance",
+            description: "Testiamo tutto su diversi dispositivi e ottimizziamo le performance.",
             icon: CheckCircle,
         },
         {
             step: 7,
             title: "Consegna",
-            description: "Il tuo sito è pronto! Ti forniamo tutte le credenziali e la documentazione",
+            description: "Il tuo sito è pronto! Ti forniamo tutte le credenziali e la documentazione.",
             icon: Rocket,
         }
     ];
@@ -99,19 +99,19 @@ function Work() {
         {
             step: 1,
             title: "Contatto Iniziale",
-            description: "Mi contatti per discutere delle tue esigenze per l'app mobile",
+            description: "Mi contatti per discutere delle tue esigenze per l'app mobile.",
             icon: Phone,
         },
         {
             step: 2,
             title: "Consulenza Gratuita",
-            description: "Analizziamo insieme le funzionalità e definiamo gli obiettivi dell'app",
+            description: "Analizziamo insieme le funzionalità e definiamo gli obiettivi dell'app.",
             icon: Headset,
         },
         {
             step: 3,
             title: "Progettazione UX/UI",
-            description: "Creiamo wireframe e mockup per un'esperienza utente ottimale",
+            description: "Creiamo wireframe e mockup per un'esperienza utente ottimale.",
             icon: Layout,
         },
         {
@@ -123,13 +123,13 @@ function Work() {
         {
             step: 5,
             title: "Test e Debug",
-            description: "Testiamo l'app su diversi dispositivi e risolviamo eventuali bug",
+            description: "Testiamo l'app su diversi dispositivi e risolviamo eventuali bug.",
             icon: CheckCircle,
         },
         {
             step: 6,
             title: "Pubblicazione",
-            description: "Pubblichiamo l'app su App Store e Google Play Store",
+            description: "Pubblichiamo l'app su App Store e Google Play Store.",
             icon: Rocket,
         }
     ];
@@ -138,43 +138,43 @@ function Work() {
         {
             step: 1,
             title: "Contatto Iniziale",
-            description: "Mi contatti per discutere delle tue esigenze di gestione clienti",
+            description: "Mi contatti per discutere delle tue esigenze di gestione clienti.",
             icon: Phone,
         },
         {
             step: 2,
             title: "Analisi Processi",
-            description: "Analizziamo i tuoi processi aziendali e identificiamo le necessità",
+            description: "Analizziamo i tuoi processi aziendali e identificiamo le necessità.",
             icon: Headset,
         },
         {
             step: 3,
             title: "Progettazione Sistema",
-            description: "Progettiamo l'architettura del CRM personalizzato per la tua azienda",
+            description: "Progettiamo l'architettura del CRM personalizzato per la tua azienda.",
             icon: Layout,
         },
         {
             step: 4,
             title: "Sviluppo CRM",
-            description: "Sviluppiamo il sistema CRM con funzionalità avanzate",
+            description: "Sviluppiamo il sistema CRM con funzionalità avanzate.",
             icon: Code,
         },
         {
             step: 5,
             title: "Integrazione Dati",
-            description: "Integriamo i dati esistenti e configuriamo le automazioni",
+            description: "Integriamo i dati esistenti e configuriamo le automazioni.",
             icon: Globe,
         },
         {
             step: 6,
             title: "Formazione e Supporto",
-            description: "Formiamo il tuo team e forniamo supporto continuo",
+            description: "Formiamo il tuo team e forniamo supporto continuo.",
             icon: CheckCircle,
         },
         {
             step: 7,
             title: "Consegna",
-            description: "Il tuo CRM è pronto! Ti forniamo accesso e documentazione completa",
+            description: "Il tuo CRM è pronto! Ti forniamo accesso e documentazione completa.",
             icon: Rocket,
         }
     ];
@@ -245,10 +245,10 @@ function Work() {
                                     </div>
 
                                     <div className=" rounded-lg">
-                                        <h3 className="text-xl font-bold text-gray-100/90 mb-3">
+                                        <h3 className="text-3xl font-semibold text-gray-100/90 mb-3">
                                             {step.title}
                                         </h3>
-                                        <p className="text-bianco font-medium text-sm text-gray-100/90 leading-relaxed">
+                                        <p className="text-bianco font-normal text-lg  max-w-2/3 mx-auto text-gray-100/90 leading-relaxed">
                                             {step.description}
                                         </p>
                                     </div>
@@ -292,7 +292,7 @@ function Work() {
                                 {currentTemplates.map((template) => (
                                     <div
                                         key={template.id}
-                                        className="bg-gradient-chiaro2 group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 ease-linear hover:scale-102 relative"
+                                        className="bg-gradient-chiaro2 group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 ease-linear hover:scale-102 relative border border-chiaro/20"
                                     >
                                         {template.cover_url && (
                                             <div className="aspect-video overflow-hidden">
@@ -304,7 +304,7 @@ function Work() {
                                             </div>
                                         )}
                                         <div className="p-6">
-                                            <h3 className="text-lg font-bold text-bianco mb-3">
+                                            <h3 className="text-lg font-medium text-bianco mb-3">
                                                 {template.name}
                                             </h3>
                                             {template.tags && template.tags.length > 0 && (
@@ -319,7 +319,7 @@ function Work() {
                                                     ))}
                                                 </div>
                                             )}
-                                            <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <div className=" duration-300">
                                                 {template.site_url && (
                                                     <a
                                                         href={template.site_url}

@@ -101,6 +101,20 @@ const getEndDate = () => {
 
 // Funzione per inviare eventi a Umami
 export const trackEvent = async (eventName, eventData = {}) => {
+  // Usa il metodo nativo di Umami se disponibile
+  if (window.umami && typeof window.umami.track === 'function') {
+    try {
+      window.umami.track(eventName, eventData);
+      return;
+    } catch (error) {
+      // Fallback all'API se il metodo nativo fallisce
+      if (import.meta.env.DEV) {
+        console.warn('Umami native tracking failed, falling back to API:', error);
+      }
+    }
+  }
+
+  // Altrimenti, usa l'API
   try {
     const payload = {
       website: UMAMI_CONFIG.websiteId,
@@ -123,15 +137,29 @@ export const trackEvent = async (eventName, eventData = {}) => {
     });
 
     if (!response.ok) {
-      console.warn('Umami tracking failed:', response.status);
+      // Logga solo in sviluppo
+      if (import.meta.env.DEV) {
+        console.warn('Umami tracking failed:', response.status);
+      }
     }
   } catch (error) {
-    console.warn('Umami tracking error:', error);
+    // Logga solo in sviluppo
+    if (import.meta.env.DEV) {
+      console.warn('Umami tracking error:', error);
+    }
   }
 };
 
-// Funzione per tracciare page views
+// Funzione per tracciare page views (disabilitata se lo script tag Umami è già presente)
 export const trackPageView = async () => {
+  // Se lo script tag Umami è già presente, non tracciare manualmente per evitare duplicati
+  if (window.umami && typeof window.umami.track === 'function') {
+    // Usa il metodo nativo di Umami se disponibile
+    window.umami.track(window.location.pathname);
+    return;
+  }
+
+  // Altrimenti, prova il metodo API (solo in caso di necessità)
   try {
     const payload = {
       website: UMAMI_CONFIG.websiteId,
@@ -151,23 +179,41 @@ export const trackPageView = async () => {
     });
 
     if (!response.ok) {
-      console.warn('Umami page view tracking failed:', response.status);
+      // Silenzia l'errore se lo script tag è già presente (tracking automatico)
+      if (response.status === 400 && window.umami) {
+        return; // Lo script tag già traccia, non serve loggare l'errore
+      }
+      // Logga solo se è un errore diverso o se non c'è lo script tag
+      if (import.meta.env.DEV) {
+        console.warn('Umami page view tracking failed:', response.status);
+      }
     }
   } catch (error) {
-    console.warn('Umami page view tracking error:', error);
+    // Silenzia gli errori se lo script tag è già presente
+    if (!window.umami && import.meta.env.DEV) {
+      console.warn('Umami page view tracking error:', error);
+    }
   }
 };
 
-// Hook per tracciare automaticamente le page views
+// Hook per tracciare automaticamente le page views (disabilitato se lo script tag è presente)
 export const useUmamiTracking = () => {
   React.useEffect(() => {
-    // Traccia la page view iniziale
+    // Se lo script tag Umami è già presente, non tracciare manualmente
+    // Lo script tag gestisce automaticamente il tracking delle page views
+    if (window.umami && typeof window.umami.track === 'function') {
+      return; // Esci senza configurare il tracking manuale
+    }
+
+    // Altrimenti, usa il tracking manuale
     trackPageView();
 
-    // Traccia quando cambia la route (per SPA)
+    // Traccia quando cambia la route (per SPA) - solo se non c'è lo script tag
     const handleRouteChange = () => {
       setTimeout(() => {
-        trackPageView();
+        if (!window.umami || typeof window.umami.track !== 'function') {
+          trackPageView();
+        }
       }, 100);
     };
 
