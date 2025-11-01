@@ -25,19 +25,10 @@
   [headers.values]
     Content-Type = "text/plain"
 
+# Redirect per SPA
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[[redirects]]
-  from = "/sitemap.xml"
-  to = "/sitemap.xml"
-  status = 200
-  headers = {Content-Type = "application/xml"}
-
-[[redirects]]
-  from = "/robots.txt"
-  to = "/robots.txt"
-  status = 200
-  headers = {Content-Type = "text/plain"} 
+  force = true
+  except = ["/sitemap.xml", "/robots.txt"]

@@ -20,7 +20,20 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    open: true
+    open: true,
+    proxy: {
+      // Proxy per Google Places API - risolve il problema CORS
+      '/api/google-places': {
+        target: 'https://maps.googleapis.com/maps/api',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/google-places/, ''),
+        configure: (proxy, _options) => {
+          proxy.on('error', (err, _req, _res) => {
+            console.log('proxy error', err);
+          });
+        },
+      }
+    }
   },
   preview: {
     port: 4173,

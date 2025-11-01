@@ -2,51 +2,60 @@ import { useState } from "react";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import SEOHead from '../components/SEOHead';
+import emailjs from 'emailjs-com';
 
 function Contatti() {
+  // Configurazione EmailJS
+  const EMAILJS_SERVICE_ID = 'service_hxeclol'; // Sostituisci con il tuo Service ID
+  const EMAILJS_TEMPLATE_ID = 'template_prc0h26'; // Sostituisci con il tuo Template ID
+  const EMAILJS_PUBLIC_KEY = 'Br-EiNhxNrYq69UvC'; // Public Key già presente in index.html
+
   const [activeTab, setActiveTab] = useState('whatsapp');
   const [message, setMessage] = useState('');
   const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState({ type: null, message: '' }); // 'success', 'error', null
 
 
-  let contatti = [
-    { 
-      icona: `bi bi-envelope-at-fill`, 
-      link: "mailto:jaderdaniotti.lavoro@gmail.com",
-      name: "Email",
-      description: "Scrivimi una email"
-    },
-    { 
-      icona: `bi bi-phone`, 
-      link: "tel:+393513152008",
-      name: "Telefono",
-      description: "Chiamami direttamente"
-    },
-    { 
-      icona: `bi bi-chat`, 
-      link: "sms:+393513152008",
-      name: "SMS",
-      description: "Mandami un messaggio"
-    },
-    { 
-      icona: `bi bi-linkedin`, 
-      link: "https://www.linkedin.com/in/jader-daniotti-0a00b9328/",
-      name: "LinkedIn",
-      description: "Connettiamoci"
-    },
-    { 
-      icona: `bi bi-whatsapp`, 
-      link: "https://wa.me/3513152008",
-      name: "WhatsApp",
-      description: "Chatta con me"
-    },
-    { 
-      icona: `bi bi-instagram`, 
-      link: "https://www.instagram.com/jader_ness/",
-      name: "Instagram",
-      description: "Seguimi"
-    },
-  ]
+  // let contatti = [
+  //   { 
+  //     icona: `bi bi-envelope-at-fill`, 
+  //     link: "mailto:jaderdaniotti.lavoro@gmail.com",
+  //     name: "Email",
+  //     description: "Scrivimi una email"
+  //   },
+  //   { 
+  //     icona: `bi bi-phone`, 
+  //     link: "tel:+393513152008",
+  //     name: "Telefono",
+  //     description: "Chiamami direttamente"
+  //   },
+  //   { 
+  //     icona: `bi bi-chat`, 
+  //     link: "sms:+393513152008",
+  //     name: "SMS",
+  //     description: "Mandami un messaggio"
+  //   },
+  //   { 
+  //     icona: `bi bi-linkedin`, 
+  //     link: "https://www.linkedin.com/in/jader-daniotti-0a00b9328/",
+  //     name: "LinkedIn",
+  //     description: "Connettiamoci"
+  //   },
+  //   { 
+  //     icona: `bi bi-whatsapp`, 
+  //     link: "https://wa.me/3513152008",
+  //     name: "WhatsApp",
+  //     description: "Chatta con me"
+  //   },
+  //   { 
+  //     icona: `bi bi-instagram`, 
+  //     link: "https://www.instagram.com/jader_ness/",
+  //     name: "Instagram",
+  //     description: "Seguimi"
+  //   },
+  // ]
 
   return (
     <>
@@ -95,9 +104,12 @@ function Contatti() {
         </h2>
         
         {/* Tabs */}
-        <div className="flex justify-center gap-2 mb-8 px-3">
+        <div className="flex justify-center gap-3 mb-8 px-3">
           <button
-            onClick={() => setActiveTab('whatsapp')}
+            onClick={() => {
+              setActiveTab('whatsapp');
+              setSubmitStatus({ type: null, message: '' });
+            }}
             className={`px-3 py-1 rounded-lg font-semibold text-md transition-all duration-300 flex items-center gap-2 ${
               activeTab === 'whatsapp'
                 ? 'bg-chiaro text-scuro shadow-lg scale-105'
@@ -108,18 +120,10 @@ function Contatti() {
             <span>WhatsApp</span>
           </button>
           <button
-            onClick={() => setActiveTab('sms')}
-            className={`px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 flex items-center gap-2 ${
-              activeTab === 'sms'
-                ? 'bg-chiaro text-scuro shadow-lg scale-105'
-                : 'bg-scuro-2 text-bianco hover:bg-scuro hover:scale-100'
-            }`}
-          >
-            <i className="bi bi-chat-dots text-2xl"></i>
-            <span>SMS</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('email')}
+            onClick={() => {
+              setActiveTab('email');
+              setSubmitStatus({ type: null, message: '' });
+            }}
             className={`px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 flex items-center gap-2 ${
               activeTab === 'email'
                 ? 'bg-chiaro text-scuro shadow-lg scale-105'
@@ -136,7 +140,7 @@ function Contatti() {
           <div className="space-y-8 relative">
             {/* Campo Nome (solo per Email) */}
             {activeTab === 'email' && (
-              <div>
+              <div className="relative">
                 <label className="block text-bianco py-1 mb-2 absolute -top-3 -left-3 bg-scuro-2 z-99 px-3 text-xl font-light text-bianco rounded-lg border border-chiaro/20">
                   Nome
                 </label>
@@ -144,6 +148,21 @@ function Contatti() {
                   type="text"
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-scuro-2 border border-chiaro/20 text-bianco placeholder-chiaro/50 focus:outline-none focus:ring-2 focus:ring-chiaro/50 focus:border-transparent transition-all font-normal pt-8"
+                />
+              </div>
+            )}
+
+            {/* Campo Email (solo per Email) */}
+            {activeTab === 'email' && (
+              <div className="relative">
+                <label className="block text-bianco py-1 mb-2 absolute -top-3 -left-3 bg-scuro-2 z-99 px-3 text-xl font-light text-bianco rounded-lg border border-chiaro/20">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-3 rounded-lg bg-scuro-2 border border-chiaro/20 text-bianco placeholder-chiaro/50 focus:outline-none focus:ring-2 focus:ring-chiaro/50 focus:border-transparent transition-all font-normal pt-8"
                 />
               </div>
@@ -162,46 +181,119 @@ function Contatti() {
               />
             </div>
 
+            {/* Messaggi di stato (solo per Email) */}
+            {activeTab === 'email' && submitStatus.type && (
+              <div
+                className={`p-4 rounded-lg border ${
+                  submitStatus.type === 'success'
+                    ? 'bg-green-500/20 border-green-500/50 text-green-300'
+                    : 'bg-red-500/20 border-red-500/50 text-red-300'
+                }`}
+              >
+                <p className="text-center font-medium">{submitStatus.message}</p>
+              </div>
+            )}
+
             {/* Bottone Invia */}
             <button
-              onClick={() => {
+              onClick={async () => {
+                if (activeTab === 'whatsapp') {
+                  // Logica WhatsApp esistente
                 if (!message.trim()) {
                   alert('Per favore, inserisci un messaggio');
                   return;
                 }
-
                 const encodedMessage = encodeURIComponent(message.trim());
-                let link = '';
-
-                if (activeTab === 'whatsapp') {
-                  link = `https://wa.me/3513152008?text=${encodedMessage}`;
-                } else if (activeTab === 'sms') {
-                  link = `sms:+393513152008?body=${encodedMessage}`;
-                } else if (activeTab === 'email') {
-                  const subject = encodeURIComponent('Contatto dal Portfolio');
-                  const emailBody = nome.trim()
-                    ? encodeURIComponent(`Ciao Jader,\n\n${message.trim()}\n\nCordiali saluti,\n${nome.trim()}`)
-                    : encodedMessage;
-                  link = `mailto:jaderdaniotti.lavoro@gmail.com?subject=${subject}&body=${emailBody}`;
-                }
-
-                if (link) {
+                  const link = `https://wa.me/393513152008?text=${encodedMessage}`;
                   window.open(link, '_blank');
+                } else if (activeTab === 'email') {
+                  // Logica Email con EmailJS
+                  if (!nome.trim()) {
+                    setSubmitStatus({ type: 'error', message: 'Per favore, inserisci il tuo nome' });
+                    return;
+                  }
+                  if (!email.trim()) {
+                    setSubmitStatus({ type: 'error', message: 'Per favore, inserisci la tua email' });
+                    return;
+                  }
+                  if (!message.trim()) {
+                    setSubmitStatus({ type: 'error', message: 'Per favore, inserisci un messaggio' });
+                    return;
+                  }
+
+                  // Validazione email base
+                  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                  if (!emailRegex.test(email.trim())) {
+                    setSubmitStatus({ type: 'error', message: 'Per favore, inserisci un\'email valida' });
+                    return;
+                  }
+
+                  setIsLoading(true);
+                  setSubmitStatus({ type: null, message: '' });
+
+                  try {
+                    // Parametri per EmailJS template
+                    const templateParams = {
+                      from_name: nome.trim(),
+                      from_email: email.trim(),
+                      message: message.trim(),
+                      to_name: 'Jader',
+                      reply_to: email.trim(),
+                    };
+
+                    // Invia email tramite EmailJS
+                    await emailjs.send(
+                      EMAILJS_SERVICE_ID,
+                      EMAILJS_TEMPLATE_ID,
+                      templateParams,
+                      EMAILJS_PUBLIC_KEY
+                    );
+
+                    // Successo
+                    setSubmitStatus({
+                      type: 'success',
+                      message: 'Messaggio inviato con successo! Ti risponderò presto.',
+                    });
+
+                    // Reset form
+                    setNome('');
+                    setEmail('');
+                    setMessage('');
+
+                    // Rimuovi messaggio di successo dopo 5 secondi
+                    setTimeout(() => {
+                      setSubmitStatus({ type: null, message: '' });
+                    }, 5000);
+                  } catch (error) {
+                    console.error('Errore invio email:', error);
+                    setSubmitStatus({
+                      type: 'error',
+                      message: 'Errore nell\'invio del messaggio. Riprova più tardi o contattami direttamente.',
+                    });
+                  } finally {
+                    setIsLoading(false);
+                  }
                 }
               }}
-              className="w-full py-4 px-6 bg-chiaro text-scuro font-medium text-lg rounded-lg hover:bg-chiaro/90 transition-all duration-300 hover:scale-98 hover:shadow-lg hover:shadow-chiaro/20 flex items-center justify-center gap-2"
+              disabled={isLoading}
+              className="w-full py-4 px-6 bg-chiaro text-scuro font-medium text-lg rounded-lg hover:bg-chiaro/90 transition-all duration-300 hover:scale-98 hover:shadow-lg hover:shadow-chiaro/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
+              {isLoading ? (
+                <>
+                  <span>Invio in corso...</span>
+                </>
+              ) : (
               <span>Invia</span>
+              )}
             </button>
+
 
             {/* Info */}
             <p className="text-chiaro/70 text-sm font-normal text-center">
               {activeTab === 'whatsapp' &&
                 'Cliccando su "Invia", si aprirà WhatsApp con il tuo messaggio già compilato.'}
-              {activeTab === 'sms' &&
-                'Cliccando su "Invia", si aprirà l\'app Messaggi con il tuo messaggio già compilato (solo su mobile).'}
               {activeTab === 'email' &&
-                'Cliccando su "Invia", si aprirà la tua app email con il messaggio già compilato.'}
+                'Compila il form e clicca su "Invia" per mandarmi un\'email direttamente. Riceverai una risposta al più presto!'}
             </p>
           </div>
         </div>

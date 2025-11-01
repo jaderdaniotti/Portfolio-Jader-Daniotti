@@ -11,12 +11,135 @@ import Mouse3D from '../components/Mouse3D';
 import Laptop3D from '../components/Laptop3D';
 import { portfolioAPI } from '../config/supabase';
 
+// Componente per le recensioni con gestione errori immagini e nuovo stile CSS
+function ReviewCard({ review }) {
+    const [imageError, setImageError] = useState(false);
+
+    return (
+        <div className="text-bianco px-5 bg-scuro-2 rounded-lg py-5 ">
+            <div className="flex items-center max-w-3/4 gap-3 mb-4">
+                {review.profile_photo_url && !imageError ? (
+                    <img
+                        src={review.profile_photo_url}
+                        alt={review.author_name}
+                        className="w-12 h-12 rounded-full object-cover"
+                        onError={() => setImageError(true)}
+                        loading="lazy"
+                    />
+                ) : (
+                    <div className="w-12 h-12 rounded-full bg-scuro-2 flex items-center justify-center border border-chiaro/20">
+                        <i className="bi bi-person-fill text-chiaro text-xl"></i>
+                    </div>
+                )}
+                <div>
+                    <p className="font-bold text-2xl ">{review.author_name}</p>
+                    <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                            <i
+                                key={i}
+                                className={`bi bi-star${i < review.rating ? '-fill' : ''}  text-sm`}
+                            ></i>
+                        ))}
+                    </div>
+                </div>
+            </div>
+            <p className="text-bianco font-normal text-md leading-relaxed mb-3">{review.text}</p>
+            {review.relative_time_description && (
+                <p className="text-chiaro/50 text-lg mt-2 font-normal italic text-end ">{review.relative_time_description}</p>
+            )}
+        </div>
+    );
+}
+
+// Componente carosello per le recensioni
+function ReviewsCarousel({ reviews }) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    if (!reviews || reviews.length === 0) {
+        return null;
+    }
+
+    // Mostra massimo 5 recensioni
+    const displayReviews = reviews.slice(0, 5);
+    const totalReviews = displayReviews.length;
+
+    const nextReview = () => {
+        setCurrentIndex((prev) => (prev + 1) % totalReviews);
+    };
+
+    const prevReview = () => {
+        setCurrentIndex((prev) => (prev - 1 + totalReviews) % totalReviews);
+    };
+
+    const goToReview = (index) => {
+        setCurrentIndex(index);
+    };
+
+    return (
+        <div className="relative w-full">
+            <div className="overflow-hidden w-full">
+                <div
+                    className="flex transition-transform duration-500 ease-in-out"
+                    style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                >
+                    {displayReviews.map((review, index) => (
+                        <div key={index} className="min-w-full flex justify-center px-4">
+                            <ReviewCard review={review} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Controlli di navigazione */}
+            <div className="flex items-center justify-center gap-4 mt-6">
+                <button
+                    onClick={prevReview}
+                    className="w-10 h-10 rounded-full bg-chiaro text-scuro flex items-center justify-center hover:bg-chiaro/90 transition-all duration-300 hover:scale-110 shadow-lg"
+                    aria-label="Recensione precedente"
+                >
+                    <i className="bi bi-chevron-left text-xl"></i>
+                </button>
+
+                {/* Indicatori */}
+                <div className="flex gap-2">
+                    {displayReviews.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => goToReview(index)}
+                            className={`h-3 rounded-full transition-all duration-300 ${index === currentIndex
+                                    ? 'bg-chiaro w-8'
+                                    : 'bg-chiaro/40 w-3 hover:bg-chiaro/60'
+                                }`}
+                            aria-label={`Vai alla recensione ${index + 1}`}
+                        />
+                    ))}
+                </div>
+
+                <button
+                    onClick={nextReview}
+                    className="w-10 h-10 rounded-full bg-chiaro text-scuro flex items-center justify-center hover:bg-chiaro/90 transition-all duration-300 hover:scale-110 shadow-lg"
+                    aria-label="Recensione successiva"
+                >
+                    <i className="bi bi-chevron-right text-xl"></i>
+                </button>
+            </div>
+
+            {/* Contatore recensioni */}
+            <p className="text-center text-chiaro/70 text-sm mt-4">
+                {currentIndex + 1} / {totalReviews}
+            </p>
+        </div>
+    );
+}
 
 function Home() {
 
     const [tecnologie, setTecnologie] = useState([]);
     const [tools, setTools] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [placeData, setPlaceData] = useState(null);
+    const [placeLoading, setPlaceLoading] = useState(true);
+    const [placeError, setPlaceError] = useState(null);
 
     // Fetch delle tecnologie dal database
     useEffect(() => {
@@ -55,6 +178,61 @@ function Home() {
             }
         };
         fetchTools();
+    }, []);
+
+    // Fetch dati Google Places API tramite Netlify Function (per evitare CORS)
+    useEffect(() => {
+        const fetchPlaceDetails = async () => {
+            const apiKey = import.meta.env.VITE_PLACE_API_KEY;
+            const placeId = 'ChIJMztRE1A7ekcR6OOrrT5YyuA';
+
+            if (!apiKey) {
+                console.warn('VITE_PLACE_API_KEY non configurata nel file .env');
+                setPlaceLoading(false);
+                return;
+            }
+
+            try {
+                // Usa il proxy di Vite per evitare problemi CORS
+                const fields = [
+                    'name',
+                    'formatted_address',
+                    'formatted_phone_number',
+                    'international_phone_number',
+                    'opening_hours',
+                    'rating',
+                    'user_ratings_total',
+                    'reviews',
+                    'website',
+                    'url',
+                    'photos'
+                ].join(',');
+
+                const proxyUrl = `/api/google-places/place/details/json?place_id=${placeId}&fields=${fields}&key=${encodeURIComponent(apiKey)}`;
+
+                const response = await fetch(proxyUrl);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.status === 'OK' && data.result) {
+                    setPlaceData(data.result);
+                } else {
+                    console.error('Errore Google Places API:', data.status, data.error_message);
+                    setPlaceError(data.error_message || 'Errore nel caricamento dei dati');
+                }
+            } catch (error) {
+                console.error('Errore nella fetch Google Places:', error);
+                setPlaceError('Errore nel caricamento delle informazioni');
+            } finally {
+                setPlaceLoading(false);
+            }
+        };
+
+        fetchPlaceDetails();
     }, []);
 
     let progetti = [
@@ -193,7 +371,7 @@ function Home() {
                             </div>
                             <hr className="py-5" />
                             {/* Laptop 3D */}
-                            <div className="rounded-2xl p-4 phone-3d-container bg-gradient-bianco w-[100vw]  mb-8">
+                            <div className="rounded-2xl p-4 phone-3d-container w-[100vw]  mb-8">
                                 <Laptop3D />
                             </div>
                             <hr className="py-5" />
@@ -201,7 +379,6 @@ function Home() {
                             <div className="rounded-2xl p-4 phone-3d-container  w-[100vw]  mb-8">
                                 <Mouse3D />
                             </div>
-                            <hr className="py-5" />
                         </div>
 
                         <div className="order-2 ">
@@ -398,7 +575,7 @@ function Home() {
                                     <img src="immagini\6_files\Aurora logo_vettoriale copia.pdf-image-006-Photoroom.png" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
                                 </div>
                             </div>
-                            <div className="grid grid-cols-1 bg-chiaro-2 md:grid-cols-3 mx-auto justify-center py-5 px-10 items-center flex-1">
+                            {/* <div className="grid grid-cols-1 bg-chiaro-2 md:grid-cols-3 mx-auto justify-center py-5 px-10 items-center flex-1">
                                 <div className="flex content-center items-center justify-center">
                                     <img src="immagini\\logo-mart-AoPqDR7a0WUaRZb0.avif" alt="" className="object-contain hover:scale-110 transition-all duration-300 size-80 md:size-58 lg:size-auto linear" />
                                 </div>
@@ -408,7 +585,7 @@ function Home() {
                                 <div className="flex content-center items-center justify-center">
                                     <img src="immagini\AVATAR\1-Photoroom.png" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     {/* aurora */}
@@ -431,7 +608,7 @@ function Home() {
                         </div>
                     </section>
                     {/* martina */}
-                    <section className="bg-gradient-chiaro2 py-10">
+                    {/* <section className="bg-gradient-chiaro2 py-10">
                         <p className="text-7xl md:text-8xl tracking-tight titolo-bianco text-center">
                             Jader
                         </p>
@@ -449,7 +626,74 @@ function Home() {
                         <div className="text-center mt-16">
                             <BigButton text="COLLABORAZIONI" href="/Collaborazioni" />
                         </div>
-                    </section>
+                    </section> */}
+                </div>
+            </div >
+            <hr />
+            {/* Jader */}
+            <div className="py-16 ">
+                <div className="container mx-auto ">
+                    <div className="text-center mb-3">
+                        <h1 className='text-5xl md:text-8xl font-bold titolo-bianco tracking-tight py-10' data-aos="fade-up">
+                            Jader
+                        </h1>
+                        <h1 className='text-3xl md:text-5xl font-bold text-bianco tracking-tight'>
+                            Cosa dicono di me?
+                        </h1>
+                    </div>
+
+                    {/* Sezione Google Places - Informazioni Attività */}
+                    {placeLoading && (
+                        <div className="text-center py-8">
+                            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-chiaro"></div>
+                            <p className="text-bianco text-xl mt-4">Caricamento informazioni...</p>
+                        </div>
+                    )}
+
+                    {placeError && (
+                        <div className="text-center py-8">
+                            <p className="text-red-400 text-lg">Impossibile caricare le informazioni dell'attività</p>
+                        </div>
+                    )}
+
+                    {placeData && !placeLoading && (
+                        <div className="max-w-5xl mx-auto px-6 mb-12" data-aos="fade-up">
+                            <div className=" rounded-2xl p-8 md:p-12l">
+                                {placeData.reviews && placeData.reviews.length > 0 && (
+                                    <div>
+                                        <ReviewsCarousel reviews={placeData.reviews} />
+                                    </div>
+                                )}
+
+                                {placeData.photos && placeData.photos.length > 0 && (
+                                    <div className="mt-8 pt-8 border-t border-chiaro/20">
+                                        <h3 className="text-2xl font-bold text-bianco mb-4 flex items-center gap-2">
+                                            <i className="bi bi-images text-chiaro"></i>
+                                            Foto
+                                        </h3>
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                            {placeData.photos.slice(0, 4).map((photo, index) => (
+                                                <a
+                                                    key={index}
+                                                    href={placeData.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="relative overflow-hidden rounded-lg aspect-square group"
+                                                >
+                                                    <img
+                                                        src={`/api/google-places/place/photo?maxwidth=400&photo_reference=${photo.photo_reference}&key=${encodeURIComponent(import.meta.env.VITE_PLACE_API_KEY)}`}
+                                                        alt={`${placeData.name} - Foto ${index + 1}`}
+                                                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                                                    />
+                                                    <div className="absolute inset-0 bg-scuro/0 group-hover:bg-scuro/20 transition-colors duration-300"></div>
+                                                </a>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div >
             <hr />

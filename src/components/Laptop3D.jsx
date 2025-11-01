@@ -165,7 +165,7 @@ function Laptop3D() {
 
     return (
         <div className="phone-3d-container">
-            <h2 className='text-scuro text-7xl md:text-9xl  font-extrabold  absolute top-1/2 left-2/4 -translate-x-1/2 -translate-y-1/2  z-[998]'>LAPTOP</h2>
+            <h2 className='titolo-bianco text-7xl md:text-9xl  font-extrabold  absolute top-1/2 left-2/4 -translate-x-1/2 -translate-y-1/2  z-[998]'>LAPTOP</h2>
             <ErrorBoundary fallback={<ErrorFallback />}>
                 <Suspense fallback={<LoadingFallback />}>
                     <Canvas
