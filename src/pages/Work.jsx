@@ -292,7 +292,7 @@ function Work() {
                                 {currentTemplates.map((template) => (
                                     <div
                                         key={template.id}
-                                        className="bg-gradient-chiaro2 group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 ease-linear hover:scale-102 relative border border-chiaro/20"
+                                        className="bg-gradient-chiaro2 group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 ease-linear hover:scale-102 relative border-3 border-chiaro/20"
                                     >
                                         {template.cover_url && (
                                             <div className="aspect-video overflow-hidden">
@@ -304,7 +304,7 @@ function Work() {
                                             </div>
                                         )}
                                         <div className="p-6">
-                                            <h3 className="text-lg font-medium text-bianco mb-3">
+                                            <h3 className="text-2xl font-semibold text-bianco mb-3">
                                                 {template.name}
                                             </h3>
                                             {template.tags && template.tags.length > 0 && (
@@ -325,7 +325,7 @@ function Work() {
                                                         href={template.site_url}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="bg-scuro-2 px-2 py-1 rounded-lg absolute top-1 right-1"
+                                                        className="bg-scuro-2 border-2 px-2 py-1 rounded-lg absolute top-1 right-1"
                                                     >
                                                         <i className="bi bi-eye"></i>
                                                     </a>

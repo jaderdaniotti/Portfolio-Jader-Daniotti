@@ -221,10 +221,11 @@ export const portfolioAPI = {
 
 // Funzioni per upload file (Supabase Storage)
 export const storageAPI = {
-  // Upload immagine
-  async uploadImage(file, path) {
+  // Upload immagine (usa supabaseAdmin se disponibile per bypassare RLS)
+  async uploadImage(file, path, useAdmin = false) {
     try {
-      const { data, error } = await supabase.storage
+      const client = useAdmin && supabaseAdmin ? supabaseAdmin : supabase
+      const { data, error } = await client.storage
         .from(import.meta.env.VITE_SUPABASE_STORAGE_BUCKET || 'portfolio-assets')
         .upload(path, file)
 
@@ -245,10 +246,11 @@ export const storageAPI = {
     return data.publicUrl
   },
 
-  // Elimina file
-  async deleteFile(path) {
+  // Elimina file (usa supabaseAdmin se disponibile per bypassare RLS)
+  async deleteFile(path, useAdmin = false) {
     try {
-      const { error } = await supabase.storage
+      const client = useAdmin && supabaseAdmin ? supabaseAdmin : supabase
+      const { error } = await client.storage
         .from(import.meta.env.VITE_SUPABASE_STORAGE_BUCKET || 'portfolio-assets')
         .remove([path])
 

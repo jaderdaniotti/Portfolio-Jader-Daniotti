@@ -16,7 +16,7 @@ function ReviewCard({ review }) {
     const [imageError, setImageError] = useState(false);
 
     return (
-        <div className="text-bianco px-5 bg-scuro-2 rounded-lg py-5 ">
+        <div className="text-scuro px-5 bg-bianco rounded-lg py-5 ">
             <div className="flex items-center max-w-3/4 gap-3 mb-4">
                 {review.profile_photo_url && !imageError ? (
                     <img
@@ -43,9 +43,9 @@ function ReviewCard({ review }) {
                     </div>
                 </div>
             </div>
-            <p className="text-bianco font-normal text-md leading-relaxed mb-3">{review.text}</p>
+            <p className="font-normal text-md leading-relaxed mb-3">{review.text}</p>
             {review.relative_time_description && (
-                <p className="text-chiaro/50 text-lg mt-2 font-normal italic text-end ">{review.relative_time_description}</p>
+                <p className="text-chiaro/50 text-lg mt-2 font-medium italic text-end ">{review.relative_time_description}</p>
             )}
         </div>
     );
@@ -354,7 +354,8 @@ function Home() {
                         <h1 className='text-5xl tracking-tight md:text-8xl font-bold titolo-bianco py-5' data-aos="fade-up">
                             Tecnologia 3D
                         </h1>
-                        <p className="text-2xl text-center md:text-2xl font-medium max-w-3xl mx-auto text-chiaro" data-aos="fade-up">
+                        <p className="text-2xl text-center md:text-3xl font-bold max-w-3xl mx-auto text-bianco
+                        " data-aos="fade-up">
                             Esplora le possibilità della tecnologia 3D nel web moderno.
                             iPhone, Mouse e Laptop sono stati integrati utilizzando React Three Fiber.
                         </p>
@@ -404,21 +405,18 @@ function Home() {
                                                 icon: "text-bianco text-xl sm:text-2xl bi bi-lightning",
                                             },
                                         ].map((feature, index) => (
-                                            <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border border-chiaro/20 rounded-xl p-4 sm:p-9 hover:from-scuro/30 hover:to-scuro/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-chiaro/10 relative" key={index}>
-                                                <div className="w-12 h-12 sm:w-14 sm:h-14 bg-chiaro/10 rounded-full flex items-center justify-center absolute -top-8 left-1/2 -translate-x-1/2 bg-scuro-2 border-bianco border">
+                                            <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border-2 border-chiaro/20 rounded-xl p-4 sm:p-9 hover:from-scuro/30 hover:to-scuro/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-chiaro/10 relative" key={index}>
+                                                <div className="w-12 h-12 sm:w-14 sm:h-14 bg-chiaro/10 rounded-full flex items-center justify-center absolute -top-8 left-1/2 -translate-x-1/2 bg-scuro-2 border-bianco border-2">
                                                     <i className={feature.icon}></i>
                                                 </div>
                                                 <div className="flex items-center justify-center text-center ">
-                                                    <span className="text-bianco font-medium text-md sm:text-base lg:text-xl leading-tight">
+                                                    <span className="text-bianco font-bold text-md sm:text-base lg:text-xl leading-tight">
                                                         {feature.title}
                                                     </span>
                                                 </div>
                                             </div>
                                         ))
                                     }
-                                </div>
-                                <div className="mt-8">
-                                    <BigButton text="SCOPRI DI PIÙ" href="/progetti" />
                                 </div>
                             </div>
                         </div>
@@ -551,7 +549,7 @@ function Home() {
 
 
                     <div className="text-center mt-16">
-                        <BigButton text="COMPETENZE" href="/progetti" />
+                        <BigButton text="COMPETENZE" href="/Competenze" />
                     </div>
                 </div>
             </div >
@@ -637,9 +635,12 @@ function Home() {
                         <h1 className='text-5xl md:text-8xl font-bold titolo-bianco tracking-tight py-10' data-aos="fade-up">
                             Jader
                         </h1>
-                        <h1 className='text-3xl md:text-5xl font-bold text-bianco tracking-tight'>
+                        <h2 className='text-3xl md:text-5xl font-bold text-bianco tracking-tight'>
                             Cosa dicono di me?
-                        </h1>
+                        </h2>
+                        <h3 className='text-xl md:text-2xl font-medium italic text-bianco mt-3 tracking-tight'>
+                            Queste sono le ultime 5 recensioni lasciate da clienti che hanno lavorato con me, prese da Google.
+                        </h3>
                     </div>
 
                     {/* Sezione Google Places - Informazioni Attività */}
@@ -741,6 +742,9 @@ function Home() {
                             )
                         })}
                     </div>
+                </div>
+                <div className="text-center my-5">
+                    <BigButton text="CONTATTAMI" href="/contatti" />
                 </div>
             </div >
 

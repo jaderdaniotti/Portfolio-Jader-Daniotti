@@ -83,8 +83,6 @@ function LoadingFallback() {
     return (
         <div className="w-full h-full min-h-[400px] flex items-center justify-center">
             <div className="text-center">
-                <div className="loading loading-spinner loading-lg text-scuro mb-4"></div>
-                <p className="text-scuro text-xl">Caricamento mouse 3D...</p>
             </div>
         </div>
     );

@@ -136,7 +136,7 @@ function Contatti() {
         </div>
 
         {/* Form */}
-        <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border border-chiaro/20 rounded-xl p-6 sm:p-8">
+        <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border-4 border-chiaro/20 rounded-xl p-6 sm:p-8">
           <div className="space-y-8 relative">
             {/* Campo Nome (solo per Email) */}
             {activeTab === 'email' && (
