@@ -142,7 +142,7 @@ function Laptop3D() {
             <ErrorBoundary fallback={<ErrorFallback />}>
                 <Suspense fallback={<LoadingFallback />}>
                     <Canvas
-                        frameloop="demand"
+                        frameloop="always"
                         dpr={[1, 1.5]}
                         camera={{ position: [0, 0, 2.5], fov: 100 }}
                         gl={{

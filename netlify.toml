@@ -25,6 +25,12 @@
   [headers.values]
     Content-Type = "text/plain"
 
+[[redirects]]
+  from = "/api/google-places/*"
+  to = "https://maps.googleapis.com/maps/api/:splat"
+  status = 200
+  force = true
+
 # Redirect per SPA
 [[redirects]]
   from = "/*"

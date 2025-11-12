@@ -171,7 +171,7 @@ function Phone3D() {
         );
     }
 
-    const frameLoop = import.meta.env && import.meta.env.DEV ? 'always' : 'demand';
+    const frameLoop = 'always';
 
     return (
         <div className="phone-3d-container absolute z-[998]">

@@ -25,7 +25,7 @@ function SciFiRoomModel() {
 }
 
 const SciFiRoom3D = () => {
-    const frameLoop = import.meta.env && import.meta.env.DEV ? 'always' : 'demand';
+    const frameLoop = 'always';
 
     return (
         <div style={{ height: '100vh' }}>
