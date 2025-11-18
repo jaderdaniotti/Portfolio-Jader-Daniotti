@@ -7,11 +7,11 @@ function CardAnteprimaProgetti({ title, description, imageUrl, link, linkGithub 
                     alt={title}
                     className="w-full h-full object-contain transition-transform duration-700 p-5 position-absolute group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent  group-hover:opacity-100 transition-opacity duration-300"></div>
 
                 {/* Overlay con link progetto e/o github */}
                 {(link || linkGithub) && (
-                    <div className="absolute top-4 left-4 opacity-0 flex gap-1 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute top-4 left-4  flex gap-1 group-hover:opacity-100 transition-opacity duration-300">
                         {link === null ? "" : (
                             <a
                                 href={link}

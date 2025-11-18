@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase, supabaseAdmin, storageAPI } from '../config/supabase';
 import { portfolioEvents } from '../utils/umami';
-import UmamiAPIData from './UmamiAPIData';
 import { 
-  BarChart3, 
   Rocket, 
   Code, 
   Wrench, 
-  ArrowLeft, 
-  TrendingUp,
-  Users,
-  Eye,
-  Calendar,
-  MoreHorizontal,
   Plus,
   Edit,
   Trash2,
@@ -24,37 +16,15 @@ import {
   Link,
   Tags,
   Type,
-  Upload
+  Upload,
+  FileText,
+  Smartphone,
+  Tablet,
+  Monitor
 } from 'lucide-react';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-} from 'chart.js';
-import { Line, Bar, Doughnut } from 'react-chartjs-2';
-import { FileText } from 'lucide-react';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement
-);
 
 const TabbedDashboard = ({ onLogout }) => {
-  const [activeTab, setActiveTab] = useState('analytics');
+  const [activeTab, setActiveTab] = useState('stack');
   const [activeStackTab, setActiveStackTab] = useState('frontend');
   const [projects, setProjects] = useState([]);
   const [technologies, setTechnologies] = useState([]);
@@ -66,6 +36,13 @@ const TabbedDashboard = ({ onLogout }) => {
   const [coverImageFile, setCoverImageFile] = useState(null);
   const [coverImagePreview, setCoverImagePreview] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
+  // Stati per le immagini del progetto divise per dispositivo
+  const [projectImages, setProjectImages] = useState({
+    pc: [], // Array di { file: File, preview: string } o { id: string, image_url: string }
+    tablet: [],
+    mobile: []
+  });
+  const [uploadingProjectImages, setUploadingProjectImages] = useState(false);
 
   // Verifica se l'utente è admin
   const isAdmin = () => {
@@ -87,7 +64,6 @@ const TabbedDashboard = ({ onLogout }) => {
   };
 
   const tabs = [
-    { id: 'analytics', name: 'Analytics', icon: BarChart3 },
     { id: 'stack', name: 'Stack', icon: Code },
     { id: 'strumenti', name: 'Strumenti', icon: Wrench },
     { id: 'progetti', name: 'Progetti', icon: Rocket },
@@ -95,9 +71,9 @@ const TabbedDashboard = ({ onLogout }) => {
   ];
 
   const stackTabs = [
-    { id: 'frontend', name: 'Frontend', color: 'blue' },
-    { id: 'backend', name: 'Backend', color: 'green' },
-    { id: 'database', name: 'Database', color: 'purple' },
+    { id: 'frontend', name: 'Frontend',  },
+    { id: 'backend', name: 'Backend', },
+    { id: 'database', name: 'Database',  },
   ];
 
   useEffect(() => {
@@ -132,7 +108,7 @@ const TabbedDashboard = ({ onLogout }) => {
     onLogout();
   };
 
-  const handleEdit = (item, type) => {
+  const handleEdit = async (item, type) => {
     setEditingItem({ ...item, type });
     setEditForm(item);
     // Se c'è un'immagine esistente, mostra l'anteprima
@@ -142,6 +118,44 @@ const TabbedDashboard = ({ onLogout }) => {
     } else {
       setCoverImageFile(null);
       setCoverImagePreview(null);
+    }
+    
+    // Carica le immagini del progetto se stiamo modificando un progetto esistente
+    if (type === 'project' && item.id) {
+      try {
+        const client = getSupabaseClient();
+        const { data, error } = await client
+          .from('project_images')
+          .select('*')
+          .eq('project_id', item.id)
+          .order('order_index');
+        
+        if (error) throw error;
+        
+        // Organizza le immagini per device_type
+        const imagesByDevice = {
+          pc: [],
+          tablet: [],
+          mobile: []
+        };
+        
+        (data || []).forEach(img => {
+          if (img.device_type && imagesByDevice[img.device_type]) {
+            imagesByDevice[img.device_type].push({
+              id: img.id,
+              image_url: img.image_url,
+              order_index: img.order_index
+            });
+          }
+        });
+        
+        setProjectImages(imagesByDevice);
+      } catch (error) {
+        console.error('Errore nel caricamento immagini progetto:', error);
+        setProjectImages({ pc: [], tablet: [], mobile: [] });
+      }
+    } else {
+      setProjectImages({ pc: [], tablet: [], mobile: [] });
     }
   };
 
@@ -177,6 +191,68 @@ const TabbedDashboard = ({ onLogout }) => {
     setCoverImageFile(null);
     setCoverImagePreview(null);
     setEditForm({...editForm, cover_image: ''});
+  };
+
+  // Gestisce la selezione di immagini per dispositivo
+  const handleProjectImageSelect = (e, deviceType) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    files.forEach(file => {
+      // Verifica che sia un'immagine
+      if (!file.type.startsWith('image/')) {
+        alert('Per favore seleziona solo file immagine');
+        return;
+      }
+      
+      // Verifica la dimensione (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`L'immagine ${file.name} è troppo grande. Massimo 5MB`);
+        return;
+      }
+
+      // Crea anteprima
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProjectImages(prev => ({
+          ...prev,
+          [deviceType]: [...prev[deviceType], {
+            file: file,
+            preview: reader.result
+          }]
+        }));
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Reset input
+    e.target.value = '';
+  };
+
+  // Rimuove un'immagine del progetto (nuova o esistente)
+  const handleRemoveProjectImage = async (deviceType, index, imageId = null) => {
+    // Se è un'immagine esistente nel database, eliminala
+    if (imageId) {
+      try {
+        const client = getSupabaseClient();
+        const { error } = await client
+          .from('project_images')
+          .delete()
+          .eq('id', imageId);
+        
+        if (error) throw error;
+      } catch (error) {
+        console.error('Errore nell\'eliminazione immagine:', error);
+        alert('Errore nell\'eliminazione dell\'immagine');
+        return;
+      }
+    }
+
+    // Rimuovi dallo stato
+    setProjectImages(prev => ({
+      ...prev,
+      [deviceType]: prev[deviceType].filter((_, i) => i !== index)
+    }));
   };
 
   const handleSave = async () => {
@@ -260,11 +336,71 @@ const TabbedDashboard = ({ onLogout }) => {
 
       if (error) throw error;
 
+      // Per i progetti, salva anche le immagini del progetto
+      if (type === 'project' && id) {
+        setUploadingProjectImages(true);
+        try {
+          // Carica le nuove immagini (quelle con file)
+          for (const deviceType of ['pc', 'tablet', 'mobile']) {
+            const images = projectImages[deviceType] || [];
+            for (let i = 0; i < images.length; i++) {
+              const img = images[i];
+              
+              // Se è una nuova immagine (ha file), caricala
+              if (img.file) {
+                const timestamp = Date.now();
+                const fileName = `projects/${id}/${deviceType}/${timestamp}-${img.file.name}`;
+                
+                const uploadResult = await storageAPI.uploadImage(img.file, fileName, isAdmin());
+                
+                if (!uploadResult.success) {
+                  console.error(`Errore nel caricamento immagine ${deviceType}:`, uploadResult.error);
+                  continue;
+                }
+
+                const imageUrl = storageAPI.getPublicUrl(fileName);
+
+                // Inserisci nel database
+                const { error: insertError } = await client
+                  .from('project_images')
+                  .insert({
+                    project_id: id,
+                    image_url: imageUrl,
+                    device_type: deviceType,
+                    order_index: i
+                  });
+
+                if (insertError) {
+                  console.error('Errore nell\'inserimento immagine:', insertError);
+                }
+              }
+              // Se è un'immagine esistente (ha id), aggiorna l'order_index se necessario
+              else if (img.id) {
+                const { error: updateError } = await client
+                  .from('project_images')
+                  .update({ order_index: i })
+                  .eq('id', img.id);
+
+                if (updateError) {
+                  console.error('Errore nell\'aggiornamento ordine immagine:', updateError);
+                }
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Errore nel salvataggio immagini progetto:', error);
+          // Non bloccare il salvataggio del progetto se c'è un errore con le immagini
+        } finally {
+          setUploadingProjectImages(false);
+        }
+      }
+
       await loadData();
       setEditingItem(null);
       setEditForm({});
       setCoverImageFile(null);
       setCoverImagePreview(null);
+      setProjectImages({ pc: [], tablet: [], mobile: [] });
     } catch (error) {
       console.error('Errore nel salvataggio:', error);
       alert('Errore nel salvataggio: ' + error.message);
@@ -317,6 +453,7 @@ const TabbedDashboard = ({ onLogout }) => {
       });
       setCoverImageFile(null);
       setCoverImagePreview(null);
+      setProjectImages({ pc: [], tablet: [], mobile: [] });
       return;
     }
 
@@ -393,17 +530,67 @@ const TabbedDashboard = ({ onLogout }) => {
       };
 
       const client = getSupabaseClient();
-      const { error } = await client
+      const { data: newProject, error } = await client
         .from('projects')
-        .insert(projectData);
+        .insert(projectData)
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // Salva le immagini del progetto se ci sono
+      if (newProject && newProject.id) {
+        setUploadingProjectImages(true);
+        try {
+          for (const deviceType of ['pc', 'tablet', 'mobile']) {
+            const images = projectImages[deviceType] || [];
+            for (let i = 0; i < images.length; i++) {
+              const img = images[i];
+              
+              // Solo le nuove immagini hanno file
+              if (img.file) {
+                const timestamp = Date.now();
+                const fileName = `projects/${newProject.id}/${deviceType}/${timestamp}-${img.file.name}`;
+                
+                const uploadResult = await storageAPI.uploadImage(img.file, fileName, isAdmin());
+                
+                if (!uploadResult.success) {
+                  console.error(`Errore nel caricamento immagine ${deviceType}:`, uploadResult.error);
+                  continue;
+                }
+
+                const imageUrl = storageAPI.getPublicUrl(fileName);
+
+                // Inserisci nel database
+                const { error: insertError } = await client
+                  .from('project_images')
+                  .insert({
+                    project_id: newProject.id,
+                    image_url: imageUrl,
+                    device_type: deviceType,
+                    order_index: i
+                  });
+
+                if (insertError) {
+                  console.error('Errore nell\'inserimento immagine:', insertError);
+                }
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Errore nel salvataggio immagini progetto:', error);
+          // Non bloccare la creazione del progetto se c'è un errore con le immagini
+        } finally {
+          setUploadingProjectImages(false);
+        }
+      }
 
       await loadData();
       setEditingItem(null);
       setEditForm({});
       setCoverImageFile(null);
       setCoverImagePreview(null);
+      setProjectImages({ pc: [], tablet: [], mobile: [] });
     } catch (error) {
       console.error('Errore nella creazione del progetto:', error);
       alert('Errore nella creazione del progetto: ' + error.message);
@@ -421,13 +608,13 @@ const TabbedDashboard = ({ onLogout }) => {
   }
 
   return (
-    <div className="min-h-screen inter bg-gray-50">
+    <div className="min-h-screen inter bg-bianco">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+      <header className="bg-bianco">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-4xl tracking-tight font-medium text-gray-900">Dashboard di <span className='text-chiaro font-semibold'>Jader</span></h1>
+              <h1 className="text-4xl tracking-tight font-medium text-gray-900">Dashboard di <span className='text-chiaro font-bold'>Jader</span></h1>
               <p className="text-gray-600 mt-1"></p>
             </div>
              <div className="flex items-center gap-2">
@@ -460,8 +647,8 @@ const TabbedDashboard = ({ onLogout }) => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center ${
                     activeTab === tab.id
-                      ? 'border-indigo-500 text-indigo-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'text-scuro'
+                      : 'border-transparent text-scuro-2 hover:text-scuro hover:border-scuro'
                   }`}
                 >
                   <IconComponent className="w-4 h-4 mr-2" />
@@ -473,49 +660,13 @@ const TabbedDashboard = ({ onLogout }) => {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-white shadow rounded-lg">
-          {/* Analytics Tab */}
-          {activeTab === 'analytics' && (
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Analytics</h2>
-                <div className="flex items-center space-x-4">
-                  <div className="grid grid-cols-5 gap-4">
-                    <div className="bg-blue-50 p-4 rounded-lg text-center">
-                      <p className="text-sm font-medium text-blue-600">Progetti</p>
-                      <p className="text-2xl font-bold text-blue-900">{projects.length}</p>
-                    </div>
-                    <div className="bg-green-50 p-4 rounded-lg text-center">
-                      <p className="text-sm font-medium text-green-600">Tecnologie</p>
-                      <p className="text-2xl font-bold text-green-900">{technologies.length}</p>
-                    </div>
-                    <div className="bg-purple-50 p-4 rounded-lg text-center">
-                      <p className="text-sm font-medium text-purple-600">Strumenti</p>
-                      <p className="text-2xl font-bold text-purple-900">{tools.length}</p>
-                    </div>
-                    <div className="bg-pink-50 p-4 rounded-lg text-center">
-                      <p className="text-sm font-medium text-pink-600">Templates</p>
-                      <p className="text-2xl font-bold text-pink-900">{templates.length}</p>
-                    </div>
-                    <div className="bg-orange-50 p-4 rounded-lg text-center">
-                      <p className="text-sm font-medium text-orange-600">Competenze Medie</p>
-                      <p className="text-2xl font-bold text-orange-900">
-                        {Math.round(technologies.reduce((acc, t) => acc + t.percent, 0) / technologies.length)}%
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <UmamiAPIData />
-            </div>
-          )}
-
-           {/* Stack Tab */}
+        <div className=" rounded-lg">
+          {/* Stack Tab */}
            {activeTab === 'stack' && (
              <div className="p-6">
                <div className="flex justify-between items-center mb-6">
-                 <h2 className="text-2xl font-bold text-gray-900">Stack Tecnologico</h2>
-                 <button 
+                  <h2 className="text-2xl font-bold text-scuro">Stack Tecnologico</h2>
+                  <button 
                    onClick={() => handleAdd('technology')}
                    className="bg-scuro-2 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
                  >
@@ -531,7 +682,7 @@ const TabbedDashboard = ({ onLogout }) => {
                      <button
                        key={tab.id}
                        onClick={() => setActiveStackTab(tab.id)}
-                       className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                       className={`py-2 px-1 border-b-2 font-medium text-scuro text-sm ${
                          activeStackTab === tab.id
                            ? `border-${tab.color}-500 text-${tab.color}-600`
                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -788,9 +939,10 @@ const TabbedDashboard = ({ onLogout }) => {
                         setEditForm({});
                         setCoverImageFile(null);
                         setCoverImagePreview(null);
+                        setProjectImages({ pc: [], tablet: [], mobile: [] });
                       }}
                       className="text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                      disabled={uploadingImage}
+                      disabled={uploadingImage || uploadingProjectImages}
                     >
                       <X className="w-5 h-5" />
                     </button>
@@ -881,6 +1033,223 @@ const TabbedDashboard = ({ onLogout }) => {
                         </div>
                       )}
                     </div>
+
+                    {/* Sezione Immagini Progetto per Dispositivo */}
+                    <div className="md:col-span-2">
+                      <div className="flex items-center justify-between mb-4">
+                        <label className="flex items-center text-sm font-semibold text-gray-700">
+                          <Image className="w-5 h-5 mr-2 text-chiaro" />
+                          Immagini del Progetto (divise per dispositivo)
+                        </label>
+                        <div className="flex items-center gap-4 text-xs text-gray-500">
+                          <span className="flex items-center">
+                            <Monitor className="w-4 h-4 mr-1" />
+                            PC: {projectImages.pc.length}
+                          </span>
+                          <span className="flex items-center">
+                            <Tablet className="w-4 h-4 mr-1" />
+                            Tablet: {projectImages.tablet.length}
+                          </span>
+                          <span className="flex items-center">
+                            <Smartphone className="w-4 h-4 mr-1" />
+                            Mobile: {projectImages.mobile.length}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {/* PC Images */}
+                        <div className="border-2 border-gray-200 rounded-xl p-5 bg-gradient-to-br from-gray-50 to-white shadow-sm">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center">
+                              <div className="p-2 bg-blue-100 rounded-lg mr-2">
+                                <Monitor className="w-5 h-5 text-blue-600" />
+                              </div>
+                              <div>
+                                <h4 className="font-bold text-gray-800">PC / Desktop</h4>
+                                <p className="text-xs text-gray-500">{projectImages.pc.length} {projectImages.pc.length === 1 ? 'immagine' : 'immagini'}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-white hover:bg-gray-50 hover:border-chiaro transition-all mb-4 group">
+                            <div className="flex flex-col items-center">
+                              <Upload className="w-6 h-6 mb-2 text-gray-400 group-hover:text-chiaro transition-colors" />
+                              <p className="text-sm font-medium text-gray-600 group-hover:text-chiaro transition-colors">Aggiungi immagini</p>
+                              <p className="text-xs text-gray-400 mt-1">PNG, JPG, WEBP</p>
+                            </div>
+                            <input
+                              type="file"
+                              className="hidden"
+                              accept="image/*"
+                              multiple
+                              onChange={(e) => handleProjectImageSelect(e, 'pc')}
+                              disabled={uploadingProjectImages || uploadingImage}
+                            />
+                          </label>
+                          <div className="space-y-3 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
+                            {projectImages.pc.length > 0 ? (
+                              projectImages.pc.map((img, index) => (
+                                <div key={index} className="relative group bg-white rounded-lg overflow-hidden border-2 border-gray-200 hover:border-chiaro transition-all shadow-sm">
+                                  <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded z-10">
+                                    #{index + 1}
+                                  </div>
+                                  <img
+                                    src={img.preview || img.image_url}
+                                    alt={`PC ${index + 1}`}
+                                    className="w-full h-40 object-contain bg-gray-50"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveProjectImage('pc', index, img.id)}
+                                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                                    disabled={uploadingProjectImages}
+                                    title="Rimuovi immagine"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </button>
+                                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-50 transition-opacity h-12"></div>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="text-center py-8 text-gray-400">
+                                <Monitor className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                                <p className="text-sm">Nessuna immagine</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Tablet Images */}
+                        <div className="border-2 border-gray-200 rounded-xl p-5 bg-gradient-to-br from-gray-50 to-white shadow-sm">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center">
+                              <div className="p-2 bg-purple-100 rounded-lg mr-2">
+                                <Tablet className="w-5 h-5 text-purple-600" />
+                              </div>
+                              <div>
+                                <h4 className="font-bold text-gray-800">Tablet</h4>
+                                <p className="text-xs text-gray-500">{projectImages.tablet.length} {projectImages.tablet.length === 1 ? 'immagine' : 'immagini'}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-white hover:bg-gray-50 hover:border-chiaro transition-all mb-4 group">
+                            <div className="flex flex-col items-center">
+                              <Upload className="w-6 h-6 mb-2 text-gray-400 group-hover:text-chiaro transition-colors" />
+                              <p className="text-sm font-medium text-gray-600 group-hover:text-chiaro transition-colors">Aggiungi immagini</p>
+                              <p className="text-xs text-gray-400 mt-1">PNG, JPG, WEBP</p>
+                            </div>
+                            <input
+                              type="file"
+                              className="hidden"
+                              accept="image/*"
+                              multiple
+                              onChange={(e) => handleProjectImageSelect(e, 'tablet')}
+                              disabled={uploadingProjectImages || uploadingImage}
+                            />
+                          </label>
+                          <div className="space-y-3 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
+                            {projectImages.tablet.length > 0 ? (
+                              projectImages.tablet.map((img, index) => (
+                                <div key={index} className="relative group bg-white rounded-lg overflow-hidden border-2 border-gray-200 hover:border-chiaro transition-all shadow-sm">
+                                  <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded z-10">
+                                    #{index + 1}
+                                  </div>
+                                  <img
+                                    src={img.preview || img.image_url}
+                                    alt={`Tablet ${index + 1}`}
+                                    className="w-full h-40 object-contain bg-gray-50"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveProjectImage('tablet', index, img.id)}
+                                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                                    disabled={uploadingProjectImages}
+                                    title="Rimuovi immagine"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </button>
+                                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-50 transition-opacity h-12"></div>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="text-center py-8 text-gray-400">
+                                <Tablet className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                                <p className="text-sm">Nessuna immagine</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Mobile Images */}
+                        <div className="border-2 border-gray-200 rounded-xl p-5 bg-gradient-to-br from-gray-50 to-white shadow-sm">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center">
+                              <div className="p-2 bg-green-100 rounded-lg mr-2">
+                                <Smartphone className="w-5 h-5 text-green-600" />
+                              </div>
+                              <div>
+                                <h4 className="font-bold text-gray-800">Mobile</h4>
+                                <p className="text-xs text-gray-500">{projectImages.mobile.length} {projectImages.mobile.length === 1 ? 'immagine' : 'immagini'}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-white hover:bg-gray-50 hover:border-chiaro transition-all mb-4 group">
+                            <div className="flex flex-col items-center">
+                              <Upload className="w-6 h-6 mb-2 text-gray-400 group-hover:text-chiaro transition-colors" />
+                              <p className="text-sm font-medium text-gray-600 group-hover:text-chiaro transition-colors">Aggiungi immagini</p>
+                              <p className="text-xs text-gray-400 mt-1">PNG, JPG, WEBP</p>
+                            </div>
+                            <input
+                              type="file"
+                              className="hidden"
+                              accept="image/*"
+                              multiple
+                              onChange={(e) => handleProjectImageSelect(e, 'mobile')}
+                              disabled={uploadingProjectImages || uploadingImage}
+                            />
+                          </label>
+                          <div className="space-y-3 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
+                            {projectImages.mobile.length > 0 ? (
+                              projectImages.mobile.map((img, index) => (
+                                <div key={index} className="relative group bg-white rounded-lg overflow-hidden border-2 border-gray-200 hover:border-chiaro transition-all shadow-sm">
+                                  <div className="absolute top-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded z-10">
+                                    #{index + 1}
+                                  </div>
+                                  <img
+                                    src={img.preview || img.image_url}
+                                    alt={`Mobile ${index + 1}`}
+                                    className="w-full h-40 object-contain bg-gray-50"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveProjectImage('mobile', index, img.id)}
+                                    className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                                    disabled={uploadingProjectImages}
+                                    title="Rimuovi immagine"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </button>
+                                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent opacity-0 group-hover:opacity-50 transition-opacity h-12"></div>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="text-center py-8 text-gray-400">
+                                <Smartphone className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                                <p className="text-sm">Nessuna immagine</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Loader durante upload immagini progetto */}
+                      {uploadingProjectImages && (
+                        <div className="mt-4 flex items-center justify-center text-sm text-chiaro bg-chiaro bg-opacity-10 rounded-lg p-3">
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-chiaro mr-3"></div>
+                          Caricamento immagini progetto in corso...
+                        </div>
+                      )}
+                    </div>
                     
                     <div>
                       <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
@@ -949,9 +1318,10 @@ const TabbedDashboard = ({ onLogout }) => {
                           setEditForm({});
                           setCoverImageFile(null);
                           setCoverImagePreview(null);
+                          setProjectImages({ pc: [], tablet: [], mobile: [] });
                         }}
                         className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-semibold flex items-center transition-colors"
-                        disabled={uploadingImage}
+                        disabled={uploadingImage || uploadingProjectImages}
                       >
                         <X className="w-4 h-4 mr-2" />
                         Annulla
@@ -960,7 +1330,7 @@ const TabbedDashboard = ({ onLogout }) => {
                         <button
                           onClick={handleSave}
                           className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-semibold flex items-center shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                          disabled={uploadingImage}
+                          disabled={uploadingImage || uploadingProjectImages}
                         >
                           {uploadingImage ? (
                             <>
@@ -978,7 +1348,7 @@ const TabbedDashboard = ({ onLogout }) => {
                         <button
                           onClick={handleCreateProject}
                           className="px-8 py-3 bg-chiaro hover:bg-chiaro-2 text-white rounded-lg text-sm font-semibold flex items-center shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                          disabled={uploadingImage}
+                          disabled={uploadingImage || uploadingProjectImages}
                         >
                           {uploadingImage ? (
                             <>
@@ -1001,7 +1371,7 @@ const TabbedDashboard = ({ onLogout }) => {
               {/* Tabella progetti */}
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                  <thead className="bg-bianco">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Titolo
@@ -1020,7 +1390,7 @@ const TabbedDashboard = ({ onLogout }) => {
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  <tbody className="bg-bianco divide-y divide-gray-200">
                     {projects.length > 0 ? (
                       projects.map((project) => (
                         <tr key={project.id} className={editingItem?.id === project.id && editingItem?.type === 'project' ? 'bg-blue-50' : ''}>

@@ -342,7 +342,7 @@ function Home() {
                         <BigButton text="CONOSCIMI" href="/Chisono"></BigButton>
                     </div>
                     <div className="shadow shadow-fuchsia-200 rounded-full border-fuchsia-200 border-1 max-w-full p-10 object-contain" data-aos="fade-up" data-aos-duration="200">
-                        <img src="immagini\AVATAR\1-Photoroom.png" className='hover:scale-110 hover:rotate-3 transition-all duration-300' alt="" />
+                        <img src="/loghi/logogrigio.png" className='hover:scale-110 hover:rotate-3 transition-all duration-300' alt="" />
                     </div>
                 </div>
             </section>
@@ -564,7 +564,7 @@ function Home() {
                         <div className="flex flex-col min-h-[600px]">
                             <div className="grid grid-cols-1 bg-scuro-2 md:grid-cols-3 mx-auto justify-center py-5 px-10 items-center flex-1">
                                 <div className="flex content-center items-center justify-center">
-                                    <img src="immagini\AVATAR\1-Photoroom.png" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
+                                    <img src="/loghi/logopurple.png" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
                                 </div>
                                 <div className="flex content-center items-center justify-center">
                                     <p className="text-6xl md:text-8xl titolo-bianco">+</p>

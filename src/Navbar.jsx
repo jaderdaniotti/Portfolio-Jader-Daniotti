@@ -48,13 +48,13 @@ function Navbar() {
 
     return (
         <>
-            <nav className={`sticky z-[999] top-0 left-0 right-0 w-full  transition-all duration-300 ${scrolled ? 'bg-chiaro shadow-lg py-1' : 'bg-chiaro py-2'
+            <nav className={`sticky z-[999] top-0 left-0 right-0 w-full bg-chiaro-2 transition-all duration-300 ${scrolled ? 'shadow-lg py-1' : ' py-2'
                 }`}>
                 <div className="container mx-auto px-4 flex items-center justify-between relative">
                     <div className="flex-shrink-0">
                         <Link to="/admin">
                             <img
-                                src="/immagini/AVATAR/1-Photoroom.png"
+                                src="/loghi/logoviola.png"
                                 alt="Jader"
                                 className="w-12 h-12 md:w-16 md:h-16 rounded-full  transition-all duration-300 hover:scale-110 hover:-rotate-3 cursor-pointer "
                             />
@@ -65,13 +65,13 @@ function Navbar() {
                             <li key={index} className="relative group">
                                 <Link
                                     to={item.href}
-                                    className={`text-md hover:text-scuro transition-all duration-300 hover:scale-105 block py-2 px-3 rounded-lg hover:bg-chiaro-2/10 ${
-                                        item.admin ? 'text-red-600 font-semibold' : 'text-scuro'
+                                    className={`text-md hover:text-scuro transition-all duration-300 hover:scale-105 block py-2 px-3 rounded-lg  ${
+                                        item.admin ? 'text-red-600 font-semibold' : 'text-grigio'
                                     }`}
                                 >
                                     {item.text}
                                 </Link>
-                                <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-scuro transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
+                                <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-grigio transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
                             </li>
                         ))}
                     </ul>
@@ -99,7 +99,7 @@ function Navbar() {
                         <div className="flex justify-between items-center px-5 border-b border-chiaro-2">
                             <Link to="/admin" onClick={handleLinkClick}>
                                 <img
-                                    src="/immagini/AVATAR/1-Photoroom.png"
+                                    src="/loghi/logopurple.png"
                                     alt="Avatar"
                                     className="w-25 h-25 rounded-full "
                                 />
@@ -133,7 +133,7 @@ function Navbar() {
                                         <Link to={item.href}
                                             onClick={handleLinkClick}
                                             className={`block px-6 py-2 text-3xl md:text-2xl w-min border-b-2 border-violet-950 hover:translate-x-1 transition-all font-medium duration-300 linear ${
-                                                item.admin ? 'text-red-600 font-bold' : 'text-scuro'
+                                                item.admin ? 'text-red-600 font-bold' : 'text-grigio'
                                             }`}
                                         >
                                             {item.text}

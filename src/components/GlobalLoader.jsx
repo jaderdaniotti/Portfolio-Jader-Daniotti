@@ -17,13 +17,8 @@ const GlobalLoader = ({ onLoadingComplete }) => {
     return (
         <div className="fixed inset-0 z-50 bg-scuro flex flex-col items-center justify-center">
             {/* Logo centrale con animazione */}
-            <div className="p-20 animazioneloader">
-                <img 
-                    src={caduta} 
-                    alt="Logo" 
-                    className="object-contain"
-                />
-            </div>
+            <div className="loader"></div>
+
 
             {/* Barra di progresso animata */}
             {/* <div className="w-80 md:w-96 bg-scuro-2 rounded-full h-3 mb-4 overflow-hidden">
