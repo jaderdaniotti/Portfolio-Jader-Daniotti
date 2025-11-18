@@ -269,7 +269,7 @@ body {
 
 .card-sfondo-bianco {
   background: linear-gradient(180deg, #393053 0%, #251c43 50%, #393053 100%);
-  border: #746a94 6px solid;
+  border: #746a94 4px solid;
 }
 
 .swiper-button-prev,

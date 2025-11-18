@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { supabase, supabaseAdmin, storageAPI } from '../config/supabase';
 import { portfolioEvents } from '../utils/umami';
-import { 
-  Rocket, 
-  Code, 
-  Wrench, 
+import CardAnteprimaProgetti from './cardAnteprimaProgetti';
+import {
+  Rocket,
+  Code,
+  Wrench,
   Plus,
   Edit,
   Trash2,
@@ -71,9 +72,9 @@ const TabbedDashboard = ({ onLogout }) => {
   ];
 
   const stackTabs = [
-    { id: 'frontend', name: 'Frontend',  },
+    { id: 'frontend', name: 'Frontend', },
     { id: 'backend', name: 'Backend', },
-    { id: 'database', name: 'Database',  },
+    { id: 'database', name: 'Database', },
   ];
 
   useEffect(() => {
@@ -119,7 +120,7 @@ const TabbedDashboard = ({ onLogout }) => {
       setCoverImageFile(null);
       setCoverImagePreview(null);
     }
-    
+
     // Carica le immagini del progetto se stiamo modificando un progetto esistente
     if (type === 'project' && item.id) {
       try {
@@ -129,16 +130,16 @@ const TabbedDashboard = ({ onLogout }) => {
           .select('*')
           .eq('project_id', item.id)
           .order('order_index');
-        
+
         if (error) throw error;
-        
+
         // Organizza le immagini per device_type
         const imagesByDevice = {
           pc: [],
           tablet: [],
           mobile: []
         };
-        
+
         (data || []).forEach(img => {
           if (img.device_type && imagesByDevice[img.device_type]) {
             imagesByDevice[img.device_type].push({
@@ -148,7 +149,7 @@ const TabbedDashboard = ({ onLogout }) => {
             });
           }
         });
-        
+
         setProjectImages(imagesByDevice);
       } catch (error) {
         console.error('Errore nel caricamento immagini progetto:', error);
@@ -168,7 +169,7 @@ const TabbedDashboard = ({ onLogout }) => {
         alert('Per favore seleziona un file immagine');
         return;
       }
-      
+
       // Verifica la dimensione (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert('L\'immagine è troppo grande. Massimo 5MB');
@@ -176,7 +177,7 @@ const TabbedDashboard = ({ onLogout }) => {
       }
 
       setCoverImageFile(file);
-      
+
       // Crea anteprima
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -190,7 +191,7 @@ const TabbedDashboard = ({ onLogout }) => {
   const handleRemoveImage = () => {
     setCoverImageFile(null);
     setCoverImagePreview(null);
-    setEditForm({...editForm, cover_image: ''});
+    setEditForm({ ...editForm, cover_image: '' });
   };
 
   // Gestisce la selezione di immagini per dispositivo
@@ -204,7 +205,7 @@ const TabbedDashboard = ({ onLogout }) => {
         alert('Per favore seleziona solo file immagine');
         return;
       }
-      
+
       // Verifica la dimensione (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert(`L'immagine ${file.name} è troppo grande. Massimo 5MB`);
@@ -239,7 +240,7 @@ const TabbedDashboard = ({ onLogout }) => {
           .from('project_images')
           .delete()
           .eq('id', imageId);
-        
+
         if (error) throw error;
       } catch (error) {
         console.error('Errore nell\'eliminazione immagine:', error);
@@ -258,7 +259,7 @@ const TabbedDashboard = ({ onLogout }) => {
   const handleSave = async () => {
     try {
       const { type, id } = editingItem;
-      
+
       // Validazione per progetti
       if (type === 'project') {
         if (!editForm.title || editForm.title.trim() === '') {
@@ -268,11 +269,11 @@ const TabbedDashboard = ({ onLogout }) => {
       }
 
       setUploadingImage(true);
-      
-      const tableName = type === 'project' ? 'projects' : 
-                      type === 'technology' ? 'technologies' : 
-                      type === 'tool' ? 'tools' : 'templates';
-      
+
+      const tableName = type === 'project' ? 'projects' :
+        type === 'technology' ? 'technologies' :
+          type === 'tool' ? 'tools' : 'templates';
+
       // Prepara i dati da aggiornare rimuovendo campi non necessari
       const updateData = { ...editForm };
       delete updateData.id;
@@ -280,7 +281,7 @@ const TabbedDashboard = ({ onLogout }) => {
       delete updateData.created_at;
       delete updateData.updated_at;
       delete updateData.user_id;
-      
+
       // Per i progetti, gestisci il caricamento dell'immagine
       if (type === 'project') {
         updateData.title = updateData.title.trim();
@@ -294,10 +295,10 @@ const TabbedDashboard = ({ onLogout }) => {
         if (coverImageFile) {
           const timestamp = Date.now();
           const fileName = `projects/${timestamp}-${coverImageFile.name}`;
-          
+
           // Usa admin client per bypassare RLS
           const uploadResult = await storageAPI.uploadImage(coverImageFile, fileName, isAdmin());
-          
+
           if (!uploadResult.success) {
             throw new Error(uploadResult.error || 'Errore nel caricamento dell\'immagine');
           }
@@ -315,7 +316,7 @@ const TabbedDashboard = ({ onLogout }) => {
           updateData.cover_image = null;
         }
       }
-      
+
       // Validazione per templates
       if (type === 'template') {
         if (!updateData.name || !updateData.site_url) {
@@ -327,7 +328,7 @@ const TabbedDashboard = ({ onLogout }) => {
           updateData.tags = [];
         }
       }
-      
+
       const client = getSupabaseClient();
       const { error } = await client
         .from(tableName)
@@ -345,14 +346,14 @@ const TabbedDashboard = ({ onLogout }) => {
             const images = projectImages[deviceType] || [];
             for (let i = 0; i < images.length; i++) {
               const img = images[i];
-              
+
               // Se è una nuova immagine (ha file), caricala
               if (img.file) {
                 const timestamp = Date.now();
                 const fileName = `projects/${id}/${deviceType}/${timestamp}-${img.file.name}`;
-                
+
                 const uploadResult = await storageAPI.uploadImage(img.file, fileName, isAdmin());
-                
+
                 if (!uploadResult.success) {
                   console.error(`Errore nel caricamento immagine ${deviceType}:`, uploadResult.error);
                   continue;
@@ -413,10 +414,10 @@ const TabbedDashboard = ({ onLogout }) => {
     if (!confirm('Sei sicuro di voler eliminare questo elemento?')) return;
 
     try {
-      const tableName = type === 'project' ? 'projects' : 
-                      type === 'technology' ? 'technologies' : 
-                      type === 'tool' ? 'tools' : 'templates';
-      
+      const tableName = type === 'project' ? 'projects' :
+        type === 'technology' ? 'technologies' :
+          type === 'tool' ? 'tools' : 'templates';
+
       const client = getSupabaseClient();
       const { error } = await client
         .from(tableName)
@@ -426,7 +427,7 @@ const TabbedDashboard = ({ onLogout }) => {
       if (error) throw error;
 
       await loadData();
-      
+
       // Se stavamo modificando l'elemento eliminato, resetta il form
       if (editingItem?.id === id) {
         setEditingItem(null);
@@ -458,9 +459,9 @@ const TabbedDashboard = ({ onLogout }) => {
     }
 
     try {
-      const tableName = type === 'technology' ? 'technologies' : 
-                      type === 'tool' ? 'tools' : 'templates';
-      
+      const tableName = type === 'technology' ? 'technologies' :
+        type === 'tool' ? 'tools' : 'templates';
+
       const defaultData = type === 'technology' ? {
         name: 'Nuova Tecnologia',
         category: 'frontend',
@@ -507,10 +508,10 @@ const TabbedDashboard = ({ onLogout }) => {
       if (coverImageFile) {
         const timestamp = Date.now();
         const fileName = `projects/${timestamp}-${coverImageFile.name}`;
-        
+
         // Usa admin client per bypassare RLS
         const uploadResult = await storageAPI.uploadImage(coverImageFile, fileName, isAdmin());
-        
+
         if (!uploadResult.success) {
           throw new Error(uploadResult.error || 'Errore nel caricamento dell\'immagine');
         }
@@ -546,14 +547,14 @@ const TabbedDashboard = ({ onLogout }) => {
             const images = projectImages[deviceType] || [];
             for (let i = 0; i < images.length; i++) {
               const img = images[i];
-              
+
               // Solo le nuove immagini hanno file
               if (img.file) {
                 const timestamp = Date.now();
                 const fileName = `projects/${newProject.id}/${deviceType}/${timestamp}-${img.file.name}`;
-                
+
                 const uploadResult = await storageAPI.uploadImage(img.file, fileName, isAdmin());
-                
+
                 if (!uploadResult.success) {
                   console.error(`Errore nel caricamento immagine ${deviceType}:`, uploadResult.error);
                   continue;
@@ -608,36 +609,36 @@ const TabbedDashboard = ({ onLogout }) => {
   }
 
   return (
-    <div className="min-h-screen inter bg-bianco">
+    <div className="min-h-screen inter bg-scuro-2">
       {/* Header */}
-      <header className="bg-bianco">
+      <header className="bg-scuro-2 border-b">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-4xl tracking-tight font-medium text-gray-900">Dashboard di <span className='text-chiaro font-bold'>Jader</span></h1>
+              <h1 className="text-4xl tracking-tight font-medium text-chiaro">Dashboard di <span className='text-bianco font-bold'>Jader</span></h1>
               <p className="text-gray-600 mt-1"></p>
             </div>
-             <div className="flex items-center gap-2">
-               <a 
-                 href="/" target='_blank'
-                 className="flex items-center  bg-chiaro text-white px-6 py-2 rounded-md text-sm font-medium transition-colors"
-               >
-                 <Globe className="w-4 h-4" />
-               </a>
-               <button
-                 onClick={handleLogout}
-                 className="bg-scuro-2 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors flex items-center"
-               >
-                 <LogOut className="w-4 h-4" />
-               </button>
-             </div>
+            <div className="flex items-center gap-2">
+              <a
+                href="/" target='_blank'
+                className="flex items-center  bg-chiaro text-white px-6 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                <Globe className="w-4 h-4" />
+              </a>
+              <button
+                onClick={handleLogout}
+                className="bg-chiaro text-white px-6 py-2 rounded-md text-sm font-medium transition-colors flex items-center"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Navigation Tabs */}
-        <div className="border-b border-gray-200 mb-8">
+        <div className="">
           <nav className="-mb-px flex space-x-8">
             {tabs.map((tab) => {
               const IconComponent = tab.icon;
@@ -645,11 +646,10 @@ const TabbedDashboard = ({ onLogout }) => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center ${
-                    activeTab === tab.id
-                      ? 'text-scuro'
-                      : 'border-transparent text-scuro-2 hover:text-scuro hover:border-scuro'
-                  }`}
+                  className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center ${activeTab === tab.id
+                      ? 'text-bianco'
+                      : 'border-transparent text-chiaro hover:text-bianco hover:border-chiaro'
+                    }`}
                 >
                   <IconComponent className="w-4 h-4 mr-2" />
                   {tab.name}
@@ -662,153 +662,151 @@ const TabbedDashboard = ({ onLogout }) => {
         {/* Tab Content */}
         <div className=" rounded-lg">
           {/* Stack Tab */}
-           {activeTab === 'stack' && (
-             <div className="p-6">
-               <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-scuro">Stack Tecnologico</h2>
-                  <button 
-                   onClick={() => handleAdd('technology')}
-                   className="bg-scuro-2 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
-                 >
-                   <Plus className="w-4 h-4 mr-2" />
-                   Aggiungi Tecnologia
-                 </button>
-               </div>
-               
-               {/* Stack Sub-tabs */}
-               <div className="border-b border-gray-200 mb-6">
-                 <nav className="-mb-px flex space-x-8">
-                   {stackTabs.map((tab) => (
-                     <button
-                       key={tab.id}
-                       onClick={() => setActiveStackTab(tab.id)}
-                       className={`py-2 px-1 border-b-2 font-medium text-scuro text-sm ${
-                         activeStackTab === tab.id
-                           ? `border-${tab.color}-500 text-${tab.color}-600`
-                           : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                       }`}
-                     >
-                       {tab.name}
-                     </button>
-                   ))}
-                 </nav>
-               </div>
+          {activeTab === 'stack' && (
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-bianco">Stack Tecnologico</h2>
+                <button
+                  onClick={() => handleAdd('technology')}
+                  className="bg-chiaro text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Aggiungi Tecnologia
+                </button>
+              </div>
 
-               {/* Filtered Technologies */}
-               {technologies.filter(tech => tech.category === activeStackTab).length > 0 ? (
-                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Stack Sub-tabs */}
+              <div className="">
+                <nav className="-mb-px flex space-x-8">
+                  {stackTabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveStackTab(tab.id)}
+                      className={`py-2 mb-3 px-1 font-medium text-bianco text-sm ${activeStackTab === tab.id
+                          ? ` text-bianco `
+                          : ' text-chiaro hover:text-bianco '
+                        }`}
+                    >
+                      {tab.name}
+                    </button>
+                  ))}
+                </nav>
+              </div>
+
+              {/* Filtered Technologies */}
+              {technologies.filter(tech => tech.category === activeStackTab).length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {technologies
                     .filter(tech => tech.category === activeStackTab)
                     .map((tech) => (
-                  <div key={tech.id} className="border rounded-lg p-4">
-                    {editingItem?.id === tech.id && editingItem?.type === 'technology' ? (
-                      <div className="space-y-3">
-                        <input
-                          type="text"
-                          value={editForm.name || ''}
-                          onChange={(e) => setEditForm({...editForm, name: e.target.value})}
-                          className="w-full px-3 py-2 border text-scuro font-medium border-gray-300 rounded-md text-sm"
-                          placeholder="Nome tecnologia"
-                        />
-                        <select
-                          value={editForm.category || ''}
-                          onChange={(e) => setEditForm({...editForm, category: e.target.value})}
-                          className="w-full px-3 py-2 border text-scuro font-medium border-gray-300 rounded-md text-sm"
-                        >
-                          <option value="frontend">Frontend</option>
-                          <option value="backend">Backend</option>
-                          <option value="database">Database</option>
-                        </select>
-                        <input
-                          type="number"
-                          value={editForm.percent || ''}
-                          onChange={(e) => setEditForm({...editForm, percent: parseInt(e.target.value)})}
-                          className="w-full px-3 py-2 border text-scuro font-medium border-gray-300 rounded-md text-sm"
-                          placeholder="Percentuale"
-                          min="0"
-                          max="100"
-                        />
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={handleSave}
-                            className="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
-                          >
-                            <Save className="w-4 h-4 mr-1" />
-                            Salva
-                          </button>
-                          <button
-                            onClick={() => setEditingItem(null)}
-                            className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
-                          >
-                            <X className="w-4 h-4 mr-1" />
-                            Annulla
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center space-x-3">
-                            <div 
-                              className="w-8 h-8 rounded flex items-center justify-center"
-                              dangerouslySetInnerHTML={{ __html: tech.svg_code }}
+                      <div key={tech.id} className="border rounded-lg p-4">
+                        {editingItem?.id === tech.id && editingItem?.type === 'technology' ? (
+                          <div className="space-y-3">
+                            <input
+                              type="text"
+                              value={editForm.name || ''}
+                              onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                              className="w-full px-3 py-2 border text-bianco font-medium border-gray-300 rounded-md text-sm"
+                              placeholder="Nome tecnologia"
                             />
-                            <h3 className="font-medium text-gray-900">{tech.name}</h3>
+                            <select
+                              value={editForm.category || ''}
+                              onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
+                              className="w-full px-3 py-2 border text-bianco font-medium border-gray-300 rounded-md text-sm"
+                            >
+                              <option className='text-bianco bg-scuro-2 rounded-md' value="frontend">Frontend</option>
+                              <option className='text-bianco bg-scuro-2 rounded-md' value="backend">Backend</option>
+                              <option className='text-bianco bg-scuro-2 rounded-md' value="database">Database</option>
+                            </select>
+                            <input
+                              type="number"
+                              value={editForm.percent || ''}
+                              onChange={(e) => setEditForm({ ...editForm, percent: parseInt(e.target.value) })}
+                              className="w-full px-3 py-2 border text-bianco font-medium border-gray-300 rounded-md text-sm"
+                              placeholder="Percentuale"
+                              min="0"
+                              max="100"
+                            />
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={handleSave}
+                                className="flex-1 bg-chiaro hover:bg-chiaro-2 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
+                              >
+                                <Save className="w-4 h-4 mr-1" />
+                                Salva
+                              </button>
+                              <button
+                                onClick={() => setEditingItem(null)}
+                                className="flex-1 bg-chiaro hover:bg-chiaro-2 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
+                              >
+                                <X className="w-4 h-4 mr-1" />
+                                Annulla
+                              </button>
+                            </div>
                           </div>
-                          <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                            tech.category === 'frontend' ? 'bg-blue-100 text-blue-800' :
-                            tech.category === 'backend' ? 'bg-green-100 text-green-800' :
-                            'bg-purple-100 text-purple-800'
-                          }`}>
-                            {tech.category}
-                          </span>
-                        </div>
-                        <div className="mb-2">
-                          <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
-                              className="bg-chiaro-2 h-2 rounded-full" 
-                              style={{ width: `${tech.percent}%` }}
-                            ></div>
-                          </div>
-                          <p className="text-xs text-gray-500 mt-1">{tech.percent}%</p>
-                        </div>
-                        <div className="flex space-x-2">
-                          <button 
-                            onClick={() => handleEdit(tech, 'technology')}
-                            className="text-scuro font-medium border-r-1 pr-2 text-sm flex items-center"
-                          >
-                            <Edit className="w-4 h-4 mr-1" />
-                            Modifica
-                          </button>
-                          <button 
-                            onClick={() => handleDelete(tech.id, 'technology')}
-                            className="text-red-600 hover:text-red-900 font-medium text-sm flex items-center"
-                          >
-                            <Trash2 className="w-4 h-4 mr-1" />
-                            Elimina
-                          </button>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                ))}
-                 </div>
-               ) : (
-                 <div className="text-center py-12 text-gray-500">
-                   <Code className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                   <p className="text-lg font-medium">Nessuna tecnologia {activeStackTab}</p>
-                   <p className="text-sm">Aggiungi una nuova tecnologia per questa categoria</p>
-                 </div>
-               )}
-             </div>
-           )}
+                        ) : (
+                          <>
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center space-x-3">
+                                <div
+                                  className="w-8 h-8 rounded flex items-center justify-center"
+                                  dangerouslySetInnerHTML={{ __html: tech.svg_code }}
+                                />
+                                <h3 className="font-medium text-bianco">{tech.name}</h3>
+                              </div>
+                              <span className={`px-2 py-1 text-xs font-semibold rounded-full ${tech.category === 'frontend' ? 'bg-blue-100 text-blue-800' :
+                                  tech.category === 'backend' ? 'bg-green-100 text-green-800' :
+                                    'bg-purple-100 text-purple-800'
+                                }`}>
+                                {tech.category}
+                              </span>
+                            </div>
+                            <div className="mb-2">
+                              <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div
+                                  className="bg-chiaro h-2 rounded-full"
+                                  style={{ width: `${tech.percent}%` }}
+                                ></div>
+                              </div>
+                              <p className="text-xs text-bianco mt-1">{tech.percent}%</p>
+                            </div>
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={() => handleEdit(tech, 'technology')}
+                                className="text-bianco font-medium border-r-1 pr-2 text-sm flex items-center"
+                              >
+                                <Edit className="w-4 h-4 mr-1" />
+                                Modifica
+                              </button>
+                              <button
+                                onClick={() => handleDelete(tech.id, 'technology')}
+                                className="text-red-600 hover:text-red-900 font-medium text-sm flex items-center"
+                              >
+                                <Trash2 className="w-4 h-4 mr-1" />
+                                Elimina
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    ))}
+                </div>
+              ) : (
+                <div className="text-center py-12 text-gray-500">
+                  <Code className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                  <p className="text-lg font-medium">Nessuna tecnologia {activeStackTab}</p>
+                  <p className="text-sm">Aggiungi una nuova tecnologia per questa categoria</p>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Strumenti Tab */}
           {activeTab === 'strumenti' && (
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Strumenti di Lavoro</h2>
-                <button 
+                <h2 className="text-2xl font-bold text-bianco">Strumenti di Lavoro</h2>
+                <button
                   onClick={() => handleAdd('tool')}
                   className="bg-scuro-2 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
                 >
@@ -824,15 +822,15 @@ const TabbedDashboard = ({ onLogout }) => {
                         <input
                           type="text"
                           value={editForm.name || ''}
-                          onChange={(e) => setEditForm({...editForm, name: e.target.value})}
-                          className="w-full px-3 py-2 border text-scuro font-medium border-gray-300 rounded-md text-sm"
+                          onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                          className="w-full px-3 py-2 border text-bianco font-medium border-gray-300 rounded-md text-sm"
                           placeholder="Nome strumento"
                         />
                         <input
                           type="number"
                           value={editForm.percent || ''}
-                          onChange={(e) => setEditForm({...editForm, percent: parseInt(e.target.value)})}
-                          className="w-full px-3 py-2 border text-scuro font-medium border-gray-300 rounded-md text-sm"
+                          onChange={(e) => setEditForm({ ...editForm, percent: parseInt(e.target.value) })}
+                          className="w-full px-3 py-2 border text-bianco font-medium border-gray-300 rounded-md text-sm"
                           placeholder="Percentuale"
                           min="0"
                           max="100"
@@ -840,14 +838,14 @@ const TabbedDashboard = ({ onLogout }) => {
                         <div className="flex space-x-2">
                           <button
                             onClick={handleSave}
-                            className="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
+                            className="flex-1 bg-chiaro hover:bg-chiaro-2 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
                           >
                             <Save className="w-4 h-4 mr-1" />
                             Salva
                           </button>
                           <button
                             onClick={() => setEditingItem(null)}
-                            className="flex-1 bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
+                            className="flex-1 bg-chiaro hover:bg-chiaro-2 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
                           >
                             <X className="w-4 h-4 mr-1" />
                             Annulla
@@ -857,30 +855,30 @@ const TabbedDashboard = ({ onLogout }) => {
                     ) : (
                       <>
                         <div className="flex items-center space-x-3 mb-2">
-                          <div 
+                          <div
                             className="w-8 h-8 rounded flex items-center justify-center"
                             dangerouslySetInnerHTML={{ __html: tool.svg_code }}
                           />
-                          <h3 className="font-medium text-gray-900">{tool.name}</h3>
+                          <h3 className="font-medium text-bianco">{tool.name}</h3>
                         </div>
                         <div className="mb-2">
                           <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
-                              className="bg-chiaro-2 h-2 rounded-full" 
+                            <div
+                              className="bg-chiaro h-2 rounded-full"
                               style={{ width: `${tool.percent}%` }}
                             ></div>
                           </div>
-                          <p className="text-xs text-gray-500 mt-1">{tool.percent}%</p>
+                          <p className="text-xs text-bianco mt-1">{tool.percent}%</p>
                         </div>
                         <div className="flex space-x-2">
-                          <button 
+                          <button
                             onClick={() => handleEdit(tool, 'tool')}
-                            className="text-scuro font-medium border-r-1 pr-2 text-sm flex items-center"
+                            className="text-bianco font-medium border-r-1 pr-2 text-sm flex items-center"
                           >
                             <Edit className="w-4 h-4 mr-1" />
                             Modifica
                           </button>
-                          <button 
+                          <button
                             onClick={() => handleDelete(tool.id, 'tool')}
                             className="text-red-600 hover:text-red-900 font-medium text-sm flex items-center"
                           >
@@ -900,13 +898,13 @@ const TabbedDashboard = ({ onLogout }) => {
           {activeTab === 'progetti' && (
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Progetti</h2>
+                <h2 className="text-2xl font-bold text-bianco">Progetti</h2>
                 {editingItem?.type !== 'project' && (
-                  <button 
+                  <button
                     onClick={() => handleAdd('project')}
-                    className="bg-scuro-2 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
+                    className="bg-chiaro text-bianco px-4 py-2 rounded-md text-sm font-medium flex items-center"
                   >
-                    <Plus className="w-4 h-4 mr-2" />
+                    <Plus className="w-4 h-4 mr-2 text-bianco" />
                     Aggiungi Progetto
                   </button>
                 )}
@@ -914,21 +912,21 @@ const TabbedDashboard = ({ onLogout }) => {
 
               {/* Form di creazione/modifica progetto */}
               {(editingItem?.type === 'project') && (
-                <div className="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-xl p-6 mb-8 shadow-sm">
+                <div className="bg-scuro-2 border-2 border-gray-200 rounded-xl p-6 mb-8 shadow-sm">
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center space-x-3">
                       <div className={`p-3 rounded-lg ${editingItem?.id ? 'bg-green-100' : 'bg-chiaro-2 bg-opacity-20'}`}>
                         {editingItem?.id ? (
-                          <Edit className="w-6 h-6 text-green-600" />
+                          <Edit className="w-6 h-6 text-bianco" />
                         ) : (
-                          <Plus className="w-6 h-6 text-chiaro" />
+                          <Plus className="w-6 h-6 text-bianco" />
                         )}
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold inter text-gray-900">
+                        <h3 className="text-xl font-bold inter text-bianco">
                           {editingItem?.id ? 'Modifica Progetto' : 'Crea Nuovo Progetto'}
                         </h3>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-bianco">
                           {editingItem?.id ? 'Aggiorna le informazioni del progetto' : 'Compila i campi per aggiungere un nuovo progetto'}
                         </p>
                       </div>
@@ -941,55 +939,55 @@ const TabbedDashboard = ({ onLogout }) => {
                         setCoverImagePreview(null);
                         setProjectImages({ pc: [], tablet: [], mobile: [] });
                       }}
-                      className="text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                      className="text-bianco hover:text-chiaro p-2 rounded-lg hover:bg-gray-100 transition-colors"
                       disabled={uploadingImage || uploadingProjectImages}
                     >
                       <X className="w-5 h-5" />
                     </button>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div className="md:col-span-2">
-                      <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                        <Type className="w-4 h-4 mr-2 text-chiaro" />
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
+                        <Type className="w-4 h-4 mr-2 text-bianco" />
                         Titolo *
                       </label>
                       <input
                         type="text"
                         value={editForm.title || ''}
-                        onChange={(e) => setEditForm({...editForm, title: e.target.value})}
-                        className="w-full px-4 py-3 border-2 border-gray-200 text-scuro font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
+                        onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                         placeholder="Es: Portfolio Moderno"
                         maxLength={200}
                       />
                     </div>
-                    
+
                     <div className="md:col-span-2">
-                      <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                        <FileText className="w-4 h-4 mr-2 text-chiaro" />
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
+                        <FileText className="w-4 h-4 mr-2 text-bianco" />
                         Descrizione
                       </label>
                       <textarea
                         value={editForm.description || ''}
-                        onChange={(e) => setEditForm({...editForm, description: e.target.value})}
-                        className="w-full px-4 py-3 border-2 border-gray-200 text-scuro font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all resize-none"
+                        onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all resize-none"
                         placeholder="Descrizione dettagliata del progetto"
                         rows={4}
                       />
                     </div>
-                    
+
                     <div className="md:col-span-2">
-                      <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                        <Image className="w-4 h-4 mr-2 text-chiaro" />
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
+                        <Image className="w-4 h-4 mr-2 text-bianco" />
                         Immagine Copertina
                       </label>
-                      
+
                       {/* Input file */}
                       <div className="mb-3">
-                        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+                        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-scuro-2 hover:bg-gray-100 transition-colors">
                           <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             <Upload className="w-8 h-8 mb-2 text-gray-400" />
-                            <p className="mb-2 text-sm text-gray-500">
+                            <p className="mb-2 text-sm text-bianco">
                               <span className="font-semibold">Clicca per caricare</span> o trascina qui
                             </p>
                             <p className="text-xs text-gray-500">PNG, JPG, WEBP (MAX. 5MB)</p>
@@ -1037,11 +1035,11 @@ const TabbedDashboard = ({ onLogout }) => {
                     {/* Sezione Immagini Progetto per Dispositivo */}
                     <div className="md:col-span-2">
                       <div className="flex items-center justify-between mb-4">
-                        <label className="flex items-center text-sm font-semibold text-gray-700">
-                          <Image className="w-5 h-5 mr-2 text-chiaro" />
+                        <label className="flex items-center text-sm font-semibold text-bianco">
+                          <Image className="w-5 h-5 mr-2 text-bianco" />
                           Immagini del Progetto (divise per dispositivo)
                         </label>
-                        <div className="flex items-center gap-4 text-xs text-gray-500">
+                        <div className="flex items-center gap-4 text-xs text-bianco">
                           <span className="flex items-center">
                             <Monitor className="w-4 h-4 mr-1" />
                             PC: {projectImages.pc.length}
@@ -1056,26 +1054,26 @@ const TabbedDashboard = ({ onLogout }) => {
                           </span>
                         </div>
                       </div>
-                      
+
                       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         {/* PC Images */}
-                        <div className="border-2 border-gray-200 rounded-xl p-5 bg-gradient-to-br from-gray-50 to-white shadow-sm">
+                        <div className="border-2 border-gray-200 rounded-xl p-5 bg-scuro-2 shadow-sm">
                           <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center">
-                              <div className="p-2 bg-blue-100 rounded-lg mr-2">
-                                <Monitor className="w-5 h-5 text-blue-600" />
+                              <div className="p-2 bg-chiaro rounded-lg mr-2">
+                                <Monitor className="w-5 h-5 text-bianco" />
                               </div>
                               <div>
-                                <h4 className="font-bold text-gray-800">PC / Desktop</h4>
+                                <h4 className="font-bold text-bianco">PC / Desktop</h4>
                                 <p className="text-xs text-gray-500">{projectImages.pc.length} {projectImages.pc.length === 1 ? 'immagine' : 'immagini'}</p>
                               </div>
                             </div>
                           </div>
-                          <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-white hover:bg-gray-50 hover:border-chiaro transition-all mb-4 group">
+                          <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-scuro-2 hover:bg-gray-50 hover:border-chiaro transition-all mb-4 group">
                             <div className="flex flex-col items-center">
-                              <Upload className="w-6 h-6 mb-2 text-gray-400 group-hover:text-chiaro transition-colors" />
-                              <p className="text-sm font-medium text-gray-600 group-hover:text-chiaro transition-colors">Aggiungi immagini</p>
-                              <p className="text-xs text-gray-400 mt-1">PNG, JPG, WEBP</p>
+                              <Upload className="w-6 h-6 mb-2 text-bianco group-hover:text-chiaro transition-colors" />
+                              <p className="text-sm font-medium text-bianco group-hover:text-chiaro transition-colors">Aggiungi immagini</p>
+                              <p className="text-xs text-bianco mt-1">PNG, JPG, WEBP</p>
                             </div>
                             <input
                               type="file"
@@ -1111,7 +1109,7 @@ const TabbedDashboard = ({ onLogout }) => {
                                 </div>
                               ))
                             ) : (
-                              <div className="text-center py-8 text-gray-400">
+                              <div className="text-center py-8 text-bianco">
                                 <Monitor className="w-8 h-8 mx-auto mb-2 opacity-50" />
                                 <p className="text-sm">Nessuna immagine</p>
                               </div>
@@ -1120,23 +1118,23 @@ const TabbedDashboard = ({ onLogout }) => {
                         </div>
 
                         {/* Tablet Images */}
-                        <div className="border-2 border-gray-200 rounded-xl p-5 bg-gradient-to-br from-gray-50 to-white shadow-sm">
+                        <div className="border-2 border-gray-200 rounded-xl p-5 bg-scuro-2 shadow-sm">
                           <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center">
-                              <div className="p-2 bg-purple-100 rounded-lg mr-2">
-                                <Tablet className="w-5 h-5 text-purple-600" />
+                              <div className="p-2 bg-chiaro rounded-lg mr-2">
+                                <Tablet className="w-5 h-5 text-bianco" />
                               </div>
                               <div>
-                                <h4 className="font-bold text-gray-800">Tablet</h4>
-                                <p className="text-xs text-gray-500">{projectImages.tablet.length} {projectImages.tablet.length === 1 ? 'immagine' : 'immagini'}</p>
+                                <h4 className="font-bold text-bianco">Tablet</h4>
+                                <p className="text-xs text-bianco">{projectImages.tablet.length} {projectImages.tablet.length === 1 ? 'immagine' : 'immagini'}</p>
                               </div>
                             </div>
                           </div>
-                          <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-white hover:bg-gray-50 hover:border-chiaro transition-all mb-4 group">
+                          <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-scuro-2 hover:bg-gray-50 hover:border-chiaro transition-all mb-4 group">
                             <div className="flex flex-col items-center">
-                              <Upload className="w-6 h-6 mb-2 text-gray-400 group-hover:text-chiaro transition-colors" />
-                              <p className="text-sm font-medium text-gray-600 group-hover:text-chiaro transition-colors">Aggiungi immagini</p>
-                              <p className="text-xs text-gray-400 mt-1">PNG, JPG, WEBP</p>
+                              <Upload className="w-6 h-6 mb-2 text-bianco group-hover:text-chiaro transition-colors" />
+                              <p className="text-sm font-medium text-bianco group-hover:text-chiaro transition-colors">Aggiungi immagini</p>
+                              <p className="text-xs text-bianco mt-1">PNG, JPG, WEBP</p>
                             </div>
                             <input
                               type="file"
@@ -1172,7 +1170,7 @@ const TabbedDashboard = ({ onLogout }) => {
                                 </div>
                               ))
                             ) : (
-                              <div className="text-center py-8 text-gray-400">
+                              <div className="text-center py-8 text-bianco">
                                 <Tablet className="w-8 h-8 mx-auto mb-2 opacity-50" />
                                 <p className="text-sm">Nessuna immagine</p>
                               </div>
@@ -1181,23 +1179,23 @@ const TabbedDashboard = ({ onLogout }) => {
                         </div>
 
                         {/* Mobile Images */}
-                        <div className="border-2 border-gray-200 rounded-xl p-5 bg-gradient-to-br from-gray-50 to-white shadow-sm">
+                        <div className="border-2 border-gray-200 rounded-xl p-5 bg-scuro-2 shadow-sm">
                           <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center">
-                              <div className="p-2 bg-green-100 rounded-lg mr-2">
-                                <Smartphone className="w-5 h-5 text-green-600" />
+                              <div className="p-2 bg-chiaro rounded-lg mr-2">
+                                <Smartphone className="w-5 h-5 text-bianco" />
                               </div>
                               <div>
-                                <h4 className="font-bold text-gray-800">Mobile</h4>
-                                <p className="text-xs text-gray-500">{projectImages.mobile.length} {projectImages.mobile.length === 1 ? 'immagine' : 'immagini'}</p>
+                                <h4 className="font-bold text-bianco">Mobile</h4>
+                                <p className="text-xs text-bianco">{projectImages.mobile.length} {projectImages.mobile.length === 1 ? 'immagine' : 'immagini'}</p>
                               </div>
                             </div>
                           </div>
-                          <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-white hover:bg-gray-50 hover:border-chiaro transition-all mb-4 group">
+                          <label className="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-scuro-2 hover:bg-gray-50 hover:border-chiaro transition-all mb-4 group">
                             <div className="flex flex-col items-center">
-                              <Upload className="w-6 h-6 mb-2 text-gray-400 group-hover:text-chiaro transition-colors" />
-                              <p className="text-sm font-medium text-gray-600 group-hover:text-chiaro transition-colors">Aggiungi immagini</p>
-                              <p className="text-xs text-gray-400 mt-1">PNG, JPG, WEBP</p>
+                              <Upload className="w-6 h-6 mb-2 text-bianco group-hover:text-chiaro transition-colors" />
+                              <p className="text-sm font-medium text-bianco group-hover:text-chiaro transition-colors">Aggiungi immagini</p>
+                              <p className="text-xs text-bianco mt-1">PNG, JPG, WEBP</p>
                             </div>
                             <input
                               type="file"
@@ -1233,7 +1231,7 @@ const TabbedDashboard = ({ onLogout }) => {
                                 </div>
                               ))
                             ) : (
-                              <div className="text-center py-8 text-gray-400">
+                              <div className="text-center py-8 text-bianco">
                                 <Smartphone className="w-8 h-8 mx-auto mb-2 opacity-50" />
                                 <p className="text-sm">Nessuna immagine</p>
                               </div>
@@ -1244,71 +1242,71 @@ const TabbedDashboard = ({ onLogout }) => {
 
                       {/* Loader durante upload immagini progetto */}
                       {uploadingProjectImages && (
-                        <div className="mt-4 flex items-center justify-center text-sm text-chiaro bg-chiaro bg-opacity-10 rounded-lg p-3">
+                        <div className="mt-4 flex items-center justify-center text-sm text-scuro bg-chiaro bg-opacity-10 rounded-lg p-3">
                           <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-chiaro mr-3"></div>
                           Caricamento immagini progetto in corso...
                         </div>
                       )}
                     </div>
-                    
+
                     <div>
-                      <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
                         <Link className="w-4 h-4 mr-2 text-chiaro" />
                         URL GitHub
                       </label>
                       <input
                         type="url"
                         value={editForm.github_url || ''}
-                        onChange={(e) => setEditForm({...editForm, github_url: e.target.value})}
-                        className="w-full px-4 py-3 border-2 border-gray-200 text-scuro font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
+                        onChange={(e) => setEditForm({ ...editForm, github_url: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                         placeholder="https://github.com/user/repo"
                       />
                     </div>
-                    
+
                     <div>
-                      <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
                         <Globe className="w-4 h-4 mr-2 text-chiaro" />
                         URL Dominio
                       </label>
                       <input
                         type="url"
                         value={editForm.domain_url || ''}
-                        onChange={(e) => setEditForm({...editForm, domain_url: e.target.value})}
-                        className="w-full px-4 py-3 border-2 border-gray-200 text-scuro font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
+                        onChange={(e) => setEditForm({ ...editForm, domain_url: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                         placeholder="https://esempio.com"
                       />
                     </div>
-                    
+
                     <div>
-                      <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
                         <Rocket className="w-4 h-4 mr-2 text-chiaro" />
                         Ordine di Visualizzazione
                       </label>
                       <input
                         type="number"
                         value={editForm.order_index || 0}
-                        onChange={(e) => setEditForm({...editForm, order_index: parseInt(e.target.value) || 0})}
-                        className="w-full px-4 py-3 border-2 border-gray-200 text-scuro font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
+                        onChange={(e) => setEditForm({ ...editForm, order_index: parseInt(e.target.value) || 0 })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                         placeholder="0"
                         min="0"
                       />
                     </div>
-                    
+
                     <div className="flex items-center">
-                      <label className="flex items-center text-sm font-semibold text-gray-700 cursor-pointer">
+                      <label className="flex items-center text-sm font-semibold text-bianco cursor-pointer">
                         <input
                           type="checkbox"
                           checked={editForm.featured || false}
-                          onChange={(e) => setEditForm({...editForm, featured: e.target.checked})}
+                          onChange={(e) => setEditForm({ ...editForm, featured: e.target.checked })}
                           className="w-5 h-5 text-chiaro border-gray-300 rounded focus:ring-chiaro mr-2"
                         />
                         Progetto in Evidenza
                       </label>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-bianco">
                       <span className="text-red-500">*</span> Campi obbligatori
                     </p>
                     <div className="flex space-x-3">
@@ -1320,7 +1318,7 @@ const TabbedDashboard = ({ onLogout }) => {
                           setCoverImagePreview(null);
                           setProjectImages({ pc: [], tablet: [], mobile: [] });
                         }}
-                        className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-semibold flex items-center transition-colors"
+                        className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-scuro rounded-lg text-sm font-semibold flex items-center transition-colors"
                         disabled={uploadingImage || uploadingProjectImages}
                       >
                         <X className="w-4 h-4 mr-2" />
@@ -1329,7 +1327,7 @@ const TabbedDashboard = ({ onLogout }) => {
                       {editingItem?.id ? (
                         <button
                           onClick={handleSave}
-                          className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-semibold flex items-center shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-6 py-3 bg-green-600 hover:bg-green-700 text-bianco rounded-lg text-sm font-semibold flex items-center shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                           disabled={uploadingImage || uploadingProjectImages}
                         >
                           {uploadingImage ? (
@@ -1347,7 +1345,7 @@ const TabbedDashboard = ({ onLogout }) => {
                       ) : (
                         <button
                           onClick={handleCreateProject}
-                          className="px-8 py-3 bg-chiaro hover:bg-chiaro-2 text-white rounded-lg text-sm font-semibold flex items-center shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-8 py-3 bg-chiaro hover:bg-chiaro-2 text-bianco rounded-lg text-sm font-semibold flex items-center shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                           disabled={uploadingImage || uploadingProjectImages}
                         >
                           {uploadingImage ? (
@@ -1368,72 +1366,87 @@ const TabbedDashboard = ({ onLogout }) => {
                 </div>
               )}
 
+              {/* Anteprima progetti con card */}
+              {projects.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold text-bianco mb-4">Anteprima Progetti</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {projects.map((project) => (
+                      <CardAnteprimaProgetti
+                        key={project.id}
+                        title={project.title}
+                        description={project.description || ''}
+                        imageUrl={project.cover_image || ''}
+                        link={project.domain_url || null}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Tabella progetti */}
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-bianco">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
                         Titolo
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
                         Descrizione
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
                         Featured
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
                         Ordine
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
                         Azioni
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-bianco divide-y divide-gray-200">
+                  <tbody className="bg-bianco divide-y divide-bianco">
                     {projects.length > 0 ? (
                       projects.map((project) => (
                         <tr key={project.id} className={editingItem?.id === project.id && editingItem?.type === 'project' ? 'bg-blue-50' : ''}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-scuro">
                             {project.title}
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+                                <td className="px-6 py-4 text-sm text-scuro max-w-xs truncate">
                             {project.description || '-'}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                              project.featured ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                            }`}>
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${project.featured ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                              }`}>
                               {project.featured ? 'Sì' : 'No'}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-scuro">
                             {project.order_index || 0}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button 
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2">
+                            <button
                               onClick={() => handleEdit(project, 'project')}
                               className="text-scuro font-medium border-r-1 pr-2 text-sm flex items-center hover:text-chiaro transition-colors"
                             >
                               <Edit className="w-4 h-4 mr-1" />
-                              Modifica
                             </button>
-                            <button 
+                            <button
                               onClick={() => handleDelete(project.id, 'project')}
-                              className="text-red-600 hover:text-red-900 flex items-center transition-colors"
+                              className="text-scuro hover:text-chiaro flex items-center transition-colors"
                             >
                               <Trash2 className="w-4 h-4 mr-1" />
-                              Elimina
                             </button>
                           </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
+                        <td colSpan="5" className="px-6 py-12 text-center text-scuro">
                           <Rocket className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                          <p className="text-lg font-medium">Nessun progetto ancora</p>
-                          <p className="text-sm">Usa il bottone "Aggiungi Progetto" per creare il tuo primo progetto</p>
+                          <p className="text-lg font-medium text-scuro">Nessun progetto ancora</p>
+                          <p className="text-sm text-scuro">Usa il bottone "Aggiungi Progetto" per creare il tuo primo progetto</p>
                         </td>
                       </tr>
                     )}
@@ -1447,7 +1460,7 @@ const TabbedDashboard = ({ onLogout }) => {
           {activeTab === 'templates' && (
             <div className="p-6">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Templates</h2>
-              
+
               {/* Form in alto - larghezza piena */}
               <div className="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-xl p-6 mb-8 shadow-sm">
                 <div className="flex items-center justify-between mb-6">
@@ -1480,7 +1493,7 @@ const TabbedDashboard = ({ onLogout }) => {
                     </button>
                   )}
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                   <div className="lg:col-span-1">
                     <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
@@ -1490,12 +1503,12 @@ const TabbedDashboard = ({ onLogout }) => {
                     <input
                       type="text"
                       value={editForm.name || ''}
-                      onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                       className="w-full px-4 py-3 border-2 border-gray-200 text-scuro font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                       placeholder="Es: Portfolio Moderno"
                     />
                   </div>
-                  
+
                   <div className="lg:col-span-1">
                     <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
                       <Link className="w-4 h-4 mr-2 text-chiaro" />
@@ -1504,12 +1517,12 @@ const TabbedDashboard = ({ onLogout }) => {
                     <input
                       type="url"
                       value={editForm.site_url || ''}
-                      onChange={(e) => setEditForm({...editForm, site_url: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, site_url: e.target.value })}
                       className="w-full px-4 py-3 border-2 border-gray-200 text-scuro font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                       placeholder="https://esempio.com"
                     />
                   </div>
-                  
+
                   <div className="lg:col-span-1">
                     <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
                       <Image className="w-4 h-4 mr-2 text-chiaro" />
@@ -1518,12 +1531,12 @@ const TabbedDashboard = ({ onLogout }) => {
                     <input
                       type="url"
                       value={editForm.cover_url || ''}
-                      onChange={(e) => setEditForm({...editForm, cover_url: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, cover_url: e.target.value })}
                       className="w-full px-4 py-3 border-2 border-gray-200 text-scuro font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                       placeholder="https://esempio.com/img.jpg"
                     />
                   </div>
-                  
+
                   <div className="lg:col-span-1">
                     <label className="flex items-center text-sm font-semibold text-gray-700 mb-2">
                       <Tags className="w-4 h-4 mr-2 text-chiaro" />
@@ -1532,13 +1545,13 @@ const TabbedDashboard = ({ onLogout }) => {
                     <input
                       type="text"
                       value={editForm.tags?.join(', ') || ''}
-                      onChange={(e) => setEditForm({...editForm, tags: e.target.value.split(',').map(t => t.trim()).filter(t => t)})}
+                      onChange={(e) => setEditForm({ ...editForm, tags: e.target.value.split(',').map(t => t.trim()).filter(t => t) })}
                       className="w-full px-4 py-3 border-2 border-gray-200 text-scuro font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                       placeholder="react, tailwind, nextjs"
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                   <p className="text-sm text-gray-500">
                     <span className="text-red-500">*</span> Campi obbligatori
@@ -1579,9 +1592,9 @@ const TabbedDashboard = ({ onLogout }) => {
                               cover_url: editForm.cover_url || null,
                               tags: editForm.tags || []
                             });
-                          
+
                           if (error) throw error;
-                          
+
                           await loadData();
                           setEditForm({});
                         } catch (error) {
@@ -1606,22 +1619,21 @@ const TabbedDashboard = ({ onLogout }) => {
                     Templates Salvati ({templates.length})
                   </h3>
                 </div>
-                
+
                 {templates.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
                     {templates.map((template) => (
-                      <div 
-                        key={template.id} 
-                        className={`border-2 rounded-xl overflow-hidden bg-white hover:shadow-lg transition-all duration-300 ${
-                          editingItem?.id === template.id 
-                            ? 'ring-4 ring-chiaro ring-opacity-50 border-chiaro shadow-lg scale-105' 
+                      <div
+                        key={template.id}
+                        className={`border-2 rounded-xl overflow-hidden bg-white hover:shadow-lg transition-all duration-300 ${editingItem?.id === template.id
+                            ? 'ring-4 ring-chiaro ring-opacity-50 border-chiaro shadow-lg scale-105'
                             : 'border-gray-200 hover:border-chiaro'
-                        }`}
+                          }`}
                       >
                         {template.cover_url && (
                           <div className="p-1 w-full bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden relative group">
-                            <img 
-                              src={template.cover_url} 
+                            <img
+                              src={template.cover_url}
                               alt={template.name}
                               className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
                               onError={(e) => {
@@ -1641,9 +1653,9 @@ const TabbedDashboard = ({ onLogout }) => {
                             <Type className="w-4 h-4 mr-2 text-chiaro flex-shrink-0" />
                             <span className="truncate">{template.name}</span>
                           </h3>
-                          <a 
-                            href={template.site_url} 
-                            target="_blank" 
+                          <a
+                            href={template.site_url}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="text-sm text-chiaro hover:text-chiaro-2 font-medium flex items-center mb-3 hover:underline transition-colors"
                           >
@@ -1653,7 +1665,7 @@ const TabbedDashboard = ({ onLogout }) => {
                           {template.tags && template.tags.length > 0 && (
                             <div className="flex flex-wrap gap-1 mb-3">
                               {template.tags.map((tag, index) => (
-                                <span 
+                                <span
                                   key={index}
                                   className="px-2 py-1 text-xs bg-chiaro bg-opacity-10 text-chiaro font-medium rounded-full border border-chiaro border-opacity-20"
                                 >
@@ -1663,14 +1675,14 @@ const TabbedDashboard = ({ onLogout }) => {
                             </div>
                           )}
                           <div className="flex space-x-2 pt-3 border-t border-gray-100">
-                            <button 
+                            <button
                               onClick={() => handleEdit(template, 'template')}
                               className="flex-1 bg-scuro-2 hover:bg-scuro text-white py-2 rounded-lg text-sm font-semibold flex items-center justify-center transition-colors"
                             >
                               <Edit className="w-4 h-4 mr-1" />
                               Modifica
                             </button>
-                            <button 
+                            <button
                               onClick={() => handleDelete(template.id, 'template')}
                               className="flex-1 bg-red-50 hover:bg-red-100 text-red-600 py-2 rounded-lg text-sm font-semibold flex items-center justify-center transition-colors"
                             >

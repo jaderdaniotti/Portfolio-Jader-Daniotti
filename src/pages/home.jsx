@@ -447,7 +447,6 @@ function Home() {
                                     description={progetto.description}
                                     imageUrl={progetto.imageUrl}
                                     link={progetto.link}
-                                    linkGithub={progetto.linkGithub}
                                 />
                             </div>
                         ))}
