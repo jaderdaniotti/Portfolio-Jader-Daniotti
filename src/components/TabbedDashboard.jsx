@@ -123,16 +123,16 @@ const TabbedDashboard = ({ onLogout }) => {
         return;
       }
 
-      setEditingItem({ ...item, type });
+    setEditingItem({ ...item, type });
       setEditForm(item || {});
       
-      // Se c'è un'immagine esistente, mostra l'anteprima
+    // Se c'è un'immagine esistente, mostra l'anteprima
       if (type === 'project' && item?.cover_image) {
-        setCoverImagePreview(item.cover_image);
-        setCoverImageFile(null);
-      } else {
-        setCoverImageFile(null);
-        setCoverImagePreview(null);
+      setCoverImagePreview(item.cover_image);
+      setCoverImageFile(null);
+    } else {
+      setCoverImageFile(null);
+      setCoverImagePreview(null);
       }
     } catch (error) {
       console.error('Errore in handleEdit:', error);
@@ -179,15 +179,15 @@ const TabbedDashboard = ({ onLogout }) => {
         };
 
         if (imagesRes.data && !imagesRes.error) {
-          (imagesRes.data || []).forEach(img => {
-            if (img.device_type && imagesByDevice[img.device_type]) {
-              imagesByDevice[img.device_type].push({
-                id: img.id,
-                image_url: img.image_url,
-                order_index: img.order_index
-              });
-            }
-          });
+        (imagesRes.data || []).forEach(img => {
+          if (img.device_type && imagesByDevice[img.device_type]) {
+            imagesByDevice[img.device_type].push({
+              id: img.id,
+              image_url: img.image_url,
+              order_index: img.order_index
+            });
+          }
+        });
         }
 
         setProjectImages(imagesByDevice);
@@ -200,12 +200,12 @@ const TabbedDashboard = ({ onLogout }) => {
         };
 
         if (technologiesRes.data && !technologiesRes.error) {
-          (technologiesRes.data || []).forEach(pt => {
+        (technologiesRes.data || []).forEach(pt => {
             // Filtra solo i tipi validi per evitare errori
             if (pt.type && technologiesByType[pt.type] && pt.technology_id) {
-              technologiesByType[pt.type].push(pt.technology_id);
-            }
-          });
+            technologiesByType[pt.type].push(pt.technology_id);
+          }
+        });
         }
 
         setProjectTechnologies(technologiesByType);
@@ -329,6 +329,14 @@ const TabbedDashboard = ({ onLogout }) => {
         }
       }
 
+      // Validazione per strumenti
+      if (type === 'tool') {
+        if (!editForm.name || editForm.name.trim() === '') {
+          alert('Il nome è obbligatorio');
+          return;
+        }
+      }
+
       setUploadingImage(true);
 
       const tableName = type === 'project' ? 'projects' :
@@ -390,16 +398,41 @@ const TabbedDashboard = ({ onLogout }) => {
         }
       }
 
+      // Validazione e preparazione dati per strumenti
+      if (type === 'tool') {
+        updateData.name = updateData.name.trim();
+        updateData.percent = updateData.percent || 50;
+        updateData.order_index = updateData.order_index || tools.length + 1;
+        updateData.svg_code = updateData.svg_code || '<svg></svg>';
+      }
+
       const client = getSupabaseClient();
-      const { error } = await client
+      
+      // Se id è null, crea un nuovo record, altrimenti aggiorna
+      let result;
+      if (id === null) {
+        result = await client
+          .from(tableName)
+          .insert(updateData)
+          .select()
+          .single();
+      } else {
+        result = await client
         .from(tableName)
         .update(updateData)
-        .eq('id', id);
+          .eq('id', id)
+          .select()
+          .single();
+      }
+      
+      const { error } = result;
 
       if (error) throw error;
 
       // Per i progetti, salva anche le immagini del progetto
-      if (type === 'project' && id) {
+      // Usa l'id dal risultato se è una creazione, altrimenti usa l'id esistente
+      const projectId = id || result.data?.id;
+      if (type === 'project' && projectId) {
         setUploadingProjectImages(true);
         try {
           // Carica le nuove immagini (quelle con file)
@@ -426,7 +459,7 @@ const TabbedDashboard = ({ onLogout }) => {
                 const { error: insertError } = await client
                   .from('project_images')
                   .insert({
-                    project_id: id,
+                    project_id: projectId,
                     image_url: imageUrl,
                     device_type: deviceType,
                     order_index: i
@@ -451,11 +484,17 @@ const TabbedDashboard = ({ onLogout }) => {
           }
 
           // Salva le tecnologie del progetto
-          // Prima elimina tutte le tecnologie esistenti
+          // Prima elimina tutte le tecnologie esistenti (solo se è un aggiornamento)
+          if (id) {
           const { error: deleteError } = await client
             .from('project_technologies')
             .delete()
             .eq('project_id', id);
+
+            if (deleteError) {
+              console.error('Errore nell\'eliminazione tecnologie esistenti:', deleteError);
+            }
+          }
 
           if (deleteError) {
             console.error('Errore nell\'eliminazione tecnologie esistenti:', deleteError);
@@ -467,7 +506,7 @@ const TabbedDashboard = ({ onLogout }) => {
             const techIds = projectTechnologies[type] || [];
             techIds.forEach(techId => {
               technologiesToInsert.push({
-                project_id: id,
+                project_id: projectId,
                 technology_id: techId,
                 type: type
               });
@@ -497,7 +536,7 @@ const TabbedDashboard = ({ onLogout }) => {
       setCoverImageFile(null);
       setCoverImagePreview(null);
       setProjectImages({ pc: [], tablet: [], mobile: [] });
-      setProjectTechnologies({ frontend: [], backend: [] });
+      setProjectTechnologies({ frontend: [], backend: [], database: [] });
     } catch (error) {
       console.error('Errore nel salvataggio:', error);
       alert('Errore nel salvataggio: ' + error.message);
@@ -551,7 +590,7 @@ const TabbedDashboard = ({ onLogout }) => {
       setCoverImageFile(null);
       setCoverImagePreview(null);
       setProjectImages({ pc: [], tablet: [], mobile: [] });
-      setProjectTechnologies({ frontend: [], backend: [] });
+      setProjectTechnologies({ frontend: [], backend: [], database: [] });
       return;
     }
 
@@ -568,15 +607,21 @@ const TabbedDashboard = ({ onLogout }) => {
       return;
     }
 
-    try {
-      const tableName = type === 'tool' ? 'tools' : 'templates';
-
-      const defaultData = type === 'tool' ? {
-        name: 'Nuovo Strumento',
+    // Per gli strumenti, apriamo il form invece di creare direttamente
+    if (type === 'tool') {
+      setEditingItem({ type: 'tool', id: null });
+      setEditForm({
+        name: '',
         percent: 50,
         order_index: tools.length + 1,
         svg_code: '<svg></svg>'
-      } : {
+      });
+      return;
+    }
+
+    // Per i templates, creiamo direttamente
+    try {
+      const defaultData = {
         name: 'Nuovo Template',
         site_url: 'https://example.com',
         cover_url: 'https://via.placeholder.com/300x200',
@@ -585,7 +630,7 @@ const TabbedDashboard = ({ onLogout }) => {
 
       const client = getSupabaseClient();
       const { error } = await client
-        .from(tableName)
+        .from('templates')
         .insert(defaultData);
 
       if (error) throw error;
@@ -754,7 +799,7 @@ const TabbedDashboard = ({ onLogout }) => {
       setCoverImageFile(null);
       setCoverImagePreview(null);
       setProjectImages({ pc: [], tablet: [], mobile: [] });
-      setProjectTechnologies({ frontend: [], backend: [] });
+      setProjectTechnologies({ frontend: [], backend: [], database: [] });
     } catch (error) {
       console.error('Errore nella creazione del progetto:', error);
       alert('Errore nella creazione del progetto: ' + error.message);
@@ -830,13 +875,14 @@ const TabbedDashboard = ({ onLogout }) => {
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-bianco">Stack Tecnologico</h2>
                 {editingItem?.type !== 'technology' && (
-                  <button
-                    onClick={() => handleAdd('technology')}
-                    className="bg-chiaro text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Aggiungi Tecnologia
-                  </button>
+                <button
+                  onClick={() => handleAdd('technology')}
+                  className="bg-scuro-2 text-white px-4 py-2 rounded-md text-sm font-medium border flex items-center"
+                
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Aggiungi Tecnologia
+                </button>
                 )}
               </div>
 
@@ -870,7 +916,7 @@ const TabbedDashboard = ({ onLogout }) => {
                     >
                       <X className="w-5 h-5" />
                     </button>
-                  </div>
+              </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div>
@@ -878,10 +924,10 @@ const TabbedDashboard = ({ onLogout }) => {
                         <Type className="w-4 h-4 mr-2 text-bianco" />
                         Nome Tecnologia *
                       </label>
-                      <input
-                        type="text"
-                        value={editForm.name || ''}
-                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                            <input
+                              type="text"
+                              value={editForm.name || ''}
+                              onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                         className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                         placeholder="Es: React, Node.js, PostgreSQL"
                         maxLength={100}
@@ -893,30 +939,30 @@ const TabbedDashboard = ({ onLogout }) => {
                         <Code className="w-4 h-4 mr-2 text-bianco" />
                         Categoria *
                       </label>
-                      <select
+                            <select
                         value={editForm.category || 'frontend'}
-                        onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
+                              onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
                         className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all bg-scuro-2"
                       >
                         <option className='text-bianco bg-scuro-2' value="frontend">Frontend</option>
                         <option className='text-bianco bg-scuro-2' value="backend">Backend</option>
                         <option className='text-bianco bg-scuro-2' value="database">Database</option>
-                      </select>
+                            </select>
                     </div>
 
                     <div>
                       <label className="flex items-center text-sm font-semibold text-bianco mb-2">
                         Percentuale Competenza
                       </label>
-                      <input
-                        type="number"
+                            <input
+                              type="number"
                         value={editForm.percent || 50}
                         onChange={(e) => setEditForm({ ...editForm, percent: parseInt(e.target.value) || 0 })}
                         className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                         placeholder="50"
-                        min="0"
-                        max="100"
-                      />
+                              min="0"
+                              max="100"
+                            />
                     </div>
 
                     <div>
@@ -968,24 +1014,24 @@ const TabbedDashboard = ({ onLogout }) => {
                         Annulla
                       </button>
                       {editingItem?.id ? (
-                        <button
-                          onClick={handleSave}
+                              <button
+                                onClick={handleSave}
                           className="px-6 py-3 bg-green-600 hover:bg-green-700 text-bianco rounded-lg text-sm font-semibold flex items-center shadow-md hover:shadow-lg transition-all"
-                        >
+                              >
                           <Save className="w-4 h-4 mr-2" />
                           Salva Modifiche
-                        </button>
+                              </button>
                       ) : (
-                        <button
+                              <button
                           onClick={handleCreateTechnology}
                           className="px-8 py-3 bg-chiaro hover:bg-chiaro-2 text-bianco rounded-lg text-sm font-semibold flex items-center shadow-md hover:shadow-lg transition-all"
-                        >
+                              >
                           <Plus className="w-5 h-5 mr-2" />
                           Crea Tecnologia
-                        </button>
+                              </button>
                       )}
-                    </div>
-                  </div>
+                            </div>
+                          </div>
                 </div>
               )}
 
@@ -1014,46 +1060,46 @@ const TabbedDashboard = ({ onLogout }) => {
                     .filter(tech => tech.category === activeStackTab)
                     .map((tech) => (
                       <div key={tech.id} className={`border rounded-lg p-4 ${editingItem?.id === tech.id && editingItem?.type === 'technology' ? 'ring-2 ring-chiaro' : ''}`}>
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center space-x-3">
-                            <div
-                              className="w-8 h-8 rounded flex items-center justify-center"
-                              dangerouslySetInnerHTML={{ __html: tech.svg_code }}
-                            />
-                            <h3 className="font-medium text-bianco">{tech.name}</h3>
-                          </div>
-                          <span className={`px-2 py-1 text-xs font-semibold rounded-full ${tech.category === 'frontend' ? 'bg-blue-100 text-blue-800' :
-                              tech.category === 'backend' ? 'bg-green-100 text-green-800' :
-                                'bg-purple-100 text-purple-800'
-                            }`}>
-                            {tech.category}
-                          </span>
-                        </div>
-                        <div className="mb-2">
-                          <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div
-                              className="bg-chiaro h-2 rounded-full"
-                              style={{ width: `${tech.percent}%` }}
-                            ></div>
-                          </div>
-                          <p className="text-xs text-bianco mt-1">{tech.percent}%</p>
-                        </div>
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => handleEdit(tech, 'technology')}
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center space-x-3">
+                                <div
+                                  className="w-8 h-8 rounded flex items-center justify-center"
+                                  dangerouslySetInnerHTML={{ __html: tech.svg_code }}
+                                />
+                                <h3 className="font-medium text-bianco">{tech.name}</h3>
+                              </div>
+                              <span className={`px-2 py-1 text-xs font-semibold rounded-full ${tech.category === 'frontend' ? 'bg-blue-100 text-blue-800' :
+                                  tech.category === 'backend' ? 'bg-green-100 text-green-800' :
+                                    'bg-purple-100 text-purple-800'
+                                }`}>
+                                {tech.category}
+                              </span>
+                            </div>
+                            <div className="mb-2">
+                              <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div
+                                  className="bg-chiaro h-2 rounded-full"
+                                  style={{ width: `${tech.percent}%` }}
+                                ></div>
+                              </div>
+                              <p className="text-xs text-bianco mt-1">{tech.percent}%</p>
+                            </div>
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={() => handleEdit(tech, 'technology')}
                             className="text-bianco font-medium border-r-1 pr-2 text-sm flex items-center hover:text-chiaro transition-colors"
-                          >
-                            <Edit className="w-4 h-4 mr-1" />
-                            Modifica
-                          </button>
-                          <button
-                            onClick={() => handleDelete(tech.id, 'technology')}
-                            className="text-red-600 hover:text-red-900 font-medium text-sm flex items-center"
-                          >
-                            <Trash2 className="w-4 h-4 mr-1" />
-                            Elimina
-                          </button>
-                        </div>
+                              >
+                                <Edit className="w-4 h-4 mr-1" />
+                                Modifica
+                              </button>
+                              <button
+                                onClick={() => handleDelete(tech.id, 'technology')}
+                                className="text-red-600 hover:text-red-900 font-medium text-sm flex items-center"
+                              >
+                                <Trash2 className="w-4 h-4 mr-1" />
+                                Elimina
+                              </button>
+                            </div>
                       </div>
                     ))}
                 </div>
@@ -1072,14 +1118,114 @@ const TabbedDashboard = ({ onLogout }) => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-bianco">Strumenti di Lavoro</h2>
+                {editingItem?.type !== 'tool' && (
                 <button
                   onClick={() => handleAdd('tool')}
-                  className="bg-scuro-2 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
+                  className="bg-scuro-2 text-white px-4 py-2 rounded-md text-sm font-medium border flex items-center"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Aggiungi Strumento
                 </button>
+                )}
               </div>
+
+              {/* Form di creazione nuovo strumento */}
+              {editingItem?.type === 'tool' && editingItem?.id === null && (
+                <div className="bg-scuro-2 border-2 border-gray-200 rounded-xl p-6 mb-8 shadow-sm">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center space-x-3">
+                      <div className="p-3 rounded-lg bg-chiaro-2 bg-opacity-20">
+                        <Plus className="w-6 h-6 text-bianco" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold inter text-bianco">
+                          Crea Nuovo Strumento
+                        </h3>
+                        <p className="text-sm text-bianco">
+                          Compila i campi per aggiungere un nuovo strumento
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setEditingItem(null);
+                        setEditForm({});
+                      }}
+                      className="text-bianco hover:text-chiaro p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
+                        <Type className="w-4 h-4 mr-2 text-bianco" />
+                        Nome *
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm?.name || ''}
+                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
+                        placeholder="Es: VS Code"
+                        maxLength={200}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
+                        <span className="mr-2">%</span>
+                        Percentuale
+                      </label>
+                      <input
+                        type="number"
+                        value={editForm?.percent || 50}
+                        onChange={(e) => setEditForm({ ...editForm, percent: parseInt(e.target.value) || 50 })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
+                        placeholder="50"
+                        min="0"
+                        max="100"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
+                        <Code className="w-4 h-4 mr-2 text-bianco" />
+                        SVG Code
+                      </label>
+                      <textarea
+                        value={editForm?.svg_code || '<svg></svg>'}
+                        onChange={(e) => setEditForm({ ...editForm, svg_code: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all resize-none font-mono"
+                        placeholder="<svg></svg>"
+                        rows={4}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end gap-3">
+                    <button
+                      onClick={() => {
+                        setEditingItem(null);
+                        setEditForm({});
+                      }}
+                      className="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-scuro rounded-lg font-medium transition-colors flex items-center"
+                    >
+                      <X className="w-4 h-4 mr-2" />
+                      Annulla
+                    </button>
+                    <button
+                      onClick={handleSave}
+                      className="px-6 py-3 bg-chiaro hover:bg-chiaro-2 text-bianco rounded-lg font-medium transition-colors flex items-center"
+                    >
+                      <Save className="w-4 h-4 mr-2" />
+                      Salva Strumento
+                    </button>
+                  </div>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {tools.map((tool) => (
                   <div key={tool.id} className="border rounded-lg p-4">
@@ -1168,7 +1314,8 @@ const TabbedDashboard = ({ onLogout }) => {
                 {editingItem?.type !== 'project' && (
                   <button
                     onClick={() => handleAdd('project')}
-                    className="bg-chiaro text-bianco px-4 py-2 rounded-md text-sm font-medium flex items-center"
+                    className="bg-scuro-2 text-white px-4 py-2 rounded-md text-sm font-medium border flex items-center"
+                
                   >
                     <Plus className="w-4 h-4 mr-2 text-bianco" />
                     Aggiungi Progetto
