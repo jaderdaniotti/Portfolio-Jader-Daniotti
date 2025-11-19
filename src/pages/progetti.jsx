@@ -13,6 +13,8 @@ function Progetti() {
     const [projectTechnologies, setProjectTechnologies] = useState({}); // { projectId: { frontend: [], backend: [], database: [] } }
     const [allTechnologies, setAllTechnologies] = useState([]); // Tutte le tecnologie disponibili
     const [loading, setLoading] = useState(true);
+    const [loadingProgress, setLoadingProgress] = useState(0);
+    const [loadingStatus, setLoadingStatus] = useState('Inizializzazione...');
     const [activeDeviceTab, setActiveDeviceTab] = useState({}); // { projectId: 'pc' | 'tablet' | 'mobile' }
     
    
@@ -22,6 +24,8 @@ function Progetti() {
         const loadProjects = async () => {
             try {
                 setLoading(true);
+                setLoadingProgress(0);
+                setLoadingStatus('Caricamento progetti...');
                 
                 // Fetch progetti e tecnologie
                 const [projectsRes, technologiesRes] = await Promise.all([
@@ -35,15 +39,19 @@ function Progetti() {
                 const projectsData = projectsRes.data || [];
                 setProgetti(projectsData);
                 setAllTechnologies(technologiesRes.data || []);
-
+                setLoadingProgress(30);
+                setLoadingStatus('Progetti caricati, caricamento immagini...');
 
                 // Fetch immagini e tecnologie per ogni progetto
                 if (projectsData && projectsData.length > 0) {
                     const imagesByProject = {};
                     const technologiesByProject = {};
+                    const totalProjects = projectsData.length;
+                    let loadedProjects = 0;
                     
                     for (const project of projectsData) {
                         // Fetch immagini
+                        setLoadingStatus(`Caricamento immagini per ${project.title}...`);
                         const { data: imagesData, error: imagesError } = await supabase
                             .from('project_images')
                             .select('*')
@@ -90,6 +98,7 @@ function Progetti() {
                         }
 
                         // Fetch tecnologie del progetto
+                        setLoadingStatus(`Caricamento tecnologie per ${project.title}...`);
                         const { data: projectTechsData, error: projectTechsError } = await supabase
                             .from('project_technologies')
                             .select('*')
@@ -113,13 +122,33 @@ function Progetti() {
 
                             technologiesByProject[project.id] = technologiesByType;
                         }
+
+                        loadedProjects++;
+                        // Aggiorna progresso: 30% base + 60% per progetti (30% + (60% * loadedProjects / totalProjects))
+                        const progress = 30 + Math.round((60 * loadedProjects) / totalProjects);
+                        setLoadingProgress(progress);
                     }
 
                     setProjectImages(imagesByProject);
                     setProjectTechnologies(technologiesByProject);
+                    setLoadingStatus('Finalizzazione...');
+                    setLoadingProgress(95);
+                    
+                    // Piccolo delay per mostrare il 100%
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                    setLoadingProgress(100);
+                    setLoadingStatus('Completato!');
+                    
+                    // Delay finale prima di nascondere il loader
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                } else {
+                    setLoadingProgress(100);
+                    setLoadingStatus('Completato!');
+                    await new Promise(resolve => setTimeout(resolve, 200));
                 }
             } catch (error) {
                 console.error('Errore nel caricamento progetti:', error);
+                setLoadingStatus('Errore nel caricamento');
             } finally {
                 setLoading(false);
             }
@@ -396,8 +425,8 @@ function Progetti() {
                     description="Scopri i progetti di Jader Daniotti"
                 />
                 <Navbar />
-                <div className="min-h-screen bg-scuro-2 flex items-center justify-center">
-                    <GlobalLoader />
+                <div className="min-h-screen bg-scuro-2 flex flex-col items-center justify-center">
+                    <GlobalLoader onLoadingComplete={() => {}}/>
                 </div>
                 <Footer />
             </>

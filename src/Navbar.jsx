@@ -80,11 +80,11 @@ function Navbar() {
                         onClick={() => setIsOpen(!isOpen)}
                         aria-label="Toggle menu"
                     >
-                        <span className={`block h-0.5 w-6 bg-chiaro-2 transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-0.5' : ''
+                        <span className={`block h-0.5 w-6 bg-bianco transition-all duration-300 ${isOpen ? 'rotate-45 translate-y-0.5' : ''
                             }`}></span>
-                        <span className={`block h-0.5 w-6 bg-chiaro-2 transition-all duration-300 mt-1 ${isOpen ? 'opacity-0' : ''
+                        <span className={`block h-0.5 w-6 bg-bianco transition-all duration-300 mt-1 ${isOpen ? 'opacity-0' : ''
                             }`}></span>
-                        <span className={`block h-0.5 w-6 bg-chiaro-2 transition-all duration-300 mt-1 ${isOpen ? '-rotate-45 -translate-y-1.5' : ''
+                        <span className={`block h-0.5 w-6 bg-bianco transition-all duration-300 mt-1 ${isOpen ? '-rotate-45 -translate-y-1.5' : ''
                             }`}></span>
                     </button>
                     {/* Overlay */}
@@ -106,7 +106,7 @@ function Navbar() {
                             </Link>
                             <button
                                 onClick={() => setIsOpen(false)}
-                                className="p-2 hover:bg-chiaro-2/10 rounded-full transition-colors duration-200"
+                                className="p-2  hover:bg-chiaro-2/10 text-bianco rounded-full transition-colors duration-200"
                                 aria-label="Close menu"
                             >
                                 <svg
@@ -119,7 +119,7 @@ function Navbar() {
                                     strokeWidth="2"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
-                                    className="text-chiaro-2"
+                                    className="text-bianco"
                                 >
                                     <path d="M18 6 6 18" />
                                     <path d="m6 6 12 12" />
