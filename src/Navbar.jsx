@@ -65,7 +65,7 @@ function Navbar() {
                             <li key={index} className="relative group">
                                 <Link
                                     to={item.href}
-                                    className={`text-md hover:text-scuro transition-all duration-300 hover:scale-105 block py-2 px-3 rounded-lg  ${
+                                    className={`text-md lg:text-lg hover:text-scuro transition-all duration-300 hover:scale-105 block py-2 px-3 rounded-lg  ${
                                         item.admin ? 'text-red-600 font-semibold' : 'text-grigio'
                                     }`}
                                 >

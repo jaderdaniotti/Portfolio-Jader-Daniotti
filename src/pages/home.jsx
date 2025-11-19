@@ -5,11 +5,8 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import Marquee from "react-fast-marquee";
 import SEOHead from '../components/SEOHead';
-import DotGrid from '../components/DotGrid';
-import Phone3D from '../components/Phone3D';
-import Mouse3D from '../components/Mouse3D';
-import Laptop3D from '../components/Laptop3D';
-import { portfolioAPI } from '../config/supabase';
+import RoboticHand3D from '../components/RoboticHand3D';
+import { portfolioAPI, supabase } from '../config/supabase';
 
 // Componente per le recensioni con gestione errori immagini e nuovo stile CSS
 function ReviewCard({ review }) {
@@ -136,6 +133,7 @@ function Home() {
 
     const [tecnologie, setTecnologie] = useState([]);
     const [tools, setTools] = useState([]);
+    const [progetti, setProgetti] = useState([]);
     const [loading, setLoading] = useState(true);
     const [placeData, setPlaceData] = useState(null);
     const [placeLoading, setPlaceLoading] = useState(true);
@@ -235,71 +233,35 @@ function Home() {
         fetchPlaceDetails();
     }, []);
 
-    let progetti = [
-        {
-            title: "VENDOR",
-            description: "Sito di annunci online con funzionalità di ricerca avanzata, filtri e gestione degli annunci. ",
-            imageUrl: "/immagini/ANTEPRIME/VENDOR.png",
-            link: null,
-            linkGithub: "https://github.com/jaderdaniotti/VENDOR"
-        },
-        {
-            title: "SECONDLIFE CARS",
-            description: "Vetrina online di auto con funzionalità di ricerca avanzata e visualizzazione dettagli con contatto all'azienda.",
-            imageUrl: "/immagini/ANTEPRIME/SECONDLIFE.png",
-            link: null,
-            linkGithub: "https://github.com/jaderdaniotti/Garage-Chelini"
-        },
-        {
-            title: "JDEAM",
-            description: "Libreria di videogiochi con possibilità di filtrare, aggiungere ai preferiti e visualizzare i dettagli dei giochi.",
-            imageUrl: "/immagini/ANTEPRIME/JDEAM.png",
-            link: null,
-            linkGithub: "https://github.com/jaderdaniotti/JDEAM-"
-        },
-        {
-            title: "L'ODIO - AVEN",
-            description: "Sito vetrina in correlato con l'uscita di un album, anteprima di video e link per ascoltare i brani.",
-            imageUrl: "/immagini/ANTEPRIME/AVEN.png",
-            link: null,
-            linkGithub: "https://github.com/jaderdaniotti/AVEN---L-ODIO"
-        },
-        {
-            title: "BBS BARBER",
-            description: "Sito web vetrina per un Barber, anteprima di servizi e tagli, contatti e link per prenotare un appuntamento.",
-            imageUrl: "/immagini/ANTEPRIME/BBS.png",
-            link: null,
-            linkGithub: " https://github.com/jader/social-media-analytics"
-        },
-        {
-            title: "TODO APP",
-            description: "Applicazione web per la gestione di task da svolgere.",
-            imageUrl: "/immagini/ANTEPRIME/TODO.png",
-            linkGithub: "https://github.com/jaderdaniotti/ToDoList-React",
-            link: null
-        },
-        {
-            title: "JSTORE",
-            description: "Ecommerce Fake per la vendita di prodotti chiamati tramite API.",
-            imageUrl: "/immagini/ANTEPRIME/JSTORE.png",
-            linkGithub: "https://github.com/jaderdaniotti/JFakeStore",
-            link: null
-        },
-        {
-            title: "JDEAM2",
-            description: "Come jdeam, ma meglio.",
-            imageUrl: "/immagini/ANTEPRIME/JDEAM2.png",
-            linkGithub: "https://github.com/jaderdaniotti/JDEAM2",
-            link: null
-        },
-        {
-            title: "BD-PRO",
-            description: "Saas per analizzare le attività intorno a te e filtrare la presenza di un sito web",
-            imageUrl: "/immagini/ANTEPRIME/BUSINESSDISCOVERYPRO.png",
-            linkGithub: null,
-            link: null
-        },
-    ]
+    // Fetch degli ultimi 3 progetti dal database
+    useEffect(() => {
+        const fetchProgetti = async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(3);
+
+                if (error) throw error;
+
+                // Mappa i dati dal database al formato atteso dal componente
+                const progettiFormattati = (data || []).map(progetto => ({
+                    title: progetto.title,
+                    description: progetto.description || '',
+                    imageUrl: progetto.cover_image || '',
+                    link: progetto.domain_url || null
+                }));
+
+                setProgetti(progettiFormattati);
+            } catch (error) {
+                console.error('Errore nel caricamento progetti:', error);
+                setProgetti([]);
+            }
+        };
+
+        fetchProgetti();
+    }, []);
 
     let contatti = [
         { name: "Linkedin", icona: "bi bi-linkedin", link: "https://www.linkedin.com/in/jader-daniotti-0a00b9328/" },
@@ -317,9 +279,12 @@ function Home() {
             />
             <Navbar />
             {/* hero */}
-            <div className="hero h-screen" id='home'>
+            <div className="hero h-screen relative" id='home'>
+                <div className="absolute hidden xl:block left-0">
+                    <img src="/loghi/saluto.png" alt="" className="w-3/4 h-full object-cover" />
+                </div>
                 <div className="hero-content text-center">
-                    <div className="max-w-md py-10">
+                    <div className="max-w-md py-10 ">
                         <p className="text-6xl tracking-tight md:text-7xl" data-aos="zoom-in" data-aos-duration="500">Ciao!</p>
                         <p className="text-7xl tracking-tight md:text-8xl" data-aos="zoom-in" data-aos-duration="500">Sono</p>
                         <h1 className="titolo-bianco tracking-tight text-8xl md:text-9xl " data-aos="zoom-in" data-aos-duration="500">Jader
@@ -348,16 +313,15 @@ function Home() {
             </section>
             <hr />
             {/* 3D */}
-            <section className="py-5 min-h-screen  overflow-visible">
-                <div className="container mx-auto px-6 overflow-visible">
+            <section className="py-5 min-h-screen  overflow-hidden">
+                <div className="container mx-auto  overflow-visible">
                     <div className="text-center mb-16">
                         <h1 className='text-5xl tracking-tight md:text-8xl font-bold titolo-bianco py-5' data-aos="fade-up">
                             Tecnologia 3D
                         </h1>
-                        <p className="text-2xl text-center md:text-3xl font-bold max-w-3xl mx-auto text-bianco
-                        " data-aos="fade-up">
+                        <p className="text-2xl md:text-2xl font-medium max-w-3xl mx-auto" data-aos="fade-up">
                             Esplora le possibilità della tecnologia 3D nel web moderno.
-                            iPhone, Mouse e Laptop sono stati integrati utilizzando React Three Fiber.
+                            Il robot è stato integrato utilizzando React Three Fiber.
                         </p>
                     </div>
 
@@ -365,26 +329,13 @@ function Home() {
 
 
                         <div className="order-1 lg:order-2 overflow-visible">
-                            {/* iPhone 3D */}
-                            <hr className="py-5" />
-                            <div className="rounded-2xl p-4 phone-3d-container  w-[100vw]  mb-8">
-                                <Phone3D />
-                            </div>
-                            <hr className="py-5" />
-                            {/* Laptop 3D */}
-                            <div className="rounded-2xl p-4 phone-3d-container w-[100vw]  mb-8">
-                                <Laptop3D />
-                            </div>
-                            <hr className="py-5" />
-                            {/* Mouse 3D */}
-                            <div className="rounded-2xl p-4 phone-3d-container  w-[100vw]  mb-8">
-                                <Mouse3D />
+                            <div className="rounded-2xl  phone-3d-container mb-8">
+                                <RoboticHand3D />
                             </div>
                         </div>
 
-                        <div className="order-2 ">
+                        {/* <div className="order-2 ">
                             <div className=" rounded-2xl p-8 ">
-                                {/* Card Features Responsive */}
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10">
                                     {
                                         [
@@ -419,7 +370,7 @@ function Home() {
                                     }
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </section>
@@ -432,10 +383,7 @@ function Home() {
                             I Miei Progetti
                         </h1>
                         <p className="text-2xl md:text-2xl font-medium max-w-3xl mx-auto" data-aos="fade-up">
-                            Ecco le anteprime dei miei progetti. Troverai un anteprima col video di ogni progetto, una descrizione di come è stato creato, e il link alla repository su <br />
-                        </p>
-                        <p className="titolo-bianco mt-6 md:text-5xl text-5xl " data-aos="fade-up">
-                            <a href='https://github.com/jaderdaniotti' target='_blank'  > Github <i className="bi bi-github"></i></a>
+                            Ecco alcuni dei miei progetti. Troverai delle anteprime per ogni tipo di device, una descrizione di come è stato creato. 
                         </p>
                     </div>
 
@@ -468,6 +416,7 @@ function Home() {
                             Ecco una lista di alcune delle competenze che ho acquistato nello sviluppo web e che uso nel mio quotidiano.
                         </p>
                     </div>
+                    <div className="">
                     {/* linguaggi */}
                     <Marquee pauseOnHover={true} speed={90} gradient={false} direction="">
                         {loading ? (
@@ -545,6 +494,7 @@ function Home() {
                         )}
                     </Marquee>
                     <h3 className='text-3xl titolo-bianco md:text-3xl text-center font-bold py-5'>Strumenti</h3>
+                    </div>
 
 
                     <div className="text-center mt-16">
@@ -707,11 +657,12 @@ function Home() {
                         <div className="grid grid-cols-1 md:grid-cols-2 justify-center ">
                             <div className="flex flex-col justify-center px-5">
                                 <p className="text-3xl md:text-3xl lg:text-4xl flex max-w-3xl text-center mb-5 mx-auto px-1" data-aos="fade-up">
-                                    Puoi contattarmi direttamente tramite il mio Agent, fissando un appuntamento con Google Calendar.
+                                    Puoi contattarmi direttamente tramite il mio Agent, fissando un appuntamento con Google Calendar. <br />
+                                    O nel form nella sezione contatti.
                                 </p>
                             </div>
                             <div className="flex flex-col justify-center">
-                                <img src="..//immagini/calendario.jpg" data-aos="zoom-in" alt="" className="object-contain rounded-circle md:max-h-100" />
+                                <img src="..//immagini/calendario.png" data-aos="zoom-in" alt="" className="object-contain rounded-circle md:max-h-100" />
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+
 import { Link } from "react-router-dom";
 import Aos from 'aos';
 function Footer() {
@@ -30,7 +30,7 @@ function Footer() {
                     Crediti
                 </Link>
                 </div>
-                <img src="/immagini/AVATAR/1-Photoroom.png" alt="" className="w-12 h-12 md:w-20 md:h-20 rounded-full  hover:border-chiaro-2 transition-all duration-300 hover:scale-110 hover:rotate-3 cursor-pointer " />
+                <img src="/loghi/logogrigio.png" alt="" className="w-12 h-12 md:w-20 md:h-20 rounded-full  hover:border-chiaro-2 transition-all duration-300 hover:scale-110 hover:rotate-3 cursor-pointer " />
             </aside>
         </footer>
     );

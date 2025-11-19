@@ -344,6 +344,10 @@ body {
   /* centratura verticale */
   justify-content: center;
   /* centratura orizzontale */
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .phone-3d-container canvas {
@@ -354,6 +358,8 @@ body {
   object-fit: contain;
   overflow: visible !important;
   align-items: center !important;
+  touch-action: none !important;
+  -webkit-touch-callout: none !important;
 }
 
 /* #region loader globale */

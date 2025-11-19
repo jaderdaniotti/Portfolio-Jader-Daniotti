@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '../config/supabase';
 import { portfolioEvents } from '../utils/umami';
-// rimpiazzato con 3D room
-import SciFiRoom3D from './SciFiRoom3D';
 import { Link } from 'react-router-dom';
 import BigButton from './bigButton';
 
@@ -49,10 +47,10 @@ const Login = ({ onLoginSuccess }) => {
 
   return (
     <div className="min-h-screen montserrat items-center justify-center bg-bianco flex flex-col">
-      <div className="w-full h-full z-99 md:px-5">
-        <SciFiRoom3D />
+      <div className="w-full h-full z-99 md:px-5 relative" >
+        <h2 className='text-scuro hidden md:block md:text-9xl font-extrabold  inter'>PANNELLO <br /> ADMIN</h2>
+        <h2 className='text-scuro text-9xl block md:hidden font-extrabold absolute top-1/2 left-1/3 -translate-x-1/2 -rotate-90 z-[999] inter'>PANNELLO <br /> ADMIN</h2>
       </div>
-      <hr className='w-full my-4 text-scuro' />
       <div id='login' className="md:max-w-3/4 w-full p-8 flex justify-center items-center space-y-8">
         <section className=' rounded-md p-4 pb-5'>
           <h2 className="mt-6 inter  text-center text-7xl font-bold text-gray-900">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import GlobalLoader from './GlobalLoader';
 import { supabase, supabaseAdmin, storageAPI } from '../config/supabase';
 import { portfolioEvents } from '../utils/umami';
 import CardAnteprimaProgetti from './cardAnteprimaProgetti';
@@ -44,6 +45,12 @@ const TabbedDashboard = ({ onLogout }) => {
     mobile: []
   });
   const [uploadingProjectImages, setUploadingProjectImages] = useState(false);
+  // Stato per le tecnologie del progetto (divise per tipo: frontend/backend/database)
+  const [projectTechnologies, setProjectTechnologies] = useState({
+    frontend: [], // Array di technology_id selezionati
+    backend: [],
+    database: []
+  });
 
   // Verifica se l'utente è admin
   const isAdmin = () => {
@@ -110,28 +117,59 @@ const TabbedDashboard = ({ onLogout }) => {
   };
 
   const handleEdit = async (item, type) => {
-    setEditingItem({ ...item, type });
-    setEditForm(item);
-    // Se c'è un'immagine esistente, mostra l'anteprima
-    if (type === 'project' && item.cover_image) {
-      setCoverImagePreview(item.cover_image);
-      setCoverImageFile(null);
-    } else {
+    try {
+      if (!item || !type) {
+        console.error('handleEdit: item o type mancanti', { item, type });
+        return;
+      }
+
+      setEditingItem({ ...item, type });
+      setEditForm(item || {});
+      
+      // Se c'è un'immagine esistente, mostra l'anteprima
+      if (type === 'project' && item?.cover_image) {
+        setCoverImagePreview(item.cover_image);
+        setCoverImageFile(null);
+      } else {
+        setCoverImageFile(null);
+        setCoverImagePreview(null);
+      }
+    } catch (error) {
+      console.error('Errore in handleEdit:', error);
+      // Reset sicuro in caso di errore
+      setEditingItem(null);
+      setEditForm({});
       setCoverImageFile(null);
       setCoverImagePreview(null);
+      setProjectImages({ pc: [], tablet: [], mobile: [] });
+      setProjectTechnologies({ frontend: [], backend: [], database: [] });
+      return;
     }
 
     // Carica le immagini del progetto se stiamo modificando un progetto esistente
     if (type === 'project' && item.id) {
       try {
         const client = getSupabaseClient();
-        const { data, error } = await client
-          .from('project_images')
-          .select('*')
-          .eq('project_id', item.id)
-          .order('order_index');
+        const [imagesRes, technologiesRes] = await Promise.all([
+          client
+            .from('project_images')
+            .select('*')
+            .eq('project_id', item.id)
+            .order('order_index'),
+          client
+            .from('project_technologies')
+            .select('*')
+            .eq('project_id', item.id)
+        ]);
 
-        if (error) throw error;
+        // Gestisci errori separatamente per non bloccare tutto
+        if (imagesRes.error) {
+          console.error('Errore nel caricamento immagini:', imagesRes.error);
+        }
+
+        if (technologiesRes.error) {
+          console.error('Errore nel caricamento tecnologie:', technologiesRes.error);
+        }
 
         // Organizza le immagini per device_type
         const imagesByDevice = {
@@ -140,23 +178,46 @@ const TabbedDashboard = ({ onLogout }) => {
           mobile: []
         };
 
-        (data || []).forEach(img => {
-          if (img.device_type && imagesByDevice[img.device_type]) {
-            imagesByDevice[img.device_type].push({
-              id: img.id,
-              image_url: img.image_url,
-              order_index: img.order_index
-            });
-          }
-        });
+        if (imagesRes.data && !imagesRes.error) {
+          (imagesRes.data || []).forEach(img => {
+            if (img.device_type && imagesByDevice[img.device_type]) {
+              imagesByDevice[img.device_type].push({
+                id: img.id,
+                image_url: img.image_url,
+                order_index: img.order_index
+              });
+            }
+          });
+        }
 
         setProjectImages(imagesByDevice);
+
+        // Organizza le tecnologie per tipo
+        const technologiesByType = {
+          frontend: [],
+          backend: [],
+          database: []
+        };
+
+        if (technologiesRes.data && !technologiesRes.error) {
+          (technologiesRes.data || []).forEach(pt => {
+            // Filtra solo i tipi validi per evitare errori
+            if (pt.type && technologiesByType[pt.type] && pt.technology_id) {
+              technologiesByType[pt.type].push(pt.technology_id);
+            }
+          });
+        }
+
+        setProjectTechnologies(technologiesByType);
       } catch (error) {
-        console.error('Errore nel caricamento immagini progetto:', error);
+        console.error('Errore nel caricamento immagini/tecnologie progetto:', error);
+        // Reset sicuro in caso di errore
         setProjectImages({ pc: [], tablet: [], mobile: [] });
+        setProjectTechnologies({ frontend: [], backend: [], database: [] });
       }
     } else {
       setProjectImages({ pc: [], tablet: [], mobile: [] });
+      setProjectTechnologies({ frontend: [], backend: [], database: [] });
     }
   };
 
@@ -388,8 +449,42 @@ const TabbedDashboard = ({ onLogout }) => {
               }
             }
           }
+
+          // Salva le tecnologie del progetto
+          // Prima elimina tutte le tecnologie esistenti
+          const { error: deleteError } = await client
+            .from('project_technologies')
+            .delete()
+            .eq('project_id', id);
+
+          if (deleteError) {
+            console.error('Errore nell\'eliminazione tecnologie esistenti:', deleteError);
+          }
+
+          // Poi inserisci le nuove tecnologie
+          const technologiesToInsert = [];
+          for (const type of ['frontend', 'backend', 'database']) {
+            const techIds = projectTechnologies[type] || [];
+            techIds.forEach(techId => {
+              technologiesToInsert.push({
+                project_id: id,
+                technology_id: techId,
+                type: type
+              });
+            });
+          }
+
+          if (technologiesToInsert.length > 0) {
+            const { error: insertTechError } = await client
+              .from('project_technologies')
+              .insert(technologiesToInsert);
+
+            if (insertTechError) {
+              console.error('Errore nell\'inserimento tecnologie:', insertTechError);
+            }
+          }
         } catch (error) {
-          console.error('Errore nel salvataggio immagini progetto:', error);
+          console.error('Errore nel salvataggio immagini/tecnologie progetto:', error);
           // Non bloccare il salvataggio del progetto se c'è un errore con le immagini
         } finally {
           setUploadingProjectImages(false);
@@ -402,6 +497,7 @@ const TabbedDashboard = ({ onLogout }) => {
       setCoverImageFile(null);
       setCoverImagePreview(null);
       setProjectImages({ pc: [], tablet: [], mobile: [] });
+      setProjectTechnologies({ frontend: [], backend: [] });
     } catch (error) {
       console.error('Errore nel salvataggio:', error);
       alert('Errore nel salvataggio: ' + error.message);
@@ -440,7 +536,7 @@ const TabbedDashboard = ({ onLogout }) => {
   };
 
   const handleAdd = async (type) => {
-    // Per i progetti, apriamo il form invece di creare direttamente
+    // Per i progetti e le tecnologie, apriamo il form invece di creare direttamente
     if (type === 'project') {
       setEditingItem({ type: 'project', id: null });
       setEditForm({
@@ -455,20 +551,27 @@ const TabbedDashboard = ({ onLogout }) => {
       setCoverImageFile(null);
       setCoverImagePreview(null);
       setProjectImages({ pc: [], tablet: [], mobile: [] });
+      setProjectTechnologies({ frontend: [], backend: [] });
+      return;
+    }
+
+    // Per le tecnologie, apriamo il form
+    if (type === 'technology') {
+      setEditingItem({ type: 'technology', id: null });
+      setEditForm({
+        name: '',
+        category: activeStackTab || 'frontend',
+        percent: 50,
+        order_index: technologies.length + 1,
+        svg_code: '<svg></svg>'
+      });
       return;
     }
 
     try {
-      const tableName = type === 'technology' ? 'technologies' :
-        type === 'tool' ? 'tools' : 'templates';
+      const tableName = type === 'tool' ? 'tools' : 'templates';
 
-      const defaultData = type === 'technology' ? {
-        name: 'Nuova Tecnologia',
-        category: 'frontend',
-        percent: 50,
-        order_index: technologies.length + 1,
-        svg_code: '<svg></svg>'
-      } : type === 'tool' ? {
+      const defaultData = type === 'tool' ? {
         name: 'Nuovo Strumento',
         percent: 50,
         order_index: tools.length + 1,
@@ -490,6 +593,42 @@ const TabbedDashboard = ({ onLogout }) => {
       await loadData();
     } catch (error) {
       console.error('Errore nell\'aggiunta:', error);
+    }
+  };
+
+  const handleCreateTechnology = async () => {
+    if (!editForm.name || editForm.name.trim() === '') {
+      alert('Il nome è obbligatorio');
+      return;
+    }
+
+    if (!editForm.category) {
+      alert('La categoria è obbligatoria');
+      return;
+    }
+
+    try {
+      const technologyData = {
+        name: editForm.name.trim(),
+        category: editForm.category,
+        percent: editForm.percent || 50,
+        order_index: editForm.order_index || technologies.length + 1,
+        svg_code: editForm.svg_code || '<svg></svg>'
+      };
+
+      const client = getSupabaseClient();
+      const { error } = await client
+        .from('technologies')
+        .insert(technologyData);
+
+      if (error) throw error;
+
+      await loadData();
+      setEditingItem(null);
+      setEditForm({});
+    } catch (error) {
+      console.error('Errore nella creazione della tecnologia:', error);
+      alert('Errore nella creazione della tecnologia: ' + error.message);
     }
   };
 
@@ -578,8 +717,31 @@ const TabbedDashboard = ({ onLogout }) => {
               }
             }
           }
+
+          // Salva le tecnologie del progetto
+          const technologiesToInsert = [];
+          for (const type of ['frontend', 'backend', 'database']) {
+            const techIds = projectTechnologies[type] || [];
+            techIds.forEach(techId => {
+              technologiesToInsert.push({
+                project_id: newProject.id,
+                technology_id: techId,
+                type: type
+              });
+            });
+          }
+
+          if (technologiesToInsert.length > 0) {
+            const { error: insertTechError } = await client
+              .from('project_technologies')
+              .insert(technologiesToInsert);
+
+            if (insertTechError) {
+              console.error('Errore nell\'inserimento tecnologie:', insertTechError);
+            }
+          }
         } catch (error) {
-          console.error('Errore nel salvataggio immagini progetto:', error);
+          console.error('Errore nel salvataggio immagini/tecnologie progetto:', error);
           // Non bloccare la creazione del progetto se c'è un errore con le immagini
         } finally {
           setUploadingProjectImages(false);
@@ -592,6 +754,7 @@ const TabbedDashboard = ({ onLogout }) => {
       setCoverImageFile(null);
       setCoverImagePreview(null);
       setProjectImages({ pc: [], tablet: [], mobile: [] });
+      setProjectTechnologies({ frontend: [], backend: [] });
     } catch (error) {
       console.error('Errore nella creazione del progetto:', error);
       alert('Errore nella creazione del progetto: ' + error.message);
@@ -602,8 +765,8 @@ const TabbedDashboard = ({ onLogout }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+      <div className="min-h-screen bg-scuro flex items-center justify-center">
+        <GlobalLoader />
       </div>
     );
   }
@@ -612,7 +775,7 @@ const TabbedDashboard = ({ onLogout }) => {
     <div className="min-h-screen inter bg-scuro-2">
       {/* Header */}
       <header className="bg-scuro-2 border-b">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className=" mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-4xl tracking-tight font-medium text-chiaro">Dashboard di <span className='text-bianco font-bold'>Jader</span></h1>
@@ -636,7 +799,7 @@ const TabbedDashboard = ({ onLogout }) => {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className=" mx-auto px-6 py-8">
         {/* Navigation Tabs */}
         <div className="">
           <nav className="-mb-px flex space-x-8">
@@ -666,14 +829,165 @@ const TabbedDashboard = ({ onLogout }) => {
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-bianco">Stack Tecnologico</h2>
-                <button
-                  onClick={() => handleAdd('technology')}
-                  className="bg-chiaro text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Aggiungi Tecnologia
-                </button>
+                {editingItem?.type !== 'technology' && (
+                  <button
+                    onClick={() => handleAdd('technology')}
+                    className="bg-chiaro text-white px-4 py-2 rounded-md text-sm font-medium flex items-center"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Aggiungi Tecnologia
+                  </button>
+                )}
               </div>
+
+              {/* Form di creazione/modifica tecnologia */}
+              {editingItem?.type === 'technology' && (
+                <div className="bg-scuro-2 border-2 border-gray-200 rounded-xl p-6 mb-8 shadow-sm">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center space-x-3">
+                      <div className={`p-3 rounded-lg ${editingItem?.id ? 'bg-green-100' : 'bg-chiaro-2 bg-opacity-20'}`}>
+                        {editingItem?.id ? (
+                          <Edit className="w-6 h-6 text-bianco" />
+                        ) : (
+                          <Plus className="w-6 h-6 text-bianco" />
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold inter text-bianco">
+                          {editingItem?.id ? 'Modifica Tecnologia' : 'Crea Nuova Tecnologia'}
+                        </h3>
+                        <p className="text-sm text-bianco">
+                          {editingItem?.id ? 'Aggiorna le informazioni della tecnologia' : 'Compila i campi per aggiungere una nuova tecnologia'}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setEditingItem(null);
+                        setEditForm({});
+                      }}
+                      className="text-bianco hover:text-chiaro p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
+                        <Type className="w-4 h-4 mr-2 text-bianco" />
+                        Nome Tecnologia *
+                      </label>
+                      <input
+                        type="text"
+                        value={editForm.name || ''}
+                        onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
+                        placeholder="Es: React, Node.js, PostgreSQL"
+                        maxLength={100}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
+                        <Code className="w-4 h-4 mr-2 text-bianco" />
+                        Categoria *
+                      </label>
+                      <select
+                        value={editForm.category || 'frontend'}
+                        onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all bg-scuro-2"
+                      >
+                        <option className='text-bianco bg-scuro-2' value="frontend">Frontend</option>
+                        <option className='text-bianco bg-scuro-2' value="backend">Backend</option>
+                        <option className='text-bianco bg-scuro-2' value="database">Database</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
+                        Percentuale Competenza
+                      </label>
+                      <input
+                        type="number"
+                        value={editForm.percent || 50}
+                        onChange={(e) => setEditForm({ ...editForm, percent: parseInt(e.target.value) || 0 })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
+                        placeholder="50"
+                        min="0"
+                        max="100"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
+                        <Rocket className="w-4 h-4 mr-2 text-bianco" />
+                        Ordine di Visualizzazione
+                      </label>
+                      <input
+                        type="number"
+                        value={editForm.order_index || technologies.length + 1}
+                        onChange={(e) => setEditForm({ ...editForm, order_index: parseInt(e.target.value) || 0 })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
+                        placeholder="0"
+                        min="0"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-2">
+                        <Code className="w-4 h-4 mr-2 text-bianco" />
+                        Codice SVG (Icona)
+                      </label>
+                      <textarea
+                        value={editForm.svg_code || '<svg></svg>'}
+                        onChange={(e) => setEditForm({ ...editForm, svg_code: e.target.value })}
+                        className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all resize-none font-mono"
+                        placeholder="<svg>...</svg>"
+                        rows={4}
+                      />
+                      <p className="text-xs text-bianco mt-2 opacity-70">
+                        Inserisci il codice SVG dell'icona della tecnologia
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                    <p className="text-sm text-bianco">
+                      <span className="text-red-500">*</span> Campi obbligatori
+                    </p>
+                    <div className="flex space-x-3">
+                      <button
+                        onClick={() => {
+                          setEditingItem(null);
+                          setEditForm({});
+                        }}
+                        className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-scuro rounded-lg text-sm font-semibold flex items-center transition-colors"
+                      >
+                        <X className="w-4 h-4 mr-2" />
+                        Annulla
+                      </button>
+                      {editingItem?.id ? (
+                        <button
+                          onClick={handleSave}
+                          className="px-6 py-3 bg-green-600 hover:bg-green-700 text-bianco rounded-lg text-sm font-semibold flex items-center shadow-md hover:shadow-lg transition-all"
+                        >
+                          <Save className="w-4 h-4 mr-2" />
+                          Salva Modifiche
+                        </button>
+                      ) : (
+                        <button
+                          onClick={handleCreateTechnology}
+                          className="px-8 py-3 bg-chiaro hover:bg-chiaro-2 text-bianco rounded-lg text-sm font-semibold flex items-center shadow-md hover:shadow-lg transition-all"
+                        >
+                          <Plus className="w-5 h-5 mr-2" />
+                          Crea Tecnologia
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Stack Sub-tabs */}
               <div className="">
@@ -699,95 +1013,47 @@ const TabbedDashboard = ({ onLogout }) => {
                   {technologies
                     .filter(tech => tech.category === activeStackTab)
                     .map((tech) => (
-                      <div key={tech.id} className="border rounded-lg p-4">
-                        {editingItem?.id === tech.id && editingItem?.type === 'technology' ? (
-                          <div className="space-y-3">
-                            <input
-                              type="text"
-                              value={editForm.name || ''}
-                              onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                              className="w-full px-3 py-2 border text-bianco font-medium border-gray-300 rounded-md text-sm"
-                              placeholder="Nome tecnologia"
+                      <div key={tech.id} className={`border rounded-lg p-4 ${editingItem?.id === tech.id && editingItem?.type === 'technology' ? 'ring-2 ring-chiaro' : ''}`}>
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center space-x-3">
+                            <div
+                              className="w-8 h-8 rounded flex items-center justify-center"
+                              dangerouslySetInnerHTML={{ __html: tech.svg_code }}
                             />
-                            <select
-                              value={editForm.category || ''}
-                              onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
-                              className="w-full px-3 py-2 border text-bianco font-medium border-gray-300 rounded-md text-sm"
-                            >
-                              <option className='text-bianco bg-scuro-2 rounded-md' value="frontend">Frontend</option>
-                              <option className='text-bianco bg-scuro-2 rounded-md' value="backend">Backend</option>
-                              <option className='text-bianco bg-scuro-2 rounded-md' value="database">Database</option>
-                            </select>
-                            <input
-                              type="number"
-                              value={editForm.percent || ''}
-                              onChange={(e) => setEditForm({ ...editForm, percent: parseInt(e.target.value) })}
-                              className="w-full px-3 py-2 border text-bianco font-medium border-gray-300 rounded-md text-sm"
-                              placeholder="Percentuale"
-                              min="0"
-                              max="100"
-                            />
-                            <div className="flex space-x-2">
-                              <button
-                                onClick={handleSave}
-                                className="flex-1 bg-chiaro hover:bg-chiaro-2 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
-                              >
-                                <Save className="w-4 h-4 mr-1" />
-                                Salva
-                              </button>
-                              <button
-                                onClick={() => setEditingItem(null)}
-                                className="flex-1 bg-chiaro hover:bg-chiaro-2 text-white px-3 py-2 rounded-md text-sm flex items-center justify-center font-medium"
-                              >
-                                <X className="w-4 h-4 mr-1" />
-                                Annulla
-                              </button>
-                            </div>
+                            <h3 className="font-medium text-bianco">{tech.name}</h3>
                           </div>
-                        ) : (
-                          <>
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center space-x-3">
-                                <div
-                                  className="w-8 h-8 rounded flex items-center justify-center"
-                                  dangerouslySetInnerHTML={{ __html: tech.svg_code }}
-                                />
-                                <h3 className="font-medium text-bianco">{tech.name}</h3>
-                              </div>
-                              <span className={`px-2 py-1 text-xs font-semibold rounded-full ${tech.category === 'frontend' ? 'bg-blue-100 text-blue-800' :
-                                  tech.category === 'backend' ? 'bg-green-100 text-green-800' :
-                                    'bg-purple-100 text-purple-800'
-                                }`}>
-                                {tech.category}
-                              </span>
-                            </div>
-                            <div className="mb-2">
-                              <div className="w-full bg-gray-200 rounded-full h-2">
-                                <div
-                                  className="bg-chiaro h-2 rounded-full"
-                                  style={{ width: `${tech.percent}%` }}
-                                ></div>
-                              </div>
-                              <p className="text-xs text-bianco mt-1">{tech.percent}%</p>
-                            </div>
-                            <div className="flex space-x-2">
-                              <button
-                                onClick={() => handleEdit(tech, 'technology')}
-                                className="text-bianco font-medium border-r-1 pr-2 text-sm flex items-center"
-                              >
-                                <Edit className="w-4 h-4 mr-1" />
-                                Modifica
-                              </button>
-                              <button
-                                onClick={() => handleDelete(tech.id, 'technology')}
-                                className="text-red-600 hover:text-red-900 font-medium text-sm flex items-center"
-                              >
-                                <Trash2 className="w-4 h-4 mr-1" />
-                                Elimina
-                              </button>
-                            </div>
-                          </>
-                        )}
+                          <span className={`px-2 py-1 text-xs font-semibold rounded-full ${tech.category === 'frontend' ? 'bg-blue-100 text-blue-800' :
+                              tech.category === 'backend' ? 'bg-green-100 text-green-800' :
+                                'bg-purple-100 text-purple-800'
+                            }`}>
+                            {tech.category}
+                          </span>
+                        </div>
+                        <div className="mb-2">
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-chiaro h-2 rounded-full"
+                              style={{ width: `${tech.percent}%` }}
+                            ></div>
+                          </div>
+                          <p className="text-xs text-bianco mt-1">{tech.percent}%</p>
+                        </div>
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleEdit(tech, 'technology')}
+                            className="text-bianco font-medium border-r-1 pr-2 text-sm flex items-center hover:text-chiaro transition-colors"
+                          >
+                            <Edit className="w-4 h-4 mr-1" />
+                            Modifica
+                          </button>
+                          <button
+                            onClick={() => handleDelete(tech.id, 'technology')}
+                            className="text-red-600 hover:text-red-900 font-medium text-sm flex items-center"
+                          >
+                            <Trash2 className="w-4 h-4 mr-1" />
+                            Elimina
+                          </button>
+                        </div>
                       </div>
                     ))}
                 </div>
@@ -910,8 +1176,78 @@ const TabbedDashboard = ({ onLogout }) => {
                 )}
               </div>
 
+                            {/* Tabella progetti */}
+              <div className="overflow-x-auto mb-8">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-bianco">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
+                        Titolo
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
+                        Descrizione
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
+                        Featured
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
+                        Ordine
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
+                        Azioni
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-bianco divide-y divide-bianco">
+                    {projects.length > 0 ? (
+                      projects.map((project) => (
+                        <tr key={project.id} className={editingItem?.id === project.id && editingItem?.type === 'project' ? 'bg-blue-50' : ''}>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-scuro">
+                            {project.title}
+                          </td>
+                                <td className="px-6 py-4 text-sm text-scuro max-w-xs truncate">
+                            {project.description || '-'}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${project.featured ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                              }`}>
+                              {project.featured ? 'Sì' : 'No'}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-scuro">
+                            {project.order_index || 0}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2">
+                            <button
+                              onClick={() => handleEdit(project, 'project')}
+                              className="text-scuro font-medium border-r-1 pr-2 text-sm flex items-center hover:text-chiaro transition-colors"
+                            >
+                              <Edit className="w-4 h-4 mr-1" />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(project.id, 'project')}
+                              className="text-scuro hover:text-chiaro flex items-center transition-colors"
+                            >
+                              <Trash2 className="w-4 h-4 mr-1" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="5" className="px-6 py-12 text-center text-scuro">
+                          <Rocket className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                          <p className="text-lg font-medium text-scuro">Nessun progetto ancora</p>
+                          <p className="text-sm text-scuro">Usa il bottone "Aggiungi Progetto" per creare il tuo primo progetto</p>
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
               {/* Form di creazione/modifica progetto */}
-              {(editingItem?.type === 'project') && (
+              {(editingItem?.type === 'project' && editForm) && (
                 <div className="bg-scuro-2 border-2 border-gray-200 rounded-xl p-6 mb-8 shadow-sm">
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center space-x-3">
@@ -938,6 +1274,7 @@ const TabbedDashboard = ({ onLogout }) => {
                         setCoverImageFile(null);
                         setCoverImagePreview(null);
                         setProjectImages({ pc: [], tablet: [], mobile: [] });
+                        setProjectTechnologies({ frontend: [], backend: [], database: [] });
                       }}
                       className="text-bianco hover:text-chiaro p-2 rounded-lg hover:bg-gray-100 transition-colors"
                       disabled={uploadingImage || uploadingProjectImages}
@@ -954,7 +1291,7 @@ const TabbedDashboard = ({ onLogout }) => {
                       </label>
                       <input
                         type="text"
-                        value={editForm.title || ''}
+                        value={editForm?.title || ''}
                         onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
                         className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                         placeholder="Es: Portfolio Moderno"
@@ -968,7 +1305,7 @@ const TabbedDashboard = ({ onLogout }) => {
                         Descrizione
                       </label>
                       <textarea
-                        value={editForm.description || ''}
+                        value={editForm?.description || ''}
                         onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                         className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all resize-none"
                         placeholder="Descrizione dettagliata del progetto"
@@ -1249,6 +1586,187 @@ const TabbedDashboard = ({ onLogout }) => {
                       )}
                     </div>
 
+                    {/* Sezione Tecnologie del Progetto */}
+                    <div className="md:col-span-2">
+                      <label className="flex items-center text-sm font-semibold text-bianco mb-4">
+                        <Code className="w-4 h-4 mr-2 text-bianco" />
+                        Tecnologie Utilizzate
+                      </label>
+
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        {/* Frontend Technologies */}
+                        <div className="border-2 border-gray-200 rounded-xl p-5 bg-scuro-2 shadow-sm">
+                          <div className="flex items-center mb-4">
+                            <div className="p-2 bg-blue-500 rounded-lg mr-2">
+                              <Code className="w-5 h-5 text-bianco" />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-bianco">Frontend</h4>
+                              <p className="text-xs text-bianco">
+                                {projectTechnologies.frontend.length} {projectTechnologies.frontend.length === 1 ? 'tecnologia selezionata' : 'tecnologie selezionate'}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="max-h-64 overflow-y-auto pr-2 custom-scrollbar space-y-2">
+                            {technologies.filter(tech => tech.category === 'frontend').length > 0 ? (
+                              technologies
+                                .filter(tech => tech.category === 'frontend')
+                                .map((tech) => (
+                                  <label
+                                    key={tech.id}
+                                    className="flex items-center p-3 bg-scuro-1 rounded-lg hover:bg-scuro cursor-pointer transition-colors"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={projectTechnologies.frontend.includes(tech.id)}
+                                      onChange={(e) => {
+                                        if (e.target.checked) {
+                                          setProjectTechnologies(prev => ({
+                                            ...prev,
+                                            frontend: [...prev.frontend, tech.id]
+                                          }));
+                                        } else {
+                                          setProjectTechnologies(prev => ({
+                                            ...prev,
+                                            frontend: prev.frontend.filter(id => id !== tech.id)
+                                          }));
+                                        }
+                                      }}
+                                      className="w-5 h-5 text-chiaro border-gray-300 rounded focus:ring-chiaro mr-3"
+                                      disabled={uploadingImage || uploadingProjectImages}
+                                    />
+                                    <div
+                                      className="w-6 h-6 rounded flex items-center justify-center mr-2"
+                                      dangerouslySetInnerHTML={{ __html: tech.svg_code }}
+                                    />
+                                    <span className="text-bianco font-medium">{tech.name}</span>
+                                  </label>
+                                ))
+                            ) : (
+                              <div className="text-center py-8 text-bianco">
+                                <Code className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                                <p className="text-sm">Nessuna tecnologia frontend disponibile</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Backend Technologies */}
+                        <div className="border-2 border-gray-200 rounded-xl p-5 bg-scuro-2 shadow-sm">
+                          <div className="flex items-center mb-4">
+                            <div className="p-2 bg-green-500 rounded-lg mr-2">
+                              <Code className="w-5 h-5 text-bianco" />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-bianco">Backend</h4>
+                              <p className="text-xs text-bianco">
+                                {projectTechnologies.backend.length} {projectTechnologies.backend.length === 1 ? 'tecnologia selezionata' : 'tecnologie selezionate'}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="max-h-64 overflow-y-auto pr-2 custom-scrollbar space-y-2">
+                            {technologies.filter(tech => tech.category === 'backend').length > 0 ? (
+                              technologies
+                                .filter(tech => tech.category === 'backend')
+                                .map((tech) => (
+                                  <label
+                                    key={tech.id}
+                                    className="flex items-center p-3 bg-scuro-1 rounded-lg hover:bg-scuro cursor-pointer transition-colors"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={projectTechnologies.backend.includes(tech.id)}
+                                      onChange={(e) => {
+                                        if (e.target.checked) {
+                                          setProjectTechnologies(prev => ({
+                                            ...prev,
+                                            backend: [...prev.backend, tech.id]
+                                          }));
+                                        } else {
+                                          setProjectTechnologies(prev => ({
+                                            ...prev,
+                                            backend: prev.backend.filter(id => id !== tech.id)
+                                          }));
+                                        }
+                                      }}
+                                      className="w-5 h-5 text-chiaro border-gray-300 rounded focus:ring-chiaro mr-3"
+                                      disabled={uploadingImage || uploadingProjectImages}
+                                    />
+                                    <div
+                                      className="w-6 h-6 rounded flex items-center justify-center mr-2"
+                                      dangerouslySetInnerHTML={{ __html: tech.svg_code }}
+                                    />
+                                    <span className="text-bianco font-medium">{tech.name}</span>
+                                  </label>
+                                ))
+                            ) : (
+                              <div className="text-center py-8 text-bianco">
+                                <Code className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                                <p className="text-sm">Nessuna tecnologia backend disponibile</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Database Technologies */}
+                        <div className="border-2 border-gray-200 rounded-xl p-5 bg-scuro-2 shadow-sm">
+                          <div className="flex items-center mb-4">
+                            <div className="p-2 bg-purple-500 rounded-lg mr-2">
+                              <Code className="w-5 h-5 text-bianco" />
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-bianco">Database</h4>
+                              <p className="text-xs text-bianco">
+                                {projectTechnologies.database.length} {projectTechnologies.database.length === 1 ? 'tecnologia selezionata' : 'tecnologie selezionate'}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="max-h-64 overflow-y-auto pr-2 custom-scrollbar space-y-2">
+                            {technologies.filter(tech => tech.category === 'database').length > 0 ? (
+                              technologies
+                                .filter(tech => tech.category === 'database')
+                                .map((tech) => (
+                                  <label
+                                    key={tech.id}
+                                    className="flex items-center p-3 bg-scuro-1 rounded-lg hover:bg-scuro cursor-pointer transition-colors"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={projectTechnologies.database.includes(tech.id)}
+                                      onChange={(e) => {
+                                        if (e.target.checked) {
+                                          setProjectTechnologies(prev => ({
+                                            ...prev,
+                                            database: [...prev.database, tech.id]
+                                          }));
+                                        } else {
+                                          setProjectTechnologies(prev => ({
+                                            ...prev,
+                                            database: prev.database.filter(id => id !== tech.id)
+                                          }));
+                                        }
+                                      }}
+                                      className="w-5 h-5 text-chiaro border-gray-300 rounded focus:ring-chiaro mr-3"
+                                      disabled={uploadingImage || uploadingProjectImages}
+                                    />
+                                    <div
+                                      className="w-6 h-6 rounded flex items-center justify-center mr-2"
+                                      dangerouslySetInnerHTML={{ __html: tech.svg_code }}
+                                    />
+                                    <span className="text-bianco font-medium">{tech.name}</span>
+                                  </label>
+                                ))
+                            ) : (
+                              <div className="text-center py-8 text-bianco">
+                                <Code className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                                <p className="text-sm">Nessuna tecnologia database disponibile</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     <div>
                       <label className="flex items-center text-sm font-semibold text-bianco mb-2">
                         <Link className="w-4 h-4 mr-2 text-chiaro" />
@@ -1256,7 +1774,7 @@ const TabbedDashboard = ({ onLogout }) => {
                       </label>
                       <input
                         type="url"
-                        value={editForm.github_url || ''}
+                        value={editForm?.github_url || ''}
                         onChange={(e) => setEditForm({ ...editForm, github_url: e.target.value })}
                         className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                         placeholder="https://github.com/user/repo"
@@ -1270,7 +1788,7 @@ const TabbedDashboard = ({ onLogout }) => {
                       </label>
                       <input
                         type="url"
-                        value={editForm.domain_url || ''}
+                        value={editForm?.domain_url || ''}
                         onChange={(e) => setEditForm({ ...editForm, domain_url: e.target.value })}
                         className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                         placeholder="https://esempio.com"
@@ -1284,7 +1802,7 @@ const TabbedDashboard = ({ onLogout }) => {
                       </label>
                       <input
                         type="number"
-                        value={editForm.order_index || 0}
+                        value={editForm?.order_index || 0}
                         onChange={(e) => setEditForm({ ...editForm, order_index: parseInt(e.target.value) || 0 })}
                         className="w-full px-4 py-3 border-2 border-gray-200 text-bianco font-medium rounded-lg text-sm focus:border-chiaro focus:ring-2 focus:ring-chiaro focus:ring-opacity-20 transition-all"
                         placeholder="0"
@@ -1296,7 +1814,7 @@ const TabbedDashboard = ({ onLogout }) => {
                       <label className="flex items-center text-sm font-semibold text-bianco cursor-pointer">
                         <input
                           type="checkbox"
-                          checked={editForm.featured || false}
+                          checked={editForm?.featured || false}
                           onChange={(e) => setEditForm({ ...editForm, featured: e.target.checked })}
                           className="w-5 h-5 text-chiaro border-gray-300 rounded focus:ring-chiaro mr-2"
                         />
@@ -1317,6 +1835,7 @@ const TabbedDashboard = ({ onLogout }) => {
                           setCoverImageFile(null);
                           setCoverImagePreview(null);
                           setProjectImages({ pc: [], tablet: [], mobile: [] });
+                          setProjectTechnologies({ frontend: [], backend: [], database: [] });
                         }}
                         className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-scuro rounded-lg text-sm font-semibold flex items-center transition-colors"
                         disabled={uploadingImage || uploadingProjectImages}
@@ -1384,75 +1903,7 @@ const TabbedDashboard = ({ onLogout }) => {
                 </div>
               )}
 
-              {/* Tabella progetti */}
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-bianco">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
-                        Titolo
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
-                        Descrizione
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
-                        Featured
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
-                        Ordine
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
-                        Azioni
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-bianco divide-y divide-bianco">
-                    {projects.length > 0 ? (
-                      projects.map((project) => (
-                        <tr key={project.id} className={editingItem?.id === project.id && editingItem?.type === 'project' ? 'bg-blue-50' : ''}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-scuro">
-                            {project.title}
-                          </td>
-                                <td className="px-6 py-4 text-sm text-scuro max-w-xs truncate">
-                            {project.description || '-'}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${project.featured ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                              }`}>
-                              {project.featured ? 'Sì' : 'No'}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-scuro">
-                            {project.order_index || 0}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2">
-                            <button
-                              onClick={() => handleEdit(project, 'project')}
-                              className="text-scuro font-medium border-r-1 pr-2 text-sm flex items-center hover:text-chiaro transition-colors"
-                            >
-                              <Edit className="w-4 h-4 mr-1" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(project.id, 'project')}
-                              className="text-scuro hover:text-chiaro flex items-center transition-colors"
-                            >
-                              <Trash2 className="w-4 h-4 mr-1" />
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="5" className="px-6 py-12 text-center text-scuro">
-                          <Rocket className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                          <p className="text-lg font-medium text-scuro">Nessun progetto ancora</p>
-                          <p className="text-sm text-scuro">Usa il bottone "Aggiungi Progetto" per creare il tuo primo progetto</p>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
+
             </div>
           )}
 

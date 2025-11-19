@@ -14,6 +14,7 @@ import {
     Rocket 
 } from 'lucide-react';
 import BigButton from "../components/bigButton";
+import GlobalLoader from "../components/GlobalLoader";
 
 function Work() {
     const [templates, setTemplates] = useState([]);
@@ -282,8 +283,7 @@ function Work() {
 
                     {loading ? (
                         <div className="text-center py-16">
-                            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-bianco"></div>
-                            <p className="text-bianco text-xl mt-4">Caricamento templates...</p>
+                            <GlobalLoader/>
                         </div>
                     ) : (
                         <>

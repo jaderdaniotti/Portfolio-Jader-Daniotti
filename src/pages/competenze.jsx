@@ -5,6 +5,7 @@ import SkillSection from "../components/skillSection";
 import Marquee from "react-fast-marquee";
 import SEOHead from '../components/SEOHead';
 import { portfolioAPI } from '../config/supabase';
+import GlobalLoader from "../components/GlobalLoader";
 
 function Competenze() {
     
@@ -116,7 +117,7 @@ function Competenze() {
             
             {loading ? (
                 <div className="text-center w-[100vw] h-[100vh] flex items-center justify-center py-20">
-                    <div className="loading loading-spinner loading-xl"></div>
+                    <GlobalLoader/>
                 </div>
             ) : (
                 <>

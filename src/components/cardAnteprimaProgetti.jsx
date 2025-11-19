@@ -1,11 +1,11 @@
 function CardAnteprimaProgetti({ title, description, imageUrl, link }) {
     return (
-        <div className="group relative overflow-hidden rounded-2xl bg-chiaro shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 h-full card-sfondo-bianco">
-            <div className="relative object-contain">
+        <div className="group h-full flex flex-col relative overflow-hidden rounded-2xl bg-chiaro shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 card-sfondo-bianco">
+            <div className="relative object-contain flex-shrink-0">
                 <img
                     src={imageUrl}
                     alt={title}
-                    className="w-full h-full object-contain transition-transform duration-700  position-absolute "
+                    className="w-full h-auto object-contain transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent  group-hover:opacity-100 transition-opacity duration-300"></div>
 
@@ -22,7 +22,7 @@ function CardAnteprimaProgetti({ title, description, imageUrl, link }) {
                     </div>
                 )}
             </div>
-            <div className="p-6 flex flex-col justify-between ">
+            <div className="p-6 flex flex-col justify-between flex-grow">
                 <div>
                     <h3 className="text-3xl font-bold text-center mb-2 transition-colors duration-300">
                         {title}

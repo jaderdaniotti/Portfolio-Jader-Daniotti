@@ -1,5 +1,4 @@
 import { useResourcePreloader } from '../hooks/useResourcePreloader';
-import caduta from '../../immagini/caduta.png'
 
 const GlobalLoader = ({ onLoadingComplete }) => {
     // Precarica automaticamente tutti i modelli 3D

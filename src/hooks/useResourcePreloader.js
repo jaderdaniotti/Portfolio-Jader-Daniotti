@@ -11,9 +11,7 @@ export const useResourcePreloader = () => {
         const preloadAll = async () => {
             // Definisce tutte le risorse 3D da precaricare
             const allResources = [
-                { name: threeAssetMetadata.phone.name, type: 'glb', url: threeAssetUrls.phone },
-                { name: threeAssetMetadata.laptop.name, type: 'glb', url: threeAssetUrls.laptop },
-                { name: threeAssetMetadata.mouse.name, type: 'glb', url: threeAssetUrls.mouse },
+                { name: threeAssetMetadata.roboticHand.name, type: 'glb', url: threeAssetUrls.roboticHand },
             ];
 
             const total = allResources.length;

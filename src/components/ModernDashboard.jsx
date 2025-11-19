@@ -25,7 +25,8 @@ import {
   Legend,
   ArcElement,
 } from 'chart.js';
-import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
+import GlobalLoader from './GlobalLoader';
 
 ChartJS.register(
   CategoryScale,
@@ -107,7 +108,7 @@ const ModernDashboard = ({ user, onLogout }) => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
+        <GlobalLoader/>
       </div>
     );
   }
