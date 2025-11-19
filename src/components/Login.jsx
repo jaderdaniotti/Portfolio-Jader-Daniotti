@@ -47,7 +47,7 @@ const Login = ({ onLoginSuccess }) => {
 
   return (
     <div className="min-h-screen montserrat items-center justify-center bg-bianco flex flex-col">
-      <div className="w-full h-full z-99 md:px-5 relative" >
+      <div className="w-full h-full z-99 md:px-5 lg:block hidden relative" >
         <h2 className='text-scuro hidden md:block md:text-9xl font-extrabold  inter'>PANNELLO <br /> ADMIN</h2>
         <h2 className='text-scuro text-9xl block md:hidden font-extrabold absolute top-1/2 left-1/3 -translate-x-1/2 -rotate-90 z-[999] inter'>PANNELLO <br /> ADMIN</h2>
       </div>
