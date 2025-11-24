@@ -22,7 +22,9 @@ import {
   FileText,
   Smartphone,
   Tablet,
-  Monitor
+  Monitor,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 const TabbedDashboard = ({ onLogout }) => {
@@ -33,6 +35,9 @@ const TabbedDashboard = ({ onLogout }) => {
   const [tools, setTools] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(true);
+  // Stati per paginazione templates
+  const [templatesCurrentPage, setTemplatesCurrentPage] = useState(1);
+  const [templatesPerPage] = useState(9); // 3 colonne x 3 righe
   const [editingItem, setEditingItem] = useState(null);
   const [editForm, setEditForm] = useState({});
   const [coverImageFile, setCoverImageFile] = useState(null);
@@ -88,6 +93,13 @@ const TabbedDashboard = ({ onLogout }) => {
     loadData();
   }, []);
 
+  // Reset pagina templates quando si cambia tab
+  useEffect(() => {
+    if (activeTab !== 'templates') {
+      setTemplatesCurrentPage(1);
+    }
+  }, [activeTab]);
+
   const loadData = async () => {
     setLoading(true);
     try {
@@ -102,7 +114,13 @@ const TabbedDashboard = ({ onLogout }) => {
       setProjects(projectsRes.data || []);
       setTechnologies(technologiesRes.data || []);
       setTools(toolsRes.data || []);
-      setTemplates(templatesRes.data || []);
+      const templatesData = templatesRes.data || [];
+      setTemplates(templatesData);
+      // Reset pagina se necessario
+      const maxPage = Math.ceil(templatesData.length / templatesPerPage);
+      if (templatesCurrentPage > maxPage && maxPage > 0) {
+        setTemplatesCurrentPage(1);
+      }
     } catch (error) {
       console.error('Errore nel caricamento dati:', error);
     } finally {
@@ -2057,7 +2075,7 @@ const TabbedDashboard = ({ onLogout }) => {
           {/* Templates Tab */}
           {activeTab === 'templates' && (
             <div className="p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Templates</h2>
+              <h2 className="text-2xl font-bold text-bianco mb-6">Templates</h2>
 
               {/* Form in alto - larghezza piena */}
               <div className="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-200 rounded-xl p-6 mb-8 shadow-sm">
@@ -2071,7 +2089,7 @@ const TabbedDashboard = ({ onLogout }) => {
                       )}
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">
+                      <h3 className="text-xl font-bold text-bianco">
                         {editingItem?.type === 'template' ? 'Modifica Template' : 'Crea Nuovo Template'}
                       </h3>
                       <p className="text-sm text-gray-500">
@@ -2212,15 +2230,23 @@ const TabbedDashboard = ({ onLogout }) => {
               {/* Lista Templates sotto */}
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <h3 className="text-lg font-semibold text-bianco flex items-center">
                     <FileText className="w-5 h-5 mr-2 text-chiaro" />
                     Templates Salvati ({templates.length})
                   </h3>
+                  {templates.length > templatesPerPage && (
+                    <div className="text-sm text-bianco">
+                      Pagina {templatesCurrentPage} di {Math.ceil(templates.length / templatesPerPage)}
+                    </div>
+                  )}
                 </div>
 
                 {templates.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
-                    {templates.map((template) => (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
+                      {templates
+                        .slice((templatesCurrentPage - 1) * templatesPerPage, templatesCurrentPage * templatesPerPage)
+                        .map((template) => (
                       <div
                         key={template.id}
                         className={`border-2 rounded-xl overflow-hidden bg-white hover:shadow-lg transition-all duration-300 ${editingItem?.id === template.id
@@ -2247,7 +2273,7 @@ const TabbedDashboard = ({ onLogout }) => {
                           </div>
                         )}
                         <div className="p-4">
-                          <h3 className="font-bold text-gray-900 mb-3 text-base flex items-center">
+                          <h3 className="font-bold text-bianco mb-3 text-base flex items-center">
                             <Type className="w-4 h-4 mr-2 text-chiaro flex-shrink-0" />
                             <span className="truncate">{template.name}</span>
                           </h3>
@@ -2290,8 +2316,65 @@ const TabbedDashboard = ({ onLogout }) => {
                           </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                        ))}
+                    </div>
+
+                    {/* Controlli paginazione */}
+                    {templates.length > templatesPerPage && (
+                      <div className="flex items-center justify-center gap-2 mt-6">
+                        <button
+                          onClick={() => setTemplatesCurrentPage(prev => Math.max(1, prev - 1))}
+                          disabled={templatesCurrentPage === 1}
+                          className="px-4 py-2 bg-scuro-2 text-bianco rounded-lg font-medium flex items-center gap-2 hover:bg-scuro transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                          Precedente
+                        </button>
+                        
+                        <div className="flex items-center gap-1">
+                          {Array.from({ length: Math.ceil(templates.length / templatesPerPage) }, (_, i) => i + 1).map((page) => {
+                            // Mostra sempre la prima, l'ultima, la pagina corrente e quelle adiacenti
+                            const totalPages = Math.ceil(templates.length / templatesPerPage);
+                            const showPage = 
+                              page === 1 || 
+                              page === totalPages || 
+                              (page >= templatesCurrentPage - 1 && page <= templatesCurrentPage + 1);
+                            
+                            if (!showPage) {
+                              // Mostra ellipsis
+                              if (page === templatesCurrentPage - 2 || page === templatesCurrentPage + 2) {
+                                return <span key={page} className="px-2 text-bianco">...</span>;
+                              }
+                              return null;
+                            }
+                            
+                            return (
+                              <button
+                                key={page}
+                                onClick={() => setTemplatesCurrentPage(page)}
+                                className={`px-3 py-2 rounded-lg font-medium transition-colors ${
+                                  templatesCurrentPage === page
+                                    ? 'bg-chiaro text-bianco'
+                                    : 'bg-scuro-2 text-bianco hover:bg-scuro'
+                                }`}
+                              >
+                                {page}
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        <button
+                          onClick={() => setTemplatesCurrentPage(prev => Math.min(Math.ceil(templates.length / templatesPerPage), prev + 1))}
+                          disabled={templatesCurrentPage >= Math.ceil(templates.length / templatesPerPage)}
+                          className="px-4 py-2 bg-scuro-2 text-bianco rounded-lg font-medium flex items-center gap-2 hover:bg-scuro transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Successiva
+                          <ChevronRight className="w-4 h-4" />
+                        </button>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="text-center py-16 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
                     <div className="bg-gray-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">

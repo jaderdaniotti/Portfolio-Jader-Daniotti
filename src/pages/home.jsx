@@ -280,9 +280,6 @@ function Home() {
             <Navbar />
             {/* hero */}
             <div className="hero h-screen relative" id='home'>
-                <div className="absolute hidden xl:block left-0">
-                    <img src="/loghi/saluto.png" alt="" className="w-3/4 h-full object-cover" />
-                </div>
                 <div className="hero-content text-center">
                     <div className="max-w-md py-10 ">
                         <p className="text-6xl tracking-tight md:text-7xl" data-aos="zoom-in" data-aos-duration="500">Ciao!</p>
