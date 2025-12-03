@@ -367,6 +367,7 @@ function Progetti() {
                                             src={img.image_url} 
                                             alt={`${progetto.title} - ${currentDeviceTab}`} 
                                             className="w-full h-auto rounded-lg shadow-sm" 
+                                            loading="lazy"
                                         />
                                     </li>
                                 ))}
@@ -426,7 +427,7 @@ function Progetti() {
                 />
                 <Navbar />
                 <div className="min-h-screen bg-scuro-2 flex flex-col items-center justify-center">
-                    <GlobalLoader onLoadingComplete={() => {}}/>
+                    <GlobalLoader />
                 </div>
                 <Footer />
             </>

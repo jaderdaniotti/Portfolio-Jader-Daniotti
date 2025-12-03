@@ -8,126 +8,6 @@ import SEOHead from '../components/SEOHead';
 import RoboticHand3D from '../components/RoboticHand3D';
 import { portfolioAPI, supabase } from '../config/supabase';
 
-// Componente per le recensioni con gestione errori immagini e nuovo stile CSS
-function ReviewCard({ review }) {
-    const [imageError, setImageError] = useState(false);
-
-    return (
-        <div className="text-scuro px-5 bg-bianco rounded-lg py-5 ">
-            <div className="flex items-center max-w-3/4 gap-3 mb-4">
-                {review.profile_photo_url && !imageError ? (
-                    <img
-                        src={review.profile_photo_url}
-                        alt={review.author_name}
-                        className="w-12 h-12 rounded-full object-cover"
-                        onError={() => setImageError(true)}
-                        loading="lazy"
-                    />
-                ) : (
-                    <div className="w-12 h-12 rounded-full bg-scuro-2 flex items-center justify-center border border-chiaro/20">
-                        <i className="bi bi-person-fill text-chiaro text-xl"></i>
-                    </div>
-                )}
-                <div>
-                    <p className="font-bold text-2xl ">{review.author_name}</p>
-                    <div className="flex items-center gap-1">
-                        {[...Array(5)].map((_, i) => (
-                            <i
-                                key={i}
-                                className={`bi bi-star${i < review.rating ? '-fill' : ''}  text-sm`}
-                            ></i>
-                        ))}
-                    </div>
-                </div>
-            </div>
-            <p className="font-normal text-md leading-relaxed mb-3">{review.text}</p>
-            {review.relative_time_description && (
-                <p className="text-chiaro/50 text-lg mt-2 font-medium italic text-end ">{review.relative_time_description}</p>
-            )}
-        </div>
-    );
-}
-
-// Componente carosello per le recensioni
-function ReviewsCarousel({ reviews }) {
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-    if (!reviews || reviews.length === 0) {
-        return null;
-    }
-
-    // Mostra massimo 5 recensioni
-    const displayReviews = reviews.slice(0, 5);
-    const totalReviews = displayReviews.length;
-
-    const nextReview = () => {
-        setCurrentIndex((prev) => (prev + 1) % totalReviews);
-    };
-
-    const prevReview = () => {
-        setCurrentIndex((prev) => (prev - 1 + totalReviews) % totalReviews);
-    };
-
-    const goToReview = (index) => {
-        setCurrentIndex(index);
-    };
-
-    return (
-        <div className="relative w-full">
-            <div className="overflow-hidden w-full">
-                <div
-                    className="flex transition-transform duration-500 ease-in-out"
-                    style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-                >
-                    {displayReviews.map((review, index) => (
-                        <div key={index} className="min-w-full flex justify-center px-4">
-                            <ReviewCard review={review} />
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Controlli di navigazione */}
-            <div className="flex items-center justify-center gap-4 mt-6">
-                <button
-                    onClick={prevReview}
-                    className="w-10 h-10 rounded-full bg-chiaro text-scuro flex items-center justify-center hover:bg-chiaro/90 transition-all duration-300 hover:scale-110 shadow-lg"
-                    aria-label="Recensione precedente"
-                >
-                    <i className="bi bi-chevron-left text-xl"></i>
-                </button>
-
-                {/* Indicatori */}
-                <div className="flex gap-2">
-                    {displayReviews.map((_, index) => (
-                        <button
-                            key={index}
-                            onClick={() => goToReview(index)}
-                            className={`h-3 rounded-full transition-all duration-300 ${index === currentIndex
-                                    ? 'bg-chiaro w-8'
-                                    : 'bg-chiaro/40 w-3 hover:bg-chiaro/60'
-                                }`}
-                            aria-label={`Vai alla recensione ${index + 1}`}
-                        />
-                    ))}
-                </div>
-
-                <button
-                    onClick={nextReview}
-                    className="w-10 h-10 rounded-full bg-chiaro text-scuro flex items-center justify-center hover:bg-chiaro/90 transition-all duration-300 hover:scale-110 shadow-lg"
-                    aria-label="Recensione successiva"
-                >
-                    <i className="bi bi-chevron-right text-xl"></i>
-                </button>
-            </div>
-
-            {/* Contatore recensioni */}
-            <p className="text-center text-chiaro/70 text-sm mt-4">
-                {currentIndex + 1} / {totalReviews}
-            </p>
-        </div>
-    );
-}
 
 function Home() {
 
@@ -135,9 +15,6 @@ function Home() {
     const [tools, setTools] = useState([]);
     const [progetti, setProgetti] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [placeData, setPlaceData] = useState(null);
-    const [placeLoading, setPlaceLoading] = useState(true);
-    const [placeError, setPlaceError] = useState(null);
 
     // Fetch delle tecnologie dal database
     useEffect(() => {
@@ -178,60 +55,6 @@ function Home() {
         fetchTools();
     }, []);
 
-    // Fetch dati Google Places API tramite Netlify Function (per evitare CORS)
-    useEffect(() => {
-        const fetchPlaceDetails = async () => {
-            const apiKey = import.meta.env.VITE_PLACE_API_KEY;
-            const placeId = 'ChIJMztRE1A7ekcR6OOrrT5YyuA';
-
-            if (!apiKey) {
-                console.warn('VITE_PLACE_API_KEY non configurata nel file .env');
-                setPlaceLoading(false);
-                return;
-            }
-
-            try {
-                // Usa il proxy di Vite per evitare problemi CORS
-                const fields = [
-                    'name',
-                    'formatted_address',
-                    'formatted_phone_number',
-                    'international_phone_number',
-                    'opening_hours',
-                    'rating',
-                    'user_ratings_total',
-                    'reviews',
-                    'website',
-                    'url',
-                    'photos'
-                ].join(',');
-
-                const proxyUrl = `/api/google-places/place/details/json?place_id=${placeId}&fields=${fields}&key=${encodeURIComponent(apiKey)}`;
-
-                const response = await fetch(proxyUrl);
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (data.status === 'OK' && data.result) {
-                    setPlaceData(data.result);
-                } else {
-                    console.error('Errore Google Places API:', data.status, data.error_message);
-                    setPlaceError(data.error_message || 'Errore nel caricamento dei dati');
-                }
-            } catch (error) {
-                console.error('Errore nella fetch Google Places:', error);
-                setPlaceError('Errore nel caricamento delle informazioni');
-            } finally {
-                setPlaceLoading(false);
-            }
-        };
-
-        fetchPlaceDetails();
-    }, []);
 
     // Fetch degli ultimi 3 progetti dal database
     useEffect(() => {
@@ -534,6 +357,7 @@ function Home() {
                     </div>
                     {/* aurora */}
                     <section className="bg-gradient-scuro2 py-10">
+                        <div className="hidden lg:block">
                         <p className="text-7xl md:text-8xl tracking-tight  titolo-bianco text-center">
                             Jader
                         </p>
@@ -543,9 +367,13 @@ function Home() {
                         <p className="text-7xl md:text-8xl  titolo-bianco text-center">
                             Aurora
                         </p>
+                        </div>
 
-                        <p className="text-lg md:text-xl px-10 md:px-20 mt-5 text-center ">
-                            Da oggi grazie alla collaborazione tra <span className="font-extrabold titolo-bianco text-2xl">Jader</span> e <span className="font-extrabold titolo-bianco text-2xl">Aurora</span> puoi avere un sito web con un AgentAI totalmente personalizzato, che svolge task quotidiane al posto tuo, 24/7, integrato dentro un sito costruito su misura per la tua attività!
+                        <p className="text-2xl md:text-2xl px-10 md:px-20 mt-5 text-center ">
+                            Da oggi grazie alla collaborazione tra 
+                            <span className="font-extrabold titolo-bianco text-xl md:text-2xl"> Jader </span> 
+                            e 
+                            <span className="font-extrabold titolo-bianco text-xl md:text-2xl"> Aurora </span> puoi avere un sito web con un AgentAI totalmente personalizzato, che svolge task quotidiane al posto tuo, 24/7, integrato dentro un sito costruito su misura per la tua attività!
                         </p>
                         <div className="text-center mt-16">
                             <BigButton text="COLLABORAZIONI" href="/Collaborazioni" />
@@ -574,73 +402,68 @@ function Home() {
                 </div>
             </div >
             <hr />
-            {/* Jader */}
+            {/*  */}
             <div className="py-16 ">
                 <div className="container mx-auto ">
-                    <div className="text-center mb-3">
+                    <div className="text-center mb-6">
                         <h1 className='text-5xl md:text-8xl font-bold titolo-bianco tracking-tight py-10' data-aos="fade-up">
-                            Jader
+                            
                         </h1>
                         <h2 className='text-3xl md:text-5xl font-bold text-bianco tracking-tight'>
                             Cosa dicono di me?
                         </h2>
-                        <h3 className='text-xl md:text-2xl font-medium italic text-bianco mt-3 tracking-tight'>
-                            Queste sono le ultime 5 recensioni lasciate da clienti che hanno lavorato con me, prese da Google.
-                        </h3>
                     </div>
 
-                    {/* Sezione Google Places - Informazioni Attività */}
-                    {placeLoading && (
-                        <div className="text-center py-8">
-                            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-chiaro"></div>
-                            <p className="text-bianco text-xl mt-4">Caricamento informazioni...</p>
-                        </div>
-                    )}
-
-                    {placeError && (
-                        <div className="text-center py-8">
-                            <p className="text-red-400 text-lg">Impossibile caricare le informazioni dell'attività</p>
-                        </div>
-                    )}
-
-                    {placeData && !placeLoading && (
-                        <div className="max-w-5xl mx-auto px-6 mb-12" data-aos="fade-up">
-                            <div className=" rounded-2xl p-8 md:p-12l">
-                                {placeData.reviews && placeData.reviews.length > 0 && (
-                                    <div>
-                                        <ReviewsCarousel reviews={placeData.reviews} />
-                                    </div>
-                                )}
-
-                                {placeData.photos && placeData.photos.length > 0 && (
-                                    <div className="mt-8 pt-8 border-t border-chiaro/20">
-                                        <h3 className="text-2xl font-bold text-bianco mb-4 flex items-center gap-2">
-                                            <i className="bi bi-images text-chiaro"></i>
-                                            Foto
-                                        </h3>
-                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                            {placeData.photos.slice(0, 4).map((photo, index) => (
-                                                <a
-                                                    key={index}
-                                                    href={placeData.url}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="relative overflow-hidden rounded-lg aspect-square group"
-                                                >
-                                                    <img
-                                                        src={`/api/google-places/place/photo?maxwidth=400&photo_reference=${photo.photo_reference}&key=${encodeURIComponent(import.meta.env.VITE_PLACE_API_KEY)}`}
-                                                        alt={`${placeData.name} - Foto ${index + 1}`}
-                                                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                                                    />
-                                                    <div className="absolute inset-0 bg-scuro/0 group-hover:bg-scuro/20 transition-colors duration-300"></div>
-                                                </a>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
+                    {/* CTA per vedere le recensioni su Google */}
+                    <div className="max-w-2xl mx-auto px-6 mb-12" data-aos="fade-up">
+                        <div className="bg-gradient-to-br from-scuro-2 to-scuro rounded-2xl p-8 md:p-12 border-2 border-chiaro/20 hover:border-chiaro/40 transition-all duration-300">
+                            <div className="text-center">
+                                <div className="mb-6">
+                                    <i className="bi bi-star-fill text-chiaro text-5xl md:text-6xl mb-4"></i>
+                                    <h3 className="text-2xl mt-2 md:text-3xl font-bold text-bianco mb-4">
+                                        Recensioni Google
+                                    </h3>
+                                    <p className="text-lg md:text-xl text-bianco/80 font-medium mb-8">
+                                        Scopri cosa dicono i miei clienti delle mie competenze e del lavoro svolto insieme.
+                                    </p>
+                                </div>
+                                <a
+                                    href="https://maps.app.goo.gl/fioodRQg38a4GG1X6"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="cta mx-auto w-auto inline-block"
+                                >
+                                    <span className="span">Recensioni</span>
+                                    <span className="second">
+                                        <svg
+                                            width="50px"
+                                            height="20px"
+                                            viewBox="0 0 66 43"
+                                            version="1.1"
+                                        >
+                                            <g id="arrow">
+                                                <path
+                                                    className="one"
+                                                    d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 40.1543933,3.89485454 Z"
+                                                    fill="#FFFFFF"
+                                                ></path>
+                                                <path
+                                                    className="two"
+                                                    d="M20.1543933,3.89485454 L23.9763149,0.139296592 C24.1708311,-0.0518420739 24.4826329,-0.0518571125 24.6771675,0.139262789 L45.6916134,20.7848311 C46.0855801,21.1718824 46.0911863,21.8050225 45.704135,22.1989893 C45.7000188,22.2031791 45.6958657,22.2073326 45.6916762,22.2114492 L24.677098,42.8607841 C24.4825957,43.0519059 24.1708242,43.0519358 23.9762853,42.8608513 L20.1545186,39.1069479 C19.9575152,38.9134427 19.9546793,38.5968729 20.1481845,38.3998695 C20.1502893,38.3977268 20.1524132,38.395603 20.1545562,38.3934985 L36.9937789,21.8567812 C37.1908028,21.6632968 37.193672,21.3467273 37.0001876,21.1497035 C36.9980647,21.1475418 36.9959223,21.1453995 36.9937605,21.1432767 L20.1545208,4.60825197 C19.9574869,4.41477773 19.9546013,4.09820839 20.1480756,3.90117456 C20.1501626,3.89904911 20.1522686,3.89694235 20.1543933,3.89485454 Z"
+                                                    fill="#FFFFFF"
+                                                ></path>
+                                                <path
+                                                    className="three"
+                                                    d="M0.154393339,3.89485454 L3.97631488,0.139296592 C4.17083111,-0.0518420739 4.48263286,-0.0518571125 4.67716753,0.139262789 L25.6916134,20.7848311 C26.0855801,21.1718824 26.0911863,21.8050225 25.704135,22.1989893 C25.7000188,22.2031791 25.6958657,22.2073326 25.6916762,22.2114492 L4.67709797,42.8607841 C4.48259567,43.0519059 4.17082418,43.0519358 3.97628526,42.8608513 L0.154518591,39.1069479 C-0.0424848215,38.9134427 -0.0453206733,38.5968729 0.148184538,38.3998695 C0.150289256,38.3977268 0.152413239,38.395603 0.154556228,38.3934985 L16.9937789,21.8567812 C17.1908028,21.6632968 17.193672,21.3467273 17.0001876,21.1497035 C16.9980647,21.1475418 16.9959223,21.1453995 16.9937605,21.1432767 L0.15452076,4.60825197 C-0.0425130651,4.41477773 -0.0453986756,4.09820839 0.148075568,3.90117456 C0.150162624,3.89904911 0.152268631,3.89694235 0.154393339,3.89485454 Z"
+                                                    fill="#FFFFFF"
+                                                ></path>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                </a>
                             </div>
                         </div>
-                    )}
+                    </div>
                 </div>
             </div >
             <hr />
@@ -666,24 +489,21 @@ function Home() {
                 </div>
                 <div className="text-center my-5">
                     <p className="text-4xl md:text-4xl px-2 pt-5 text-center mb-8"  >Oppure tramite chiamata, email o social network</p>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-4xl mx-auto px-6" >
+                    <div className="flex justify-center gap-6  mx-auto px-6" >
                         {contatti.map((contatto, index) => {
                             return (
                                 <a
                                     href={contatto.link}
                                     target="_blank"
-                                    className=" rounded-lg p-6  transition-all duration-300 hover:scale-105 hover:-translate-y-2 group"
+                                    className="transition-all duration-300 hover:scale-105 hover:-translate-y-2 group"
                                     key={index}
                                     data-aos="fade-up"
                                     data-aos-delay={index * 100}
                                 >
                                     <div className="text-center">
-                                        <div className="bg-scuro rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3 group-hover:bg-scuro-2 transition-colors duration-300">
+                                        <div className="flex items-center justify-center mx-auto mb-3 group-hover:bg-scuro-2 transition-colors duration-300">
                                             <i className={`${contatto.icona} text-bianco text-2xl`}></i>
                                         </div>
-                                        <h3 className="text-bianco font-normal text-2xl mb-2 group-hover:text-scuro-2 transition-colors duration-300">
-                                            {contatto.name}
-                                        </h3>
                                     </div>
                                 </a>
                             )
