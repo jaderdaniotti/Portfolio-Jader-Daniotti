@@ -2,9 +2,6 @@
   publish = "dist"
   command = "npm run build"
 
-[build.environment]
-  NODE_VERSION = "18.20.0"
-
 [[headers]]
   for = "/*"
   [headers.values]
