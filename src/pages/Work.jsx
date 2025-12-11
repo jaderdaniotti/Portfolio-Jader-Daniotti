@@ -3,18 +3,19 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import SEOHead from '../components/SEOHead';
 import { supabase } from '../config/supabase';
-import { 
-    Phone, 
-    Headset, 
-    Layout, 
-    Palette, 
-    Code, 
-    Globe, 
-    CheckCircle, 
-    Rocket 
+import {
+    Phone,
+    Headset,
+    Layout,
+    Palette,
+    Code,
+    Globe,
+    CheckCircle,
+    Rocket
 } from 'lucide-react';
 import BigButton from "../components/bigButton";
 import GlobalLoader from "../components/GlobalLoader";
+import Ribbons from "../components/Ribbons";
 
 function Work() {
     const [templates, setTemplates] = useState([]);
@@ -182,7 +183,7 @@ function Work() {
 
     // Funzione per ottenere il processo attivo
     const getCurrentProcess = () => {
-        switch(activeTab) {
+        switch (activeTab) {
             case 'WEB': return processWeb;
             case 'APP': return processApp;
             case 'CRM': return processCrm;
@@ -191,14 +192,24 @@ function Work() {
     };
 
     return (
-        <>
+        <div className="relative">
             <SEOHead
                 title="Work - Jader Daniotti | Processo di Creazione Siti Web"
                 description="Scopri il processo completo per la creazione del tuo sito web: dal primo contatto alla consegna finale. Sfoglia i template disponibili e scegli quello perfetto per te."
                 keywords="processo creazione sito, template web, sviluppo sito, personalizzazione sito, dominio hosting"
             />
-            <Navbar />
-
+                <Navbar />
+                <Ribbons
+                    baseThickness={30}
+                    colors={['#ffffff', '#746a94', '#443C68', '#393053']}
+                    offsetFactor={0.01}
+                    opacity={0.7}
+                    speedMultiplier={0.2}
+                    maxAge={300}
+                    enableFade={true}
+                    enableShaderEffect={true}
+                    zIndex={1}
+                />
             {/* Hero Section */}
             <div className="py-10 ">
                 <h1 className="text-center text-6xl md:text-8xl tracking-tight titolo-bianco">
@@ -217,11 +228,10 @@ function Work() {
                                 <button
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
-                                    className={`px-6 py-3 rounded-full font-semibold text-lg transition-all duration-300 ${
-                                        activeTab === tab
+                                    className={`px-6 py-3 rounded-full font-semibold text-lg transition-all duration-300 ${activeTab === tab
                                             ? 'bg-scuro text-bianco shadow-lg'
                                             : 'text-scuro hover:bg-chiaro-2'
-                                    }`}
+                                        }`}
                                 >
                                     {tab}
                                 </button>
@@ -283,7 +293,7 @@ function Work() {
 
                     {loading ? (
                         <div className="text-center py-16">
-                            <GlobalLoader/>
+                            <GlobalLoader />
                         </div>
                     ) : (
                         <>
@@ -352,24 +362,24 @@ function Work() {
                                             // Calcola le pagine da mostrare (sempre 3)
                                             let startPage = Math.max(1, currentPage - 1);
                                             let endPage = Math.min(totalPages, currentPage + 1);
-                                            
+
                                             // Se siamo all'inizio, mostra le prime 3 pagine
                                             if (currentPage <= 2) {
                                                 startPage = 1;
                                                 endPage = Math.min(3, totalPages);
                                             }
-                                            
+
                                             // Se siamo alla fine, mostra le ultime 3 pagine
                                             if (currentPage >= totalPages - 1) {
                                                 startPage = Math.max(1, totalPages - 2);
                                                 endPage = totalPages;
                                             }
-                                            
+
                                             const pagesToShow = [];
                                             for (let i = startPage; i <= endPage; i++) {
                                                 pagesToShow.push(i);
                                             }
-                                            
+
                                             return pagesToShow.map(page => (
                                                 <button
                                                     key={page}
@@ -409,7 +419,7 @@ function Work() {
             </section>
 
             <Footer />
-        </>
+        </div>
     );
 }
 

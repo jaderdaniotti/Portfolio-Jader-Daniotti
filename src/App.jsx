@@ -13,6 +13,7 @@ import Contatti from './pages/contatti';
 import Servizi from "./pages/servizi";
 import Admin from "./pages/Admin";
 import Work from "./pages/Work";
+import LandingPage from "./pages/landingPage";
 import Credits from "./pages/Credits";
 import FloatingDashboardButton from "./components/FloatingDashboardButton";
 import { useUmamiTracking } from './utils/umami';
@@ -35,6 +36,7 @@ function App() {
         <BrowserRouter>
           <ScrollToTop />
           <Routes>
+
             <Route path="/" element={<Home />} />
             <Route path='/work' element={<Work />} />
             <Route path='/chisono' element={<Chisono />} />
@@ -45,6 +47,7 @@ function App() {
             <Route path="/progetti" element={<Progetti />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/credits" element={<Credits />} />
+            <Route path="/landingpage" element={<LandingPage />} />
           </Routes>
           <FloatingDashboardButton />
         </BrowserRouter>

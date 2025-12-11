@@ -3,6 +3,7 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import SEOHead from '../components/SEOHead';
 import emailjs from 'emailjs-com';
+import Aurora from "../components/Aurora";
 
 function Contatti() {
   // Configurazione EmailJS
@@ -64,7 +65,17 @@ function Contatti() {
         description="Contatta Jader Daniotti per progetti web e collaborazioni. Email, telefono, WhatsApp, LinkedIn e Instagram. Scarica il CV e iniziamo a lavorare insieme!"
         keywords="contatti, email, telefono, WhatsApp, LinkedIn, Instagram, CV, curriculum vitae, progetti web"
       />
-      <Navbar></Navbar>
+      <div className="fixed inset-0 " style={{ zIndex: 0 }}>
+        <Aurora
+          colorStops={['#18122B', '#746a94', '#443C68']}
+          blend={0}
+          amplitude={1}
+          speed={0.9}
+        />
+      </div>
+      
+      <div className="relative z-10">
+        <Navbar></Navbar>
       {/* <div className="py-10 " id="contattisection">
         <h1 className="text-center text-6xl md:text-8xl tracking-tight titolo-bianco">
           CONTATTI
@@ -148,8 +159,8 @@ function Contatti() {
               setSubmitStatus({ type: null, message: '' });
             }}
             className={`px-3 py-1 rounded-lg font-semibold text-md transition-all duration-300 flex items-center gap-2 ${activeTab === 'whatsapp'
-                ? 'bg-chiaro text-scuro shadow-lg scale-105'
-                : 'bg-scuro-2 text-bianco hover:bg-scuro hover:scale-100'
+              ? 'bg-chiaro text-scuro shadow-lg scale-105'
+              : 'bg-scuro-2 text-bianco hover:bg-scuro hover:scale-100'
               }`}
           >
             <i className="bi bi-whatsapp text-2xl"></i>
@@ -161,8 +172,8 @@ function Contatti() {
               setSubmitStatus({ type: null, message: '' });
             }}
             className={`px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 flex items-center gap-2 ${activeTab === 'email'
-                ? 'bg-chiaro text-scuro shadow-lg scale-105'
-                : 'bg-scuro-2 text-bianco hover:bg-scuro hover:scale-100'
+              ? 'bg-chiaro text-scuro shadow-lg scale-105'
+              : 'bg-scuro-2 text-bianco hover:bg-scuro hover:scale-100'
               }`}
           >
             <i className="bi bi-envelope-at-fill text-2xl"></i>
@@ -220,8 +231,8 @@ function Contatti() {
             {activeTab === 'email' && submitStatus.type && (
               <div
                 className={`p-4 rounded-lg border ${submitStatus.type === 'success'
-                    ? 'bg-green-500/20 border-green-500/50 text-green-300'
-                    : 'bg-red-500/20 border-red-500/50 text-red-300'
+                  ? 'bg-green-500/20 border-green-500/50 text-green-300'
+                  : 'bg-red-500/20 border-red-500/50 text-red-300'
                   }`}
               >
                 <p className="text-center font-medium">{submitStatus.message}</p>
@@ -381,6 +392,7 @@ function Contatti() {
       <hr className="my-10" />
 
       <Footer></Footer>
+      </div>
     </>
   );
 }

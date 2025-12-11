@@ -49,7 +49,7 @@ function Navbar() {
     return (
         <>
             <nav className={`sticky z-[999] top-0 left-0 right-0 w-full bg-chiaro-2 transition-all duration-300 ${scrolled ? 'shadow-lg py-1' : ' py-2'
-                }`}>
+                }` }>
                 <div className="container mx-auto px-4 flex items-center justify-between relative">
                     <div className="flex-shrink-0">
                         <Link to="/admin">
@@ -96,7 +96,7 @@ function Navbar() {
                     )}
                     <div className={`fixed top-0 right-0 h-full w-screen max-w bg-chiaro shadow-2xl transform transition-transform duration-700 linear z-50 md:hidden ${isOpen ? 'translate-x-0' : 'translate-x-full'
                         }`}>
-                        <div className="flex justify-between items-center px-5 border-b border-chiaro-2">
+                        <div className="flex justify-between items-center px-5 border-b text-scuro">
                             <Link to="/admin" onClick={handleLinkClick}>
                                 <img
                                     src="/loghi/logopurple.png"
@@ -119,7 +119,7 @@ function Navbar() {
                                     strokeWidth="2"
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
-                                    className="text-bianco"
+                                    className="text-scuro"
                                 >
                                     <path d="M18 6 6 18" />
                                     <path d="m6 6 12 12" />
@@ -132,8 +132,8 @@ function Navbar() {
                                     <li key={index}>
                                         <Link to={item.href}
                                             onClick={handleLinkClick}
-                                            className={`block px-6 py-2 text-3xl md:text-2xl w-min border-b-2 border-violet-950 hover:translate-x-1 transition-all font-medium duration-300 linear ${
-                                                item.admin ? 'text-red-600 font-bold' : 'text-grigio'
+                                            className={`block px-6 py-2 text-3xl md:text-2xl w-min border-b-2  hover:translate-x-1 transition-all font-medium duration-300 linear ${
+                                                item.admin ? 'text-red-600 font-bold' : 'text-scuro'
                                             }`}
                                         >
                                             {item.text}

@@ -17,6 +17,31 @@ html {
   overflow-x: visible;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+a,
+script {
+  z-index: 998;
+}
+
+nav {
+  z-index: 999;
+}
+
+/* .bg-svg{
+  background-image: url('/immagini/bg.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+} */
+
 body {
   background: #18122B;
   background: linear-gradient(135deg, var(--scuro) 0%, var(--scuro-2) 100%);
@@ -109,6 +134,13 @@ body {
 
 /* #endregion */
 
+.glass {
+  background: rgba(68, 60, 104, 0.5);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(1.1px);
+  -webkit-backdrop-filter: blur(1.1px);
+}
+
 /* #region gradienti */
 .bg-gradient-chiaro {
   background: linear-gradient(135deg, var(--chiaro) 0%, var(--chiaro-2) 100%);
@@ -171,7 +203,51 @@ body {
   letter-spacing: -0.025em;
 }
 
+
+.geist {
+  font-family: "Geist", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
 /* #endregion */
+
+.dropping-texts {
+  position: relative;
+  /* altezza minima per contenere il testo */
+  min-height: 50px;
+}
+
+.dropping-texts::before {
+  content: "Jader";
+  display: block;
+  opacity: 0;
+  animation: changeText 6s ease-in-out infinite;
+  box-shadow: 0px 60px 25px -20px rgba(0, 0, 0, 0.5);
+  background-color: var(--bianco);
+  color: var(--scuro);
+  padding: 10px;
+  border-radius: 10px;
+}
+
+@keyframes changeText {
+  0%, 33% {
+    opacity: 1;
+    content: "Jader"
+  }
+
+  33.33%,
+  66% {
+    content: "Web Designer";
+    opacity: 1;
+  }
+
+  66.66%,
+  100% {
+    content: "Fullstack Developer";
+    opacity: 1;
+  }
+}
 
 .titolo-bianco {
   background: linear-gradient(180deg, var(--bianco) 0%, var(--chiaro) 100%);
@@ -268,7 +344,7 @@ body {
 /* #endregion */
 
 .card-sfondo-bianco {
-  background: linear-gradient(180deg, #393053 0%, #251c43 50%, #393053 100%);
+
   border: #746a94 4px solid;
 }
 

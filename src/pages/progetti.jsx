@@ -450,7 +450,7 @@ function Progetti() {
             
            
             {/* Grid progetti */}
-            <div className="mb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:px-8 px-2 items-stretch" id='projects'>
+            <div className="mb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6 gap-6 md:px-8 px-2 items-stretch" id='projects'>
                 {progetti.map((progetto) => (
                     <div key={progetto.id} className="flex flex-col h-full">
                         <div onClick={() => openModal(progetto)} className="cursor-pointer h-full">
