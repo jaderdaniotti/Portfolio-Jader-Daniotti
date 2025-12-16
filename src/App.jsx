@@ -1,22 +1,31 @@
 
 import './App.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import GlobalLoader from './components/GlobalLoader';
 import ScrollToTop from './components/ScrollToTop';
-import Home from './pages/home'
-import Progetti from './pages/progetti'
-import Collaborazioni from './pages/collaborazioni';
-import Chisono from './pages/chisono';
-import Competenze from './pages/competenze';
-import Contatti from './pages/contatti';
-import Servizi from "./pages/servizi";
-import Admin from "./pages/Admin";
-import Work from "./pages/Work";
-import LandingPage from "./pages/landingPage";
-import Credits from "./pages/Credits";
 import FloatingDashboardButton from "./components/FloatingDashboardButton";
 import { useUmamiTracking } from './utils/umami';
+
+// Lazy loading delle pagine per migliorare le performance
+const Home = lazy(() => import('./pages/home'));
+const Progetti = lazy(() => import('./pages/progetti'));
+const Collaborazioni = lazy(() => import('./pages/collaborazioni'));
+const Chisono = lazy(() => import('./pages/chisono'));
+const Competenze = lazy(() => import('./pages/competenze'));
+const Contatti = lazy(() => import('./pages/contatti'));
+const Servizi = lazy(() => import('./pages/servizi'));
+const Admin = lazy(() => import('./pages/Admin'));
+const Work = lazy(() => import('./pages/Work'));
+const LandingPage = lazy(() => import('./pages/landingPage'));
+const Credits = lazy(() => import('./pages/Credits'));
+
+// Componente di fallback durante il caricamento delle pagine
+const PageLoader = () => (
+  <div className="fixed inset-0 z-50 bg-scuro flex items-center justify-center">
+    <div className="loader"></div>
+  </div>
+);
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -35,20 +44,21 @@ function App() {
       {!isLoading && (
         <BrowserRouter>
           <ScrollToTop />
-          <Routes>
-
-            <Route path="/" element={<Home />} />
-            <Route path='/work' element={<Work />} />
-            <Route path='/chisono' element={<Chisono />} />
-            <Route path='/collaborazioni' element={<Collaborazioni />} />
-            <Route path='/competenze' element={<Competenze />} />
-            <Route path='/contatti' element={<Contatti />} />
-            <Route path='/servizi' element={<Servizi />} />
-            <Route path="/progetti" element={<Progetti />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/credits" element={<Credits />} />
-            <Route path="/landingpage" element={<LandingPage />} />
-          </Routes>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path='/work' element={<Work />} />
+              <Route path='/chisono' element={<Chisono />} />
+              <Route path='/collaborazioni' element={<Collaborazioni />} />
+              <Route path='/competenze' element={<Competenze />} />
+              <Route path='/contatti' element={<Contatti />} />
+              <Route path='/servizi' element={<Servizi />} />
+              <Route path="/progetti" element={<Progetti />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/credits" element={<Credits />} />
+              <Route path="/landingpage" element={<LandingPage />} />
+            </Routes>
+          </Suspense>
           <FloatingDashboardButton />
         </BrowserRouter>
       )}
