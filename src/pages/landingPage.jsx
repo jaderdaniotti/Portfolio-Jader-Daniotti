@@ -1,7 +1,7 @@
 
 import SplitText from '../components/ui/splitText';
 import LightPillar from '../components/LightPillar';
-import { portfolioAPI, supabase } from '../config/supabase';
+import { supabase } from '../config/supabase';
 import { useEffect, useState } from 'react';
 import CardAnteprimaProgetti from '../components/cardAnteprimaProgetti';
 import avatarcomputer from '../assets/images/logopc.png'
@@ -26,6 +26,20 @@ import {
 } from 'react-icons/si';
 export default function LandingPage() {
     const [progetti, setProgetti] = useState([]);
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Detect mobile devices for performance optimization
+    useEffect(() => {
+        const checkMobile = () => {
+            const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+                || window.innerWidth < 768;
+            setIsMobile(mobile);
+        };
+        
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     let contatti = [
         { name: "Linkedin", icona: "bi bi-linkedin", link: "https://www.linkedin.com/in/jader-daniotti-0a00b9328/" },
@@ -85,27 +99,45 @@ export default function LandingPage() {
 
     return (
         <div className='bg-scuro min-h-screen relative'>
-            <div className="fixed top-0 left-0 w-full h-screen pointer-events-none z-0">
-                <LightPillar
-                    topColor="#1b152f"
-                    bottomColor="#443C68"
-                    intensity={1.0}
-                    rotationSpeed={0.3}
-                    glowAmount={0.005}
-                    pillarWidth={3.0}
-                    pillarHeight={0.4}
-                    noiseIntensity={0.5}
-                    pillarRotation={0}
-                    interactive={false}
-                    mixBlendMode="normal"
-                />
-            </div>
+            {/* Disabilita LightPillar su mobile per migliorare le performance */}
+            {!isMobile && (
+                <div className="fixed top-0 left-0 w-full h-screen pointer-events-none z-0">
+                    <LightPillar
+                        topColor="#1b152f"
+                        bottomColor="#443C68"
+                        intensity={0.8}
+                        rotationSpeed={0.2}
+                        glowAmount={0.003}
+                        pillarWidth={2.5}
+                        pillarHeight={0.3}
+                        noiseIntensity={0.3}
+                        pillarRotation={0}
+                        interactive={false}
+                        mixBlendMode="normal"
+                    />
+                </div>
+            )}
             {/* hero */}
             <section className='min-h-screen relative px-5 flex flex-col justify-center lg:grid lg:grid-cols-3 pb-16'>
                 <div className="flex flex-col lg:col-span-2 justify-center mb-8 lg:mb-0 relative z-10">
-                    <SplitText text='Jader Daniotti'
-                        className='text-bianco horizon text-left text-5xl sm:text-7xl md:text-8xl lg:text-7xl 2xl:text-9xl' />
-                    <SplitText text='Fullstack Developer' className='text-bianco inter capitalize text-2xl sm:text-2xl md:text-5xl lg:text-5xl' />
+                    {/* Usa animazioni più leggere su mobile */}
+                    {isMobile ? (
+                        <>
+                            <h1 className='text-bianco horizon text-left text-5xl sm:text-7xl md:text-8xl lg:text-7xl 2xl:text-9xl'>Jader Daniotti</h1>
+                            <p className='text-bianco inter capitalize text-2xl sm:text-2xl md:text-5xl lg:text-5xl'>Fullstack Developer</p>
+                        </>
+                    ) : (
+                        <>
+                            <SplitText text='Jader Daniotti'
+                                className='text-bianco horizon text-left text-5xl sm:text-7xl md:text-8xl lg:text-7xl 2xl:text-9xl' 
+                                delay={50}
+                                duration={0.4} />
+                            <SplitText text='Fullstack Developer' 
+                                className='text-bianco inter capitalize text-2xl sm:text-2xl md:text-5xl lg:text-5xl'
+                                delay={50}
+                                duration={0.4} />
+                        </>
+                    )}
                 </div>
                 <div className="flex lg:justify-center items-center lg:col-span-1 relative z-10">
                     <ul className="flex flex-col gap-3 sm:gap-4 geist text-bianco text-2xl sm:text-xl md:text-4xl lg:text-4xl  2xl:text-5xl uppercase text-left lg:text-center  ul-landing">
@@ -118,8 +150,15 @@ export default function LandingPage() {
             </section>
             {/* chisono */}
             <section className="border-t-2 border-bianco gap-12 min-h-screen relative px-5 flex flex-col justify-evenly lg:grid lg:grid-cols-2 py-6 overflow-hidden" id='aboutme'>
-                <div className="absolute bottom-0 left-1/3 w-full h-full">
-                    <img src={avatarcomputer} alt="avatarcomputer" className="size-full object-contain" />
+                {/* Lazy loading per immagine pesante */}
+                <div className="absolute bottom-0 left-1/3 w-full h-full opacity-30">
+                    <img 
+                        src={avatarcomputer} 
+                        alt="avatarcomputer" 
+                        className="size-full object-contain" 
+                        loading="lazy"
+                        decoding="async"
+                    />
                 </div>
                 <div className="flex flex-col lg:col-span-1 justify-start mb-8 lg:mb-0 relative z-10">
                     <h1 className="horizon text-7xl sm:text-7xl md:text-8xl  2xl:text-9xl">#Chi sono</h1>
@@ -135,15 +174,15 @@ export default function LandingPage() {
                     <p className="inter uppercase font-semibold text-2xl md:text-3xl lg:text-4xl 2xl:text-4xl text-center">Ecco alcune delle mie competenze</p>
                 </div>
                 <div className='mb-0' style={{ height: 'auto', position: 'relative', overflow: 'hidden' }}>
-                    {/* Basic horizontal loop */}
+                    {/* Riduce velocità e disabilita hover su mobile */}
                     <LogoLoop
                         logos={techLogos}
-                        speed={40}
+                        speed={isMobile ? 25 : 40}
                         direction="left"
-                        logoHeight={48}
-                        gap={50}
+                        logoHeight={isMobile ? 36 : 48}
+                        gap={isMobile ? 30 : 50}
                         hoverSpeed={0}
-                        scaleOnHover
+                        scaleOnHover={!isMobile}
                         ariaLabel="Technology partners"
                     />
                 </div>
@@ -156,7 +195,7 @@ export default function LandingPage() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-start align-middle items-stretch" id='projects'>
                     {progetti.map((progetto, index) => (
-                        <div key={index} data-aos="fade-up">
+                        <div key={index}>
                             <CardAnteprimaProgetti
                                 title={progetto.title}
                                 description={progetto.description}

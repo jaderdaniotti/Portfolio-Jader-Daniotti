@@ -10,7 +10,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  assetsInclude: ['**/*.glb', '**/*.gltf'],
+  assetsInclude: ['**/*.glb', '**/*.gltf', '**/*.otf', '**/*.ttf', '**/*.woff', '**/*.woff2'],
   build: {
     rollupOptions: {
       output: {
