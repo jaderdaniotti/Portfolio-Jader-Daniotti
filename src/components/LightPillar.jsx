@@ -74,8 +74,7 @@ const LightPillar = ({
     }
 
     renderer.setSize(width, height);
-    // Riduce pixel ratio per migliorare performance
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1 : 1.5));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -176,8 +175,8 @@ const LightPillar = ({
 
         vec3 color = vec3(0.0);
         
-        // Ottimizzato: ridotto a 30 iterazioni per migliorare le performance su tutti i dispositivi
-        for(float i = 0.0; i < 30.0; i++) {
+        // Ottimizzato: ridotto da 100 a 50 iterazioni per migliorare le performance
+        for(float i = 0.0; i < 50.0; i++) {
           vec3 pos = origin + direction * depth;
           pos.xz *= rotX;
 
@@ -263,9 +262,9 @@ const LightPillar = ({
       container.addEventListener('mousemove', handleMouseMove, { passive: true });
     }
 
-    // Animation loop with fixed timestep - ridotto FPS per performance
+    // Animation loop with fixed timestep
     let lastTime = performance.now();
-    const targetFPS = isMobile ? 30 : 45;
+    const targetFPS = 60;
     const frameTime = 1000 / targetFPS;
 
     const animate = currentTime => {

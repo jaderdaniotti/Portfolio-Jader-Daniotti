@@ -4,12 +4,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, lazy, Suspense } from 'react';
 import GlobalLoader from './components/GlobalLoader';
 import ScrollToTop from './components/ScrollToTop';
-import FloatingDashboardButton from "./components/FloatingDashboardButton";
+// import FloatingDashboardButton from "./components/FloatingDashboardButton";
 import { useUmamiTracking } from './utils/umami';
 
 // Lazy loading delle pagine per migliorare le performance
 const Home = lazy(() => import('./pages/home'));
 const Progetti = lazy(() => import('./pages/progetti'));
+const ProgettoDettaglio = lazy(() => import('./pages/ProgettoDettaglio'));
 const Collaborazioni = lazy(() => import('./pages/collaborazioni'));
 const Chisono = lazy(() => import('./pages/chisono'));
 const Competenze = lazy(() => import('./pages/competenze'));
@@ -54,12 +55,13 @@ function App() {
               <Route path='/contatti' element={<Contatti />} />
               <Route path='/servizi' element={<Servizi />} />
               <Route path="/progetti" element={<Progetti />} />
+              <Route path="/progetti/:id" element={<ProgettoDettaglio />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/credits" element={<Credits />} />
               <Route path="/landingpage" element={<LandingPage />} />
             </Routes>
           </Suspense>
-          <FloatingDashboardButton />
+          {/* <FloatingDashboardButton /> */}
         </BrowserRouter>
       )}
     </>

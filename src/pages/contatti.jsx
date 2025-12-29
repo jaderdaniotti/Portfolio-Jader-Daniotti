@@ -109,7 +109,7 @@ function Contatti() {
       </div> */}
 
       {/* Form Personalizzato con Tabs */}
-      <div className="px-4 py-8 max-w-4xl mx-auto">
+      <div className="px-4 py-8 pt-20 md:pt-24 max-w-4xl mx-auto">
         <h2 className="text-5xl md:text-6xl font-bold text-bianco tracking-tight text-center mb-4">
           Cosa aspetti? <span className="italic">Contattami!</span>
         </h2>

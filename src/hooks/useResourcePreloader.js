@@ -11,33 +11,25 @@ export const useResourcePreloader = () => {
     useEffect(() => {
         const preloadAll = async () => {
             try {
-                // 1. Carica prima i dati dei progetti da Supabase
+                // 1. Carica solo i dati dei progetti da Supabase (senza immagini)
                 setCurrentResource('Caricamento dati progetti...');
                 const { data: projectsData, error: projectsError } = await supabase
                     .from('projects')
-                    .select('id, cover_image')
-                    .order('order_index');
+                    .select('id, title, description, cover_image, order_index')
+                    .order('order_index')
+                    .limit(12);
 
                 if (projectsError) {
                     console.error('Errore caricamento progetti:', projectsError);
                 }
 
-                // 2. Carica tutte le immagini dei progetti
-                const { data: imagesData, error: imagesError } = await supabase
-                    .from('project_images')
-                    .select('image_url');
-
-                if (imagesError) {
-                    console.error('Errore caricamento immagini progetti:', imagesError);
-                }
-
-                // 3. Prepara la lista di tutte le risorse da precaricare
+                // 2. Prepara la lista di tutte le risorse da precaricare
                 const allResources = [
                     { name: 'Font Horizon', type: 'font', url: '/src/assets/fonts/Horizon.otf', family: 'Horizon' },
                     { name: threeAssetMetadata.roboticHand.name, type: 'glb', url: threeAssetUrls.roboticHand },
                 ];
 
-                // Aggiungi le cover images dei progetti
+                // Aggiungi solo le cover images dei progetti (necessarie per le card)
                 if (projectsData && projectsData.length > 0) {
                     projectsData.forEach((project, index) => {
                         if (project.cover_image) {
@@ -50,19 +42,8 @@ export const useResourcePreloader = () => {
                     });
                 }
 
-                // Aggiungi le immagini dei progetti (limita a max 20 per non rallentare troppo)
-                if (imagesData && imagesData.length > 0) {
-                    const limitedImages = imagesData.slice(0, 20);
-                    limitedImages.forEach((img, index) => {
-                        if (img.image_url) {
-                            allResources.push({
-                                name: `Immagine Progetto ${index + 1}`,
-                                type: 'image',
-                                url: img.image_url
-                            });
-                        }
-                    });
-                }
+                // NON carichiamo più tutte le immagini dei progetti qui
+                // Verranno caricate on-demand nella pagina di dettaglio
 
                 const total = allResources.length;
                 let loaded = 0;

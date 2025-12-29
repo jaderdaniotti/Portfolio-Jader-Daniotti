@@ -1,28 +1,15 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Navbar() {
+    const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 10);
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    useEffect(() => {
-        // Controlla se l'utente è admin
-        const savedUser = localStorage.getItem('admin_user');
-        if (savedUser) {
-            try {
-                const user = JSON.parse(savedUser);
-                setIsAdmin(user.role === 'admin');
-            } catch {
-                setIsAdmin(false);
-            }
-        }
     }, []);
 
     const handleLinkClick = () => setIsOpen(false);
@@ -33,10 +20,22 @@ function Navbar() {
         // { href: "/Chisono", text: "Jader" },
         { href: "/progetti", text: "Progetti" },
         { href: "/Competenze", text: "Competenze" },
-        { href: "/Collaborazioni", text: "Collaborazioni" },
+        // { href: "/Collaborazioni", text: "Collaborazioni" },
         { href: "/Contatti", text: "Contatti" },
         // { href: "/Servizi", text: "Servizi" },
     ];
+
+    // Funzione per verificare se un link è attivo
+    const isActive = (href) => {
+        if (href === "/") {
+            return location.pathname === "/";
+        }
+        // Per /progetti, controlla anche se il path inizia con /progetti (include /progetti/:id)
+        if (href === "/progetti") {
+            return location.pathname.startsWith("/progetti");
+        }
+        return location.pathname === href || location.pathname.startsWith(href + "/");
+    };
 
     useEffect(() => {
         if (isOpen) {
@@ -49,7 +48,7 @@ function Navbar() {
 
     return (
         <>
-            <nav className={`sticky z-[999] top-0 left-0 right-0 w-full bg-chiaro-2 transition-all duration-300 ${scrolled ? 'shadow-lg py-1' : ' py-2'
+            <nav className={`fixed z-[999] top-0 left-0 right-0 w-full bg-chiaro-2 transition-all duration-300 ${scrolled ? 'shadow-lg py-1' : ' py-2'
                 }` }>
                 <div className="container mx-auto px-4 flex items-center justify-between relative">
                     <div className="flex-shrink-0">
@@ -62,19 +61,26 @@ function Navbar() {
                         </Link>
                     </div>
                     <ul className="hidden md:flex items-center font-medium md:text-md lg:text-xl absolute left-1/2 -translate-x-1/2">
-                        {LINK.map((item, index) => (
-                            <li key={index} className="relative group">
-                                <Link
-                                    to={item.href}
-                                    className={`text-md lg:text-lg hover:text-scuro transition-all duration-300 hover:scale-105 block py-2 px-3 rounded-lg  ${
-                                        item.admin ? 'text-red-600 font-semibold' : 'text-grigio'
-                                    }`}
-                                >
-                                    {item.text}
-                                </Link>
-                                <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-grigio transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
-                            </li>
-                        ))}
+                        {LINK.map((item, index) => {
+                            const active = isActive(item.href);
+                            return (
+                                <li key={index} className="relative group">
+                                    <Link
+                                        to={item.href}
+                                        className={`text-md lg:text-lg hover:text-scuro transition-all duration-300 hover:scale-105 block py-2 px-3 rounded-lg  ${
+                                            item.admin ? 'text-red-600 font-semibold' : 'text-grigio'
+                                        }`}
+                                    >
+                                        {item.text}
+                                    </Link>
+                                    <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-grigio transition-all duration-300 ${
+                                        active 
+                                            ? 'w-full' 
+                                            : 'w-0 group-hover:w-full'
+                                    }`}></span>
+                                </li>
+                            );
+                        })}
                     </ul>
                     <button
                         className="md:hidden relative w-8 h-8 flex flex-col justify-center items-center group"
@@ -129,18 +135,25 @@ function Navbar() {
                         </div>
                         <div className="py-6 ">
                             <ul className="align-center flex flex-col items-center gap-4">
-                                {LINK.map((item, index) => (
-                                    <li key={index}>
-                                        <Link to={item.href}
-                                            onClick={handleLinkClick}
-                                            className={`block px-6 py-2 text-3xl md:text-2xl w-min border-b-2  hover:translate-x-1 transition-all font-medium duration-300 linear ${
-                                                item.admin ? 'text-red-600 font-bold' : 'text-scuro'
-                                            }`}
-                                        >
-                                            {item.text}
-                                        </Link>
-                                    </li>
-                                ))}
+                                {LINK.map((item, index) => {
+                                    const active = isActive(item.href);
+                                    return (
+                                        <li key={index}>
+                                            <Link to={item.href}
+                                                onClick={handleLinkClick}
+                                                className={`block px-6 py-2 text-3xl md:text-2xl w-min border-b-2 hover:translate-x-1 transition-all font-medium duration-300 linear ${
+                                                    active 
+                                                        ? 'text-scuro underline decoration-2 underline-offset-4' 
+                                                        : item.admin 
+                                                            ? 'text-red-600 font-bold' 
+                                                            : 'text-scuro'
+                                                }`}
+                                            >
+                                                {item.text}
+                                            </Link>
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </div>
                     </div>

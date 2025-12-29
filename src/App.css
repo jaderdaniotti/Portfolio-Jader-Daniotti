@@ -47,9 +47,9 @@
 }
 @font-face {
   font-family: 'Horizon';
-  src: url('./assets/fonts/Horizon.otf') format('opentype');
+  src: url('../../../src/assets/fonts/Horizon.otf');
   font-weight: 700;
-  font-display: swap;
+
 }
 
 .horizon{

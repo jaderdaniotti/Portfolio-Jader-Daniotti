@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import CardServizi from "../components/cardServizi";
@@ -214,7 +214,7 @@ function Collaborazioni() {
       />
       <Navbar />
       {/* titolo */}
-      <div className="py-10 px-5" id="">
+      <div className="py-10 px-5 pt-20 md:pt-24" id="">
         <h1 className="text-center text-4xl md:text-7xl lg:text-8xl tracking-tight titolo-bianco">
           COLLABORAZIONI
         </h1>

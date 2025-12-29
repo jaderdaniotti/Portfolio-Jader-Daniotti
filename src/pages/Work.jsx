@@ -211,7 +211,7 @@ function Work() {
                     zIndex={1}
                 />
             {/* Hero Section */}
-            <div className="py-10 ">
+            <div className="py-10 pt-20 md:pt-24">
                 <h1 className="text-center text-6xl md:text-8xl tracking-tight titolo-bianco">
                     WORK
                 </h1>

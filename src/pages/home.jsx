@@ -9,7 +9,8 @@ import RoboticHand3D from '../components/RoboticHand3D';
 import { portfolioAPI, supabase } from '../config/supabase';
 import Background from '../components/ui/bghome';
 import BlobCursor from '../components/BlobCursor';
-
+import { immagini } from '../data/images'
+import { ExternalLink } from "lucide-react";
 function Home() {
 
     const [tecnologie, setTecnologie] = useState([]);
@@ -63,14 +64,15 @@ function Home() {
             try {
                 const { data, error } = await supabase
                     .from('projects')
-                    .select('*')
-                    .order('created_at', { ascending: false })
+                    .select('id, title, description, cover_image, domain_url, order_index')
+                    .order('order_index', { ascending: true })
                     .limit(3);
 
                 if (error) throw error;
 
                 // Mappa i dati dal database al formato atteso dal componente
                 const progettiFormattati = (data || []).map(progetto => ({
+                    id: progetto.id,
                     title: progetto.title,
                     description: progetto.description || '',
                     imageUrl: progetto.cover_image || '',
@@ -114,7 +116,7 @@ function Home() {
                 slowDuration={0.5}
                 zIndex={1}
             />
-            <div className="bg-svg relative overflow-hidden">
+            <div className="bg-svg relative overflow-hidden pt-20 md:pt-24">
                 <div className="relative z-10">
 
                     <SEOHead
@@ -147,9 +149,9 @@ function Home() {
                                 <h2 className="text-6xl tracking-tight md:text-6xl flex items-center justify-center gap-4 font-bold text-bianco">
                                     Sono
                                 </h2>
-                                    <div class="dropping-texts relative text-6xl mt-3 tracking-tight md:text-7xl font-extrabold">
-                                        <div></div>
-                                    </div>
+                                <div class="dropping-texts relative text-6xl mt-3 tracking-tight md:text-7xl font-extrabold">
+                                    <div></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -368,75 +370,68 @@ function Home() {
                                 <h1 className='text-5xl md:text-8xl tracking-tight font-bold titolo-bianco py-10'>
                                     Collaborazioni
                                 </h1>
-                                <div className="flex flex-col min-h-[600px]">
-                                    <div className="grid grid-cols-1 bg-scuro-2 glass md:grid-cols-3 mx-auto justify-center py-5 px-10 items-center flex-1">
-                                        <div className="flex content-center items-center justify-center">
-                                            <img src="/loghi/logopurple.png" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
+                                {/* Collaborations */}
+                                <section className="py-12 grid grid-cols-1 md:grid-cols-2 gap-10">
+                                    <div className="bg-white/5 rounded-xl border border-white/10 p-8 animate__animated animate__fadeInLeft">
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center">
+                                                <img src="https://www.itsaurora.ai/_next/image?url=%2Faurorafooterlogo.png&w=32&q=75" alt="" />
+                                            </div>
+                                            <div className="flex flex-col justify-start items-start">
+                                                <h3 className="text-2xl font-semibold pp-neue">Aurora Technologies</h3>
+                                                <p className="text-white/60 font-medium">Sviluppo Agent AI</p>
+                                            </div>
                                         </div>
-                                        <div className="flex content-center items-center justify-center">
-                                            <p className="text-6xl md:text-8xl titolo-bianco">+</p>
-                                        </div>
-                                        <div className="flex content-center items-center justify-center">
-                                            <img src="immagini\6_files\Aurora logo_vettoriale copia.pdf-image-006-Photoroom.png" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
+                                        <p className="text-white/70 leading-relaxed font-medium text-left">
+                                            Collaborazione su soluzioni AI-powered con sistemi Agent AI personalizzati. <br />Costruiamo assistenti intelligenti
+                                            che lavorano 24/7, integrati in siti web e applicazioni personalizzate.
+                                        </p>
+                                        <div className="flex justify-start items-end">
+                                            
+                                        <a
+                                            href="https://www.itsaurora.ai/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="gap-2 mt-4 text-md text-white/80 hover:text-white transition-colors btn bg-bianco font-medium px-10 text-scuro-2 rounded-4xl text-md"
+                                        >
+                                            Visita Aurora
+                                            <ExternalLink className="w-4 h-4" />
+                                        </a>
                                         </div>
                                     </div>
-                                    {/* <div className="grid grid-cols-1 bg-chiaro-2 md:grid-cols-3 mx-auto justify-center py-5 px-10 items-center flex-1">
-                                <div className="flex content-center items-center justify-center">
-                                    <img src="immagini\\logo-mart-AoPqDR7a0WUaRZb0.avif" alt="" className="object-contain hover:scale-110 transition-all duration-300 size-80 md:size-58 lg:size-auto linear" />
-                                </div>
-                                <div className="flex content-center items-center justify-center">
-                                    <p className="text-6xl md:text-8xl titolo-bianco">+</p>
-                                </div>
-                                <div className="flex content-center items-center justify-center">
-                                    <img src="immagini\AVATAR\1-Photoroom.png" alt="" className="object-contain hover:scale-110 transition-all duration-300 linear" />
-                                </div>
-                            </div> */}
-                                </div>
+
+                                    <div className="bg-white/5 rounded-xl border border-white/10 p-8 animate__animated animate__fadeInRight">
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center">
+                                                <img src={immagini.wham} alt="" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-2xl text-left font-semibold pp-neue">WHAM!</h3>
+                                                <p className="text-white/60 font-medium">Grafica & Brand Identity</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-white/70 leading-relaxed font-medium text-left">
+
+                                            Parola onomatopeica che descrive un qualcosa che fa rumore e arriva all'improvviso lasciandoti a bocca aperta!
+                                            <br />
+                                            Wham Design è uno studio grafico dinamico specializzato nel branding.
+                                            Ci piacciono i design fighi ma che raccontino una storia.
+
+                                        </p>
+                                        <div className="flex justify-start items-end">
+                                        <a
+                                            href="https://www.whamdesignstudio.com/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="gap-2 mt-4 text-md text-white/80 hover:text-white transition-colors btn bg-bianco font-medium px-10 text-scuro-2 rounded-4xl text-md"
+                                            >
+                                                Visita Wham!
+                                                <ExternalLink className="w-4 h-4" />
+                                            </a>
+                                        </div>
+                                    </div>
+                                </section>
                             </div>
-                            {/* aurora */}
-                            <section className="glass py-10">
-                                <div className="hidden lg:block">
-                                    <p className="text-7xl md:text-8xl tracking-tight  titolo-bianco text-center">
-                                        Jader
-                                    </p>
-                                    <p className="text-4xl md:text-6xl titolo-bianco text-center">
-                                        +
-                                    </p>
-                                    <p className="text-7xl md:text-8xl  titolo-bianco text-center">
-                                        Aurora
-                                    </p>
-                                </div>
-
-                                <p className="text-2xl md:text-2xl px-10 md:px-20 mt-5 text-center ">
-                                    Da oggi grazie alla collaborazione tra
-                                    <span className="font-extrabold titolo-bianco text-xl md:text-2xl"> Jader </span>
-                                    e
-                                    <span className="font-extrabold titolo-bianco text-xl md:text-2xl"> Aurora </span> puoi avere un sito web con un AgentAI totalmente personalizzato, che svolge task quotidiane al posto tuo, 24/7, integrato dentro un sito costruito su misura per la tua attività!
-                                </p>
-                                <div className="text-center mt-16">
-                                    <BigButton text="COLLABORAZIONI" href="/Collaborazioni" />
-                                </div>
-                            </section>
-                            {/* martina */}
-                            {/* <section className="bg-gradient-chiaro2 py-10">
-                        <p className="text-7xl md:text-8xl tracking-tight titolo-bianco text-center">
-                            Jader
-                        </p>
-                        <p className="text-4xl md:text-6xl titolo-bianco text-center">
-                            +
-                        </p>
-                        <p className="text-7xl md:text-8xl  titolo-bianco text-center">
-                            Martina
-                        </p>
-
-                        <p className="text-lg md:text-xl px-10 md:px-20 mt-5 text-center ">
-                            Da oggi, grazie alla collaborazione tra <span className="font-extrabold titolo-bianco text-2xl">Jader</span> e <span className="font-extrabold titolo-bianco text-2xl">Martina</span>, puoi avere un sito web costruito su misura per la tua attività, con una grafica professionale e un'identità visiva unica che raccontano davvero chi sei.
-                        </p>
-
-                        <div className="text-center mt-16">
-                            <BigButton text="COLLABORAZIONI" href="/Collaborazioni" />
-                        </div>
-                    </section> */}
                         </div>
                     </div >
                     <hr />

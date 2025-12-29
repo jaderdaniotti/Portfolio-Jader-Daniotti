@@ -110,7 +110,7 @@ function Competenze() {
                 keywords="competenze, skills, HTML, CSS, JavaScript, React, Laravel, PHP, sviluppo web, frontend, backend, tools"
             />
             <Navbar />
-            <div className="py-10 px-5" id="indice">
+            <div className="py-10 px-5 pt-20 md:pt-24" id="indice">
                 <h1 className="text-center text-5xl md:text-8xl titolo-bianco">COMPETENZE</h1>
             </div>
             <hr className='mb-10' />

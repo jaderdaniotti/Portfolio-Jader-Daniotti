@@ -7,7 +7,6 @@ function CardAnteprimaProgetti({ title, description, imageUrl, link }) {
                     alt={title}
                     className="w-full h-auto object-contain transition-transform duration-700"
                     loading="lazy"
-                    decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t  via-transparent to-transparent  group-hover:opacity-100 transition-opacity duration-300"></div>
 
