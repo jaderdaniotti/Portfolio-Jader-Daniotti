@@ -20,6 +20,7 @@ const Admin = lazy(() => import('./pages/Admin'));
 const Work = lazy(() => import('./pages/Work'));
 const LandingPage = lazy(() => import('./pages/landingPage'));
 const Credits = lazy(() => import('./pages/Credits'));
+const Privacy = lazy(() => import('./pages/Privacy'));
 
 // Componente di fallback durante il caricamento delle pagine
 const PageLoader = () => (
@@ -58,6 +59,7 @@ function App() {
               <Route path="/progetti/:id" element={<ProgettoDettaglio />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/credits" element={<Credits />} />
+              <Route path="/privacy" element={<Privacy />} />
               <Route path="/landingpage" element={<LandingPage />} />
             </Routes>
           </Suspense>
