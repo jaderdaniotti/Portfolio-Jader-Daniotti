@@ -104,6 +104,9 @@ body {
 .bg-scuro {
   background-color: var(--scuro);
 }
+.bg-scuro-50{
+  background-color: var(--scuro)/50;
+}
 
 .bg-scuro-2 {
   background-color: var(--scuro-2);

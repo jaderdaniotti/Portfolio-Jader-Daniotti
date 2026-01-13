@@ -1,8 +1,10 @@
 import logo from '../assets/images/logogrigio.png';
 import wham from '../assets/images/wham.webp';
+import background from '../assets/video/background.mp4'
+import logoviola from '../assets/images/logoviola.png';
 
 export const immagini = {
-    logo, wham
+    logo, wham, background, logoviola,
 }
 
 

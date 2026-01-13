@@ -199,17 +199,6 @@ function Work() {
                 keywords="processo creazione sito, template web, sviluppo sito, personalizzazione sito, dominio hosting"
             />
                 <Navbar />
-                <Ribbons
-                    baseThickness={30}
-                    colors={['#ffffff', '#746a94', '#443C68', '#393053']}
-                    offsetFactor={0.01}
-                    opacity={0.7}
-                    speedMultiplier={0.2}
-                    maxAge={300}
-                    enableFade={true}
-                    enableShaderEffect={true}
-                    zIndex={1}
-                />
             {/* Hero Section */}
             <div className="py-10 pt-20 md:pt-24">
                 <h1 className="text-center text-6xl md:text-8xl tracking-tight titolo-bianco">

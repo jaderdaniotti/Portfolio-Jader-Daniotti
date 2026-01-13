@@ -17,6 +17,7 @@ function Home() {
     const [tools, setTools] = useState([]);
     const [progetti, setProgetti] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [logoSource, setLogoSource] = useState("/loghi/logogrigio.png");
 
     // Fetch delle tecnologie dal database
     useEffect(() => {
@@ -57,7 +58,6 @@ function Home() {
         fetchTools();
     }, []);
 
-
     // Fetch degli ultimi 3 progetti dal database
     useEffect(() => {
         const fetchProgetti = async () => {
@@ -66,7 +66,7 @@ function Home() {
                     .from('projects')
                     .select('id, title, description, cover_image, domain_url, order_index')
                     .order('order_index', { ascending: true })
-                    .limit(3);
+                    .limit(6);
 
                 if (error) throw error;
 
@@ -116,7 +116,7 @@ function Home() {
                 slowDuration={0.5}
                 zIndex={1}
             />
-            <div className="bg-svg relative overflow-hidden pt-20 md:pt-24">
+            <div className="bg-svg relative overflow-hidden pt-20 md:pt-20">
                 <div className="relative z-10">
 
                     <SEOHead
@@ -143,7 +143,10 @@ function Home() {
                     <hr /> */}
                     {/* hero */}
                     <div className="hero h-screen relative" id='home'>
-                        <Background />
+                        <div className="absolute top-0 left-0 w-full h-full">
+                            {/* <div className="size-full bg-black/30 absolute top-0 left-0"></div> */}
+                            <video src={immagini.background} autoPlay muted loop className="size-full opacity-5 object-cover" />
+                        </div>
                         <div className="hero-content geist font-semibold text-center">
                             <div className="my-auto mx-auto py-10 text-center">
                                 <h2 className="text-6xl tracking-tight md:text-6xl flex items-center justify-center gap-4 font-bold text-bianco">
@@ -166,8 +169,11 @@ function Home() {
                                 </p>
                                 <BigButton text="CONOSCIMI" href="/Chisono"></BigButton>
                             </div>
-                            <div className="shadow shadow-fuchsia-200 rounded-full border-fuchsia-200 border-1 max-w-full p-10 object-contain" data-aos="fade-up" data-aos-duration="200">
-                                <img src="/loghi/logogrigio.png" className='hover:scale-110 hover:rotate-3 transition-all duration-300' alt="" />
+                            <div className="shadow shadow-fuchsia-200 rounded-full border-fuchsia-200 border max-w-full p-10 object-contain" data-aos="fade-up" data-aos-duration="200">
+                                <img src={logoSource}
+                                onMouseEnter={() => setLogoSource(immagini.logoviola)}
+                                onMouseLeave={() => setLogoSource("/loghi/logogrigio.png")}
+                                 className='hover:scale-110 hover:rotate-3 transition-all duration-300' alt="" />
                             </div>
                         </div>
                     </section>
