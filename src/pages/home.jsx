@@ -436,7 +436,47 @@ function Home() {
                                             </a>
                                         </div>
                                     </div>
+
                                 </section>
+                                    <div className="bg-white/5 rounded-xl border text-center border-white/10 p-8 animate__animated animate__fadeInRight">
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center">
+                                                <img src={immagini.gstart} alt="" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-2xl text-left font-semibold pp-neue">Gstart</h3>
+                                                <p className="text-white/60 font-medium"></p>
+                                            </div>
+                                        </div>
+                                        <p className="text-white/70 leading-relaxed font-medium text-left">
+
+                                            G-START è il punto di partenza per chi vuole crescere, migliorarsi e costruire il proprio futuro. Crediamo in un'educazione che non solo informi, ma trasformi, dando a tutti gli strumenti per emergere.
+                                            <br /><br />
+                                            <strong>G come Growth</strong><br />
+                                            Crescita misurabile, non teorica. È il motivo per cui esistiamo: far avanzare persone e imprese con strumenti concreti, metodo e visione.
+                                            <br /><br />
+                                            <strong>G come Guidance</strong><br />
+                                            Accompagniamo chi si affida a noi in ogni fase: dall'idea al progetto, dal bando al brand. Una guida strategica, chiara e affidabile.
+                                            <br /><br />
+                                            <strong>G come Genesis</strong><br />
+                                            Il punto di partenza delle nuove iniziative. Trasformiamo intuizioni in piani strutturati, sostenibili e pronti a diventare impresa.
+                                            <br /><br />
+                                            <strong>G come Goal-Oriented</strong><br />
+                                            Ogni percorso ha obiettivi precisi, metriche e roadmap. Niente improvvisazione: lavoriamo per risultati concreti.
+
+                                        </p>
+                                        <div className="flex justify-start items-end">
+                                        <a
+                                            href="https://www.whamdesignstudio.com/"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="gap-2 mt-4 text-md text-white/80 hover:text-white transition-colors btn bg-bianco font-medium px-10 text-scuro-2 rounded-4xl text-md"
+                                            >
+                                                Visita Wham!
+                                                <ExternalLink className="w-4 h-4" />
+                                            </a>
+                                        </div>
+                                    </div>
                             </div>
                         </div>
                     </div >
