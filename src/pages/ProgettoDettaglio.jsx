@@ -207,31 +207,26 @@ function ProgettoDettaglio() {
                             <span className="text-base font-medium">Torna ai Progetti</span>
                         </button>
 
-                        <div className="glass rounded-2xl p-6 md:p-8 border border-chiaro-2/30">
+                        <div className="">
                             <div className="flex items-start gap-4 mb-4">
-                                <div className="p-3 bg-gradient-chiaro rounded-xl shadow-lg">
-                                    <Layers className="w-6 h-6 md:w-8 md:h-8 text-bianco" />
-                                </div>
                                 <div className="flex-1">
-                                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-bianco leading-tight">
+                                    <h1 className="text-3xl md:text-5xl lg:text-8xl font-extrabold tracking-tighter text-bianco leading-tight">
                                         {progetto.title}
                                     </h1>
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                    <hr className='my-8 ' />
                     {/* Main Content Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 items-center">
                         {/* Left Column - Description & Technologies */}
                         <div className="lg:col-span-2 space-y-6">
                             {/* Description Card */}
-                            <div className="glass rounded-2xl p-6 md:p-8 border border-chiaro-2/30">
+                            <div className="">
                                 <div className="flex items-center gap-3 mb-4">
-                                    <div className="p-2 bg-chiaro-2 rounded-lg">
-                                        <FileText className="w-5 h-5 text-bianco" />
-                                    </div>
-                                    <h2 className="text-2xl md:text-3xl font-bold text-bianco">Descrizione</h2>
+                                    
+                                    <h2 className="text-3xl md:text-4xl font-bold text-bianco">Descrizione</h2>
                                 </div>
                                 <p className="text-base font-medium md:text-lg text-bianco/90 leading-relaxed">
                                     {progetto.description || 'Nessuna descrizione disponibile per questo progetto.'}
@@ -240,10 +235,10 @@ function ProgettoDettaglio() {
                         </div>
 
                         {/* Right Column - Quick Actions & Info */}
-                        <div className="space-y-6">
+                        <div className="space-y-6 ">
                             {/* Quick Actions Card */}
                             {progetto.domain_url ? (
-                                <div className="glass rounded-2xl p-6 border border-chiaro-2/30">
+                                <div className="glass rounded-xl p-6 border border-chiaro-2/30">
                                     <div className="flex items-center gap-3 mb-4">
                                         <div className="p-2 bg-chiaro-2 rounded-lg">
                                             <Globe className="w-5 h-5 text-bianco" />
@@ -294,32 +289,25 @@ function ProgettoDettaglio() {
                         </div>
 
                     </div>
+                    <hr className='my-8 ' />
                     {/* Technologies Section */}
                     {(frontendTechs.length > 0 || backendTechs.length > 0 || databaseTechs.length > 0) && (
-                        <div className="glass mb-4 rounded-2xl p-6 md:p-8 border border-chiaro-2/30">
-                            <div className="flex items-center justify-center gap-3 mb-6">
-                                <div className="p-2 bg-chiaro-2 rounded-lg">
-                                    <Sparkles className="w-5 h-5 text-bianco" />
-                                </div>
-                                <h2 className="text-2xl md:text-3xl font-bold  text-bianco">Stack Tecnologico</h2>
-                            </div>
+                        <div className="">
+                            <h2 className="text-3xl md:text-4xl font-bold text-bianco">Stack Tecnologico</h2>
 
-                            <div className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 {/* Frontend Technologies */}
                                 {frontendTechs.length > 0 && (
-                                    <div className="bg-scuro/50 rounded-xl p-5 ">
-                                        <div className="flex items-center justify-center gap-3 mb-4">
-                                            <div className="p-2 bg-gradient-chiaro rounded-lg">
-                                                <Palette className="w-5 h-5 text-bianco" />
-                                            </div>
+                                    <div className="bg-scuro/50 rounded-xl p-5 flex flex-col ">
+                                        <div className="flex items-center gap-3 ">
                                             <div>
-                                                <h3 className="text-lg font-bold text-bianco">Frontend</h3>
-                                                <p className="text-xs text-chiaro">
+                                                <h3 className="text-xl md:text-2xl font-bold text-bianco"> Frontend</h3>
+                                                <p className="text-md md:text-lg font-normal text-gray-200">
                                                     {frontendTechs.length} {frontendTechs.length === 1 ? 'tecnologia' : 'tecnologie'}
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="flex justify-center  gap-3">
+                                        <div className="flex flex-wrap gap-3">
                                             {frontendTechs.map((tech) => (
                                                 <div
                                                     key={tech.id}
@@ -341,11 +329,8 @@ function ProgettoDettaglio() {
 
                                 {/* Backend Technologies */}
                                 {backendTechs.length > 0 && (
-                                    <div className="bg-scuro/50 rounded-xl p-5 ">
-                                        <div className="flex items-center justify-center gap-3 mb-4">
-                                            <div className="p-2 bg-gradient-chiaro rounded-lg">
-                                                <Server className="w-5 h-5 text-bianco" />
-                                            </div>
+                                    <div className=" p-5 ">
+                                        <div className="flex items-center  gap-3 mb-4">
                                             <div>
                                                 <h3 className="text-lg font-bold text-bianco">Backend</h3>
                                                 <p className="text-xs text-chiaro">
@@ -353,7 +338,7 @@ function ProgettoDettaglio() {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="flex justify-center  gap-3">
+                                        <div className="flex flex-wrap gap-3">
                                             {backendTechs.map((tech) => (
                                                 <div
                                                     key={tech.id}
@@ -375,19 +360,17 @@ function ProgettoDettaglio() {
 
                                 {/* Database Technologies */}
                                 {databaseTechs.length > 0 && (
-                                    <div className="bg-scuro/50 rounded-xl p-5 ">
-                                        <div className="flex items-center justify-center gap-3 mb-4">
-                                            <div className="p-2 bg-gradient-chiaro rounded-lg">
-                                                <Database className="w-5 h-5 text-bianco" />
-                                            </div>
+                                    <div className="bg-scuro/50 rounded-xl p-5 flex flex-col ">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            
                                             <div>
-                                                <h3 className="text-lg font-bold text-bianco">Database</h3>
-                                                <p className="text-xs text-chiaro">
+                                                <h3 className="text-xl md:text-2xl font-bold text-bianco">Database</h3>
+                                                <p className="text-md md:text-lg font-normal text-gray-200">
                                                     {databaseTechs.length} {databaseTechs.length === 1 ? 'tecnologia' : 'tecnologie'}
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="flex justify-center  gap-3">
+                                        <div className="flex flex-wrap gap-3">
                                             {databaseTechs.map((tech) => (
                                                 <div
                                                     key={tech.id}
@@ -409,15 +392,12 @@ function ProgettoDettaglio() {
                             </div>
                         </div>
                     )}
-
+                    <hr className='my-8 ' />
                     {/* Images Gallery Section */}
                     {(projectImages.pc.length > 0 || projectImages.tablet.length > 0 || projectImages.mobile.length > 0) && (
-                        <div className="glass rounded-2xl p-6 md:p-8 border border-chiaro-2/30">
+                        <div className=" p-6 md:p-8 ">
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="p-2 bg-chiaro-2 rounded-lg">
-                                    <ImageIcon className="w-5 h-5 text-bianco" />
-                                </div>
-                                <h2 className="text-2xl md:text-3xl font-bold text-bianco">Galleria Progetto</h2>
+                                <h2 className="text-3xl md:text-4xl font-bold text-bianco">Galleria Progetto</h2>
                             </div>
 
                             {/* Device Tabs - Enhanced Design */}
@@ -426,15 +406,15 @@ function ProgettoDettaglio() {
                                     <button
                                         onClick={() => setActiveDeviceTab('pc')}
                                         className={`group px-5 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 border ${activeDeviceTab === 'pc'
-                                                ? 'bg-gradient-chiaro text-bianco border-chiaro shadow-lg scale-105'
-                                                : 'bg-scuro-2/50 text-chiaro border-chiaro-2/30 hover:bg-chiaro-2/20 hover:border-chiaro-2/50'
+                                            ? 'bg-gradient-chiaro text-bianco border-chiaro shadow-lg scale-105'
+                                            : 'bg-scuro-2/50 text-chiaro border-chiaro-2/30 hover:bg-chiaro-2/20 hover:border-chiaro-2/50'
                                             }`}
                                     >
                                         <Monitor className={`w-5 h-5 transition-transform ${activeDeviceTab === 'pc' ? 'scale-110' : ''}`} />
                                         <span>Desktop</span>
                                         <span className={`px-2 py-0.5 rounded-full text-xs ${activeDeviceTab === 'pc'
-                                                ? 'bg-bianco/20 text-bianco'
-                                                : 'bg-chiaro-2/30 text-chiaro'
+                                            ? 'bg-bianco/20 text-bianco'
+                                            : 'bg-chiaro-2/30 text-chiaro'
                                             }`}>
                                             {projectImages.pc.length}
                                         </span>
@@ -444,15 +424,15 @@ function ProgettoDettaglio() {
                                     <button
                                         onClick={() => setActiveDeviceTab('tablet')}
                                         className={`group px-5 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 border ${activeDeviceTab === 'tablet'
-                                                ? 'bg-gradient-chiaro text-bianco border-chiaro shadow-lg scale-105'
-                                                : 'bg-scuro-2/50 text-bianco border-chiaro-2/30 hover:bg-chiaro-2/20 hover:border-chiaro-2/50'
+                                            ? 'bg-gradient-chiaro text-bianco border-chiaro shadow-lg scale-105'
+                                            : 'bg-scuro-2/50 text-bianco border-chiaro-2/30 hover:bg-chiaro-2/20 hover:border-chiaro-2/50'
                                             }`}
                                     >
                                         <Tablet className={`w-5 h-5 transition-transform ${activeDeviceTab === 'tablet' ? 'scale-110' : ''}`} />
                                         <span>Tablet</span>
                                         <span className={`px-2 py-0.5 rounded-full text-xs ${activeDeviceTab === 'tablet'
-                                                ? 'bg-bianco/20 text-bianco'
-                                                : 'bg-chiaro-2/30 text-bianco'
+                                            ? 'bg-bianco/20 text-bianco'
+                                            : 'bg-chiaro-2/30 text-bianco'
                                             }`}>
                                             {projectImages.tablet.length}
                                         </span>
@@ -462,15 +442,15 @@ function ProgettoDettaglio() {
                                     <button
                                         onClick={() => setActiveDeviceTab('mobile')}
                                         className={`group px-5 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 border ${activeDeviceTab === 'mobile'
-                                                ? 'bg-gradient-chiaro text-bianco border-chiaro shadow-lg scale-105'
-                                                : 'bg-scuro-2/50 text-bianco border-chiaro-2/30 hover:bg-chiaro-2/20 hover:border-chiaro-2/50'
+                                            ? 'bg-gradient-chiaro text-bianco border-chiaro shadow-lg scale-105'
+                                            : 'bg-scuro-2/50 text-bianco border-chiaro-2/30 hover:bg-chiaro-2/20 hover:border-chiaro-2/50'
                                             }`}
                                     >
                                         <Smartphone className={`w-5 h-5 transition-transform ${activeDeviceTab === 'mobile' ? 'scale-110' : ''}`} />
                                         <span>Mobile</span>
                                         <span className={`px-2 py-0.5 rounded-full text-xs ${activeDeviceTab === 'mobile'
-                                                ? 'bg-bianco/20 text-bianco'
-                                                : 'bg-chiaro-2/30 text-bianco'
+                                            ? 'bg-bianco/20 text-bianco'
+                                            : 'bg-chiaro-2/30 text-bianco'
                                             }`}>
                                             {projectImages.mobile.length}
                                         </span>

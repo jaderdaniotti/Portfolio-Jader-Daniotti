@@ -14,7 +14,7 @@ const GlobalLoader = ({ onLoadingComplete }) => {
     if (!loading) return null;
 
     return (
-        <div className="fixed inset-0 z-50 bg-scuro flex flex-col items-center justify-center">
+        <div className="fixed inset-0 z-50 bg-scuro-2 flex flex-col items-center justify-center">
             {/* Logo centrale con animazione */}
             <div className="loader"></div>
 
