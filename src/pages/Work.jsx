@@ -194,9 +194,9 @@ function Work() {
     return (
         <div className="relative">
             <SEOHead
-                title="Work - Jader Daniotti | Processo di Creazione Siti Web"
-                description="Scopri il processo completo per la creazione del tuo sito web: dal primo contatto alla consegna finale. Sfoglia i template disponibili e scegli quello perfetto per te."
-                keywords="processo creazione sito, template web, sviluppo sito, personalizzazione sito, dominio hosting"
+                title="Come Creo i Siti Web - Jader Daniotti | Udine e Friuli"
+                description="Processo di creazione siti web a Udine e in Friuli: dal primo contatto alla consegna. Web designer per Udine, Gemona del Friuli, Solaro."
+                keywords="creazione siti web udine, processo sviluppo sito, web designer udine, siti web friuli, come si crea un sito"
             />
                 <Navbar />
             {/* Hero Section */}

@@ -28,6 +28,9 @@ function Footer() {
 
       <aside className="grid-flow-col gap-4 md:place-self-center text-lg md:justify-self-end flex items-center">
         <div className="flex flex-col gap-2">
+          <p className="text-scuro font-medium text-sm md:text-base">
+            Web designer e creazione siti web a <strong>Udine</strong>, <strong>Gemona del Friuli</strong>, <strong>Solaro</strong> e in tutto il <strong>Friuli</strong>.
+          </p>
           <div className="flex flex-col md:flex-row md:gap-4 gap-1">
             <Link
               to="/credits"

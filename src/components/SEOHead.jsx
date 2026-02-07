@@ -15,7 +15,7 @@ const SEOHead = ({
 
   useEffect(() => {
     // Update document title
-    document.title = title || "Jader Daniotti - Fullstack Developer & Web Designer";
+    document.title = title || "Jader Daniotti - Web Designer Udine | Creazione Siti Web Friuli";
 
     // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]');

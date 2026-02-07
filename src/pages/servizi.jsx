@@ -179,9 +179,9 @@ function Servizi() {
     return (
         <>
             <SEOHead 
-                title="Servizi - Jader Daniotti | Sviluppo Web e Soluzioni Digitali"
-                description="Servizi di sviluppo web personalizzati: portfolio, landing page, siti aziendali, e-commerce. Soluzioni per studenti, freelancer, piccole imprese e artisti."
-                keywords="servizi web, sviluppo siti, portfolio, landing page, e-commerce, siti aziendali, freelancer, piccola impresa, artista"
+                title="Creazione Siti Web Udine e Friuli | Servizi - Jader Daniotti"
+                description="Creazione siti web a Udine, Gemona del Friuli, Solaro e in tutto il Friuli: portfolio, siti aziendali, e-commerce, landing page. Web designer Udine."
+                keywords="creazione siti web udine, siti web udine, siti web friuli, web designer udine, servizi web, siti aziendali, e-commerce, landing page, Gemona del Friuli, Solaro"
             />
             <Navbar></Navbar>
             <div className="py-10 px-5">

@@ -208,9 +208,9 @@ function Collaborazioni() {
   return (
     <>
       <SEOHead 
-        title="Collaborazioni - Jader Daniotti | Servizi di Sviluppo Web"
-        description="Collabora con Jader Daniotti per progetti web personalizzati. Servizi per studenti, freelancer, piccole imprese e artisti. Sviluppo siti web e soluzioni digitali."
-        keywords="collaborazioni, servizi web, sviluppo siti, portfolio, freelancer, piccola impresa, artista, ecommerce, landing page"
+        title="Collaborazioni - Jader Daniotti | Web Designer Udine e Friuli"
+        description="Collabora con Jader Daniotti per siti web a Udine, Gemona del Friuli, Solaro e in Friuli. Servizi web per imprese e professionisti."
+        keywords="collaborazioni web designer udine, siti web friuli, creazione siti web udine, jader daniotti, agenzie siti web udine"
       />
       <Navbar />
       {/* titolo */}

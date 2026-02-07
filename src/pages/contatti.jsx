@@ -61,9 +61,9 @@ function Contatti() {
   return (
     <>
       <SEOHead
-        title="Contatti - Jader Daniotti | Contattami per Progetti Web"
-        description="Contatta Jader Daniotti per progetti web e collaborazioni. Email, telefono, WhatsApp, LinkedIn e Instagram. Scarica il CV e iniziamo a lavorare insieme!"
-        keywords="contatti, email, telefono, WhatsApp, LinkedIn, Instagram, CV, curriculum vitae, progetti web"
+        title="Contatti - Jader Daniotti | Web Designer Udine e Friuli"
+        description="Contatta Jader Daniotti per creazione siti web a Udine, Gemona del Friuli, Solaro e in Friuli. Email, WhatsApp, LinkedIn. Preventivo gratuito."
+        keywords="contatti jader daniotti, web designer udine contatti, creazione siti web udine preventivo, siti web friuli, WhatsApp, LinkedIn"
       />
       <div className="fixed inset-0 " style={{ zIndex: 0 }}>
         <Aurora

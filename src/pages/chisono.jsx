@@ -7,9 +7,9 @@ function Chisono() {
     return (
         <>
             <SEOHead 
-                title="Chi Sono - Jader Daniotti Portfolio"
-                description="Scopri la storia di Jader Daniotti: dal CFP come elettricista in Italia, al lavoro in Francia, fino al Bootcamp FullStack Developer. Percorso di crescita e passione per il web development."
-                keywords="Jader Daniotti, storia, percorso, Francia, elettricista, FullStack Developer, Bootcamp, web development, crescita professionale"
+                title="Chi Sono - Jader Daniotti | Web Designer Udine e Friuli"
+                description="Jader Daniotti: web designer a Udine, Gemona del Friuli e Solaro. La mia storia da elettricista al Bootcamp FullStack. Creazione siti web in Friuli."
+                keywords="jader daniotti, web designer udine, web designer friuli, chi sono, storia, FullStack Developer, creazione siti web udine, Gemona del Friuli, Solaro"
             />
             <Navbar></Navbar>
             <div className="py-10 px-5" id="indice">
@@ -73,7 +73,7 @@ function Chisono() {
                         <p className=" text-md md:text-xl  text-center font-medium px-2" >
                             Ciao! Mi chiamo
                             <span className="font-bold"> Jader </span>
-                            e ti do il benvenuto sul mio sito web.
+                            e ti do il benvenuto sul mio sito web. Sono <span className="font-bold">web designer a Udine, Gemona del Friuli, Solaro</span> e in tutto il Friuli: mi occupo di <span className="font-bold">creazione siti web</span> su misura.
                         </p>
                         <p className=" text-md md:text-xl  text-center font-medium px-2" >
                             Sono quel tipo di persona a cui piacciono le <span className="font-bold"> sfide</span>, a cui piace imparare sempre cose nuove, prendendo spunto da ciò che lo circonda.

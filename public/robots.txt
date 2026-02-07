@@ -43,15 +43,13 @@ Allow: /
 User-agent: WhatsApp
 Allow: /
 
-# Block access to specific file types
+# Block access to specific file types (keep sitemap and robots crawlable)
 Disallow: /*.json$
-Disallow: /*.xml$
-Disallow: /*.txt$
 Disallow: /*.pdf$
 Disallow: /*.doc$
 Disallow: /*.docx$
 
-# Allow access to important files
+# Explicitly allow SEO-critical files
 Allow: /sitemap.xml
 Allow: /robots.txt
-Allow: /manifest.json 
+Allow: /manifest.json

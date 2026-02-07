@@ -120,9 +120,9 @@ function Home() {
                 <div className="relative z-10">
 
                     <SEOHead
-                        title="Jader Daniotti - Fullstack Developer & Web Designer | Portfolio"
-                        description="Portfolio di Jader Daniotti - Fullstack Developer specializzato in Frontend, UI/UX, Web Design e soluzioni digitali personalizzate. Scopri i progetti, le competenze e i servizi."
-                        keywords="Jader Daniotti, Fullstack Developer, Web Design, UI/UX, Frontend, Portfolio, Sviluppo Web, React, Laravel, PHP, JavaScript, HTML, CSS"
+                        title="Jader Daniotti - Web Designer Udine | Creazione Siti Web Friuli"
+                        description="Web designer a Udine e in Friuli: Jader Daniotti crea siti web per Udine, Gemona del Friuli, Solaro. Creazione siti web Udine, siti web Friuli. Portfolio e servizi."
+                        keywords="web designer udine, web designer gemona del friuli, web designer solaro, creazione siti web udine, siti web udine, siti web friuli, jader, jader daniotti, agenzie siti web udine, Web Design, UI/UX, Portfolio, React, Laravel"
                     />
                     <Navbar />
                     {/* hero */}
@@ -164,6 +164,7 @@ function Home() {
                         <div className="grid grid-cols-1 md:grid-cols-2 align-center items-center justify-center  px-5 py-5 w-full text-center" id='chi-sono'>
                             <div className="text-center flex-col py-10">
                                 <h1 className="titolo-bianco tracking-tight text-7xl" data-aos="zoom-in" >Chi sono?</h1>
+                                <p className="py-2 text-lg md:text-xl text-bianco/80" data-aos="zoom-in">Web designer a Udine, Gemona del Friuli, Solaro e in tutto il Friuli — creazione siti web su misura.</p>
                                 <p className="py-6 text-3xl" data-aos="zoom-in" >
                                     Ciao a tutti, mi chiamo Jader Daniotti, sono un appassionato di <br /> <span className='text-chiaro'>Web Design</span>, <br /> <span className='text-chiaro'>UI/UX</span> e <br /><span className='text-chiaro'>Programmazione</span>.
                                 </p>

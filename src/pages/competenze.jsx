@@ -105,9 +105,9 @@ function Competenze() {
     return (
         <>
             <SEOHead
-                title="Competenze - Jader Daniotti | Fullstack Developer Skills"
-                description="Scopri le competenze tecniche di Jader Daniotti: HTML, CSS, JavaScript, React, Laravel, PHP e molti altri strumenti di sviluppo web."
-                keywords="competenze, skills, HTML, CSS, JavaScript, React, Laravel, PHP, sviluppo web, frontend, backend, tools"
+                title="Competenze - Jader Daniotti | Web Designer Udine"
+                description="Competenze tecniche di Jader Daniotti, web designer a Udine e Friuli: React, Laravel, PHP, JavaScript, UI/UX per creazione siti web professionali."
+                keywords="competenze web designer udine, jader daniotti skills, React, Laravel, siti web friuli, sviluppo web"
             />
             <Navbar />
             <div className="py-10 px-5 pt-20 md:pt-24" id="indice">

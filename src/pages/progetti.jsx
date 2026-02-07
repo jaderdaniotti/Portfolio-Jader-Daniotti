@@ -49,8 +49,8 @@ function Progetti() {
         return (
             <>
                 <SEOHead
-                    title="Progetti - Jader Daniotti Portfolio"
-                    description="Scopri i progetti di Jader Daniotti"
+                    title="Progetti - Jader Daniotti | Siti Web Udine e Friuli"
+                    description="Progetti di creazione siti web a Udine e in Friuli."
                 />
                 <Navbar />
                 <div className="min-h-screen bg-scuro-2 flex flex-col items-center justify-center">
@@ -64,9 +64,9 @@ function Progetti() {
     return (
         <>
             <SEOHead
-                title="Progetti - Jader Daniotti Portfolio"
-                description="Scopri i progetti di Jader Daniotti: sviluppo web con React, Laravel, PHP e JavaScript."
-                keywords="progetti web, React, Laravel, PHP, JavaScript, sviluppo web"
+                title="Progetti - Jader Daniotti | Siti Web Udine e Friuli"
+                description="Progetti di creazione siti web realizzati da Jader Daniotti per clienti a Udine, Gemona del Friuli, Solaro e in Friuli."
+                keywords="progetti siti web udine, portfolio jader daniotti, siti web friuli, realizzazioni web designer udine"
             />
             <Navbar></Navbar>
 
