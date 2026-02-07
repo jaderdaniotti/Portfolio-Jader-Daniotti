@@ -1,0 +1,25 @@
+# Keep-Alive: mantiene attivi database e sito in produzione
+# Esegue un ping alla Home Page ogni 45 minuti o manualmente
+
+name: Keep-Alive Ping
+
+on:
+  schedule:
+    # Ogni 45 minuti (cron: minuto ora giorno mese giorno_settimana)
+    - cron: '*/45 * * * *'
+  workflow_dispatch:
+    # Permette avvio manuale per test da GitHub Actions UI
+
+jobs:
+  keep-alive:
+    name: Ping produzione
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping Home Page (Keep-Alive)
+        run: |
+          curl -fsS -o /dev/null -w "HTTP %{http_code} - %{url_effective}\n" \
+            -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" \
+            -H "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8" \
+            -H "Accept-Language: it-IT,it;q=0.9,en;q=0.8" \
+            "${{ secrets.PROD_URL }}"
