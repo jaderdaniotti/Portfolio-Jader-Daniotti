@@ -3,6 +3,7 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import SEOHead from '../components/SEOHead';
 import { supabase } from '../config/supabase';
+import PageHero from '../components/PageHero';
 import {
     Phone,
     Headset,
@@ -198,14 +199,17 @@ function Work() {
                 description="Processo di creazione siti web a Udine e in Friuli: dal primo contatto alla consegna. Web designer per Udine, Gemona del Friuli, Solaro."
                 keywords="creazione siti web udine, processo sviluppo sito, web designer udine, siti web friuli, come si crea un sito"
             />
-                <Navbar />
-            {/* Hero Section */}
-            <div className="py-10 pt-20 md:pt-24">
-                <h1 className="text-center text-6xl md:text-8xl tracking-tight titolo-bianco">
-                    WORK
-                </h1>
-            </div>
-            <hr />
+            <Navbar />
+            
+            <PageHero
+                eyebrow="PROCESSO"
+                title="Work"
+                description="Scopri il processo completo per la creazione del tuo sito web: dal primo contatto alla consegna finale. Sfoglia i template disponibili e scegli quello perfetto per te."
+                keywords={["Web", "App", "CRM", "Template"]}
+                actions={[
+                    { href: "/contatti", label: "Inizia il tuo progetto" }
+                ]}
+            />
 
             {/* Sezione 1: Tab Processi */}
             <section className="py-16 ">

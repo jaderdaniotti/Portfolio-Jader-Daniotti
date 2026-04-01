@@ -1,9 +1,51 @@
-
-import BigButton from '../components/bigButton'
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import SEOHead from '../components/SEOHead';
+import PageHero from '../components/PageHero';
+
 function Chisono() {
+    const timelineStops = [
+        {
+            number: "01",
+            title: "Chi sono?",
+            items: [
+                "Ciao! Mi chiamo Jader e ti do il benvenuto sul mio sito web. Sono web designer a Udine, Gemona del Friuli, Solaro e in tutto il Friuli: mi occupo di creazione siti web su misura.",
+                "Sono quel tipo di persona a cui piacciono le sfide, a cui piace imparare sempre cose nuove, prendendo spunto da ciò che lo circonda.",
+                "Se sei arrivato in questa sezione del sito, vuol dire che non sei solo interessato al mio lato professionale, ma vuoi conoscermi davvero. Cercherò di farti avere un'idea più chiara di me!"
+            ]
+        },
+        {
+            number: "02",
+            title: "La partenza",
+            items: [
+                "Ho cominciato il mio percorso alle superiori, in un CFP (Corso di Formazione Professionale), studiando come elettricista. A quell'età non avevo ancora in mente cosa volessi fare da grande. Volevo buttarmi nel mondo del lavoro, quindi decisi di fare 3 anni su 5 in alternanza scuola/lavoro.",
+                "A 18 anni, nel 2019, stanco della vita che conducevo, mi venne offerta un'occasione d'oro: partire per lavorare in un altro stato, in compagnia di un amico.",
+                "Senza pensarci troppo, dopo qualche settimana passata a organizzare i documenti, preparare i vestiti e salutare tutti, mi ritrovai in Francia, più precisamente a Fontaine, periferia di Grenoble, Rhone Alpes."
+            ]
+        },
+        {
+            number: "03",
+            title: "Il lavoro",
+            items: [
+                "Durante i primi tempi in Francia, partendo da zero a livello linguistico, feci pratica lavorando nei mercati il weekend, attività che mi permise di imparare a parlare il francese pur continuando a vendere prodotti italiani. Dal lunedì al venerdì, invece, giravo le regioni limitrofe lavorando nei cantieri, alternando i ruoli di manovale e lavavetri.",
+                "Al secondo anno, ebbi l'occasione di riprendere ciò che avevo studiato in Italia, ovvero l'elettricità. Venni assunto da un'azienda che forniva kit di impianti elettrici, imparando in seguito a lavorare anche su impianti di idraulica e riscaldamento.",
+                "La mia carriera durò due anni, finché poi, dopo un'allettante offerta lavorativa, entrai in un'azienda leader nella realizzazione di mezzi di soccorso, tra cui ambulanze e veicoli per interventi dei pompieri. Con loro partii in trasferte, fino ad arrivare a gestire la manutenzione di queste ultime, anche in Romania."
+            ]
+        },
+        {
+            number: "04",
+            title: "Dev-Mode",
+            items: [
+                "Dopo 5 anni, decisi di tornare in Italia, vicino alla mia famiglia e ai miei amici.",
+                "Cominciai a lavorare in un'azienda come elettromeccanico, ma a settembre mi imbatto per puro caso in una pubblicità di un Bootcamp per diventare FullStack Developer.",
+                "Ai tempi non avevo la più pallida idea di cosa significasse scrivere codice. Avevo creato un sito ecommerce qualche anno prima con Shopify seguendo tutorial su Youtube, ma non potevo nemmeno immaginare cosa sarebbe significato, di lì a qualche mese, saperlo fare scrivendo codice e personalizzando tutto dalla A alla Z.",
+                "Decisi quindi di iscrivermi. Iniziai il corso a ottobre in orario part-time, la sera dopo il lavoro, finché non mi lasciai quest'ultimo a dicembre per dedicare l'intera giornata allo studio e alla pratica.",
+                "In parallelo al corso, approfondisco gli argomenti trattati in autonomia, realizzo progetti di prova per esercitarmi e, occasionalmente, creo web app per privati o collaboro con amici alla realizzazione di progetti.",
+                "Dopo vari progetti e tanti pezzi di me messi in progetti altrui, eccomi qui a costruire il sito che parla di me, Jader, per farti davvero capire chi sono."
+            ]
+        }
+    ];
+
     return (
         <>
             <SEOHead 
@@ -11,169 +53,66 @@ function Chisono() {
                 description="Jader Daniotti: web designer a Udine, Gemona del Friuli e Solaro. La mia storia da elettricista al Bootcamp FullStack. Creazione siti web in Friuli."
                 keywords="jader daniotti, web designer udine, web designer friuli, chi sono, storia, FullStack Developer, creazione siti web udine, Gemona del Friuli, Solaro"
             />
-            <Navbar></Navbar>
-            <div className="py-10 px-5" id="indice">
-                <h1 className="text-center text-6xl md:text-8xl titolo-bianco">JADER</h1>
-            </div>
-            <hr className='mb-10' />
-            <ul className="list mt-5 bg-chiaro-2 shadow rounded-t-2xl ">
-                <li className="p-4 pb-2 text-3xl  opacity-60 tracking-tighter">Il mio percorso</li>
+            <Navbar />
+            
+            <PageHero
+                eyebrow="IL PERCORSO"
+                title="Jader"
+                description="Una sequenza di soste pensata per far emergere il mio percorso con ritmo, scorci e tempo per vivere ogni luogo."
+                keywords={["Web Designer", "Udine", "Friuli", "FullStack"]}
+            />
 
-                <li className="list-row">
-                    <div className="text-4xl self-center font-thin opacity-30 tabular-nums">01</div>
-                    <div><img className="size-15 rounded-box" src="immagini\AVATAR\1-Photoroom.png" /></div>
-                    <div className="list-col-grow flex items-center font-medium tracking-tight text-2xl">
-                        <div>Chi sono?</div>
-                    </div>
-                    <a href="#aboutme" className="p-3 motion-safe:animate-bounce">
-                        <i class="bi bi-arrow-down-circle text-2xl"></i>
-                    </a>
-                </li>
+            {/* Timeline */}
+            <div className="relative py-16 px-4 sm:px-6 lg:px-8 bg-scuro-2">
+                <div className="mx-auto max-w-6xl">
+                    <ol className="relative mt-8 space-y-4 md:space-y-0 md:before:absolute md:before:bottom-0 md:before:left-1/2 md:before:top-0 md:before:w-px md:before:-translate-x-1/2 md:before:bg-white/12 md:before:content-['']">
+                        {timelineStops.map((stop, si) => (
+                            <li
+                                key={`stop-${si}`}
+                                data-aos="fade-up"
+                                data-aos-delay={Math.min((si + 1) * 100, 500)}
+                            >
+                                <div className="grid gap-0 md:grid-cols-[minmax(0,1fr)_4rem_minmax(0,1fr)]">
+                                    <div
+                                        className={`border-y border-white/12 py-8 ${
+                                            si % 2 === 0
+                                                ? "md:col-start-1 md:row-start-1 md:pr-8 md:text-right"
+                                                : "md:col-start-3 md:row-start-1 md:pl-8"
+                                        }`}
+                                    >
+                                        <div className={`text-[11px] font-semibold uppercase tracking-[0.24em] text-white/42 ${si % 2 === 0 ? 'md:text-right' : ''}`}>
+                                            {stop.number}
+                                        </div>
+                                        <h3 className="mt-2 text-xl md:text-2xl font-semibold text-white">
+                                            {stop.title}
+                                        </h3>
+                                        <ul className="mt-3 space-y-3 text-sm md:text-base font-normal leading-relaxed text-white/72">
+                                            {stop.items.map((line, li) => (
+                                                <li key={li}>{line}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
 
-                <li className="list-row">
-                    <div className="text-4xl self-center font-thin opacity-30 tabular-nums">02</div>
-                    <div><img className="size-15 rounded-box" src="immagini\AVATAR\9.png" /></div>
-                    <div className="list-col-grow flex items-center font-medium tracking-tight text-2xl">
-                        <div>La partenza</div>
-                    </div>
-                    <a href="#partenza" className="p-3 motion-safe:animate-bounce">
-                        <i class="bi bi-arrow-down-circle text-2xl"></i>
-                    </a>
-                </li>
+                                    <div className="relative hidden md:col-start-2 md:row-start-1 md:block">
+                                        <div className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/25 bg-white/80 shadow-[0_0_0_8px_rgba(255,255,255,0.04)]" />
+                                    </div>
 
-                <li className="list-row">
-                    <div className="text-4xl self-center font-thin opacity-30 tabular-nums">03</div>
-                    <div><img className="size-15 rounded-box" src="immagini\AVATAR\11-Photoroom.png" /></div>
-                    <div className="list-col-grow flex items-center font-medium tracking-tight text-2xl">
-                        <div>Il lavoro</div>
-                    </div>
-                    <a href="#lavoro" className="p-3 motion-safe:animate-bounce">
-                        <i class="bi bi-arrow-down-circle text-2xl"></i>
-                    </a>
-                </li>
-
-                <li className="list-row">
-                    <div className="text-4xl self-center font-thin opacity-30 tabular-nums">04</div>
-                    <div><img className="size-15 rounded-box" src="immagini\AVATAR\4-Photoroom (1).png" /></div>
-                    <div className="list-col-grow flex items-center font-medium tracking-tight text-2xl">
-                        <div>Dev-Mode</div>
-                    </div>
-                    <a href="#devmode" className="p-3 motion-safe:animate-bounce">
-                        <i class="bi bi-arrow-down-circle text-2xl"></i>
-                    </a>
-                </li>
-
-            </ul>
-            {/* Chi sono? */}
-            <section className="flex flex-col px-5 md:px-20 py-8 bg-scuro text-chiaro items-center text-center" id="aboutme">
-                <h2 className="text-center mb-5 text-5xl md:text-6xl ">Chi sono?</h2>
-                <img src="immagini\AVATAR\10-Photoroom.png" alt="" className="mb-5 h-75 object-contain" />
-                <div className="grid grid-cols-12 gap-4">
-                    <div className='col-span-12'>
-                        <p className=" text-md md:text-xl  text-center font-medium px-2" >
-                            Ciao! Mi chiamo
-                            <span className="font-bold"> Jader </span>
-                            e ti do il benvenuto sul mio sito web. Sono <span className="font-bold">web designer a Udine, Gemona del Friuli, Solaro</span> e in tutto il Friuli: mi occupo di <span className="font-bold">creazione siti web</span> su misura.
-                        </p>
-                        <p className=" text-md md:text-xl  text-center font-medium px-2" >
-                            Sono quel tipo di persona a cui piacciono le <span className="font-bold"> sfide</span>, a cui piace imparare sempre cose nuove, prendendo spunto da ciò che lo circonda.
-                        </p>
-                        <p className=" text-md md:text-xl  text-center font-medium px-2" >
-                            Se sei arrivato in questa sezione del sito, vuol dire che non sei solo interessato al mio lato <span className="font-bold"> professionale</span>, ma vuoi conoscermi davvero. Cercherò di farti avere un’idea più chiara di me!
-                        </p>
-                    </div>
+                                    <div
+                                        className={
+                                            si % 2 === 0
+                                                ? "hidden md:col-start-3 md:row-start-1 md:block"
+                                                : "hidden md:col-start-1 md:row-start-1 md:block"
+                                        }
+                                        aria-hidden
+                                    />
+                                </div>
+                            </li>
+                        ))}
+                    </ol>
                 </div>
-            </section>
-            {/* La partenza */}
-            <section className="flex flex-col px-5 md:px-20 py-8 bg-chiaro-2 text-scuro items-center" id="partenza">
-                <h2 className="text-center mb-5 text-5xl md:text-6xl ">La partenza</h2>
-                <img src="immagini\AVATAR\9.png" alt="" className="mb-5 h-75 object-contain" />
-                <p className=" text-md  md:text-xl  text-center font-medium px-2" >
-                    Ho cominciato il mio percorso alle superiori, in un <span className="font-bold"> CFP </span> &#40;Corso di Formazione Professionale&#41;, studiando come elettricista. <br />
-                    A quell'età non avevo ancora in mente cosa volessi fare da grande. Volevo buttarmi nel mondo del lavoro, quindi decisi di fare 3 anni su 5 in alternanza <span className="font-bold"> scuola/lavoro</span>.
-                </p>
-                <p className=" text-md md:text-xl text-center font-medium px-2" >
-                    A 18 anni, nel 2019, stanco della vita che conducevo, mi venne offerta un’occasione d'oro: partire per lavorare in un altro stato, in compagnia di un amico.
-                </p>
-                <p className=" text-md md:text-xl text-center font-medium px-2" >
-                    Senza pensarci troppo, dopo qualche settimana passata a organizzare i documenti, preparare i vestiti e salutare tutti, mi ritrovai in <span className="font-bold"> Francia </span>, più precisamente a Fontaine, periferia di Grenoble, Rhone Alpes.
-                </p>
-            </section>
-            {/* Il lavoro */}
-            <section className="flex flex-col px-5 md:px-20 py-8 bg-scuro text-chiaro  items-center" id="lavoro">
-                <h2 className="text-center mb-5 text-5xl md:text-6xl ">Il lavoro</h2>
-                <img src="immagini\AVATAR\11-Photoroom.png" alt="" className="mb-5 h-75 object-contain " />
-                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
-                    Durante i primi tempi in <span className="font-bold"> Francia </span>, partendo da zero a livello linguistico, feci pratica lavorando nei mercati il <span className="font-bold"> weekend </span>, attività che mi permise di imparare a parlare il francese pur continuando a vendere prodotti italiani. <span className="font-bold"> Dal lunedì al venerdì </span>, invece, giravo le regioni limitrofe lavorando nei cantieri, alternando i ruoli di <span className="font-bold"> manovale </span> e <span className="font-bold"> lavavetri </span>.
-                </p>
-                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
-                    Al secondo anno, ebbi l’occasione di riprendere ciò che avevo studiato in Italia, ovvero <span className="font-bold"> l’elettricità</span>. Venni assunto da un’azienda che forniva kit di impianti elettrici, imparando in seguito a lavorare anche su impianti di <span className="font-bold"> idraulica </span> e <span className="font-bold"> riscaldamento </span>.
-                </p>
-                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
-                    La mia carriera durò due anni, finché poi, dopo un’allettante offerta lavorativa, entrai in un’azienda <span className="font-bold"> leader </span> nella realizzazione di mezzi di soccorso, tra cui ambulanze e veicoli per interventi dei pompieri. Con loro partii in trasferte, fino ad arrivare a gestire la manutenzione di <span className="font-bold"> queste ultime</span>, anche in <span className="font-bold"> Romania </span>.
-                </p>
-            </section>
-            {/* Dev-Mode */}
-            <section className="flex flex-col px-5 md:px-20 py-8 bg-chiaro-2 text-scuro items-center rounded-b-2xl" id="devmode">
-                <h2 className="text-center mb-5 text-5xl md:text-6xl ">Dev-Mode</h2>
-                <span className="">
-                    <img src="immagini\AVATAR\4-Photoroom (1).png" alt="" className="mb-5 h-75 object-contain rounded-4xl" />
-                </span>
-                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
-                    Dopo 5 anni, decisi di tornare in <span className="font-bold"> Italia </span>, vicino alla mia famiglia e ai miei amici.
-                </p>
-                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
-                    Cominciai a lavorare in un’azienda come elettromeccanico, ma a settembre mi imbatto per puro caso in una pubblicità di un <span className="font-bold"> Bootcamp </span> per diventare <span className="font-bold"> FullStack Developer</span>.
-                </p>
-                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
-                    Ai tempi non avevo la più pallida idea di cosa significasse scrivere <span className="font-bold"> codice</span>. Avevo creato un sito <span className="font-bold"> ecommerce </span> qualche anno prima con <span className="font-bold"> Shopify </span> seguendo tutorial su <span className="font-bold"> Youtube</span>, ma non potevo nemmeno immaginare cosa sarebbe significato, di lì a qualche mese, saperlo fare scrivendo <span className="font-bold"> codice </span> e personalizzando tutto dalla A alla Z.
-                </p>
-                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
-                    Decisi quindi di iscrivermi. Iniziai il corso a ottobre in orario part-time, la sera dopo il lavoro, finché non mi lasciai quest’ultimo a dicembre per dedicare l’intera giornata allo <span className="font-bold"> studio </span> e alla <span className="font-bold"> pratica</span>.
-                </p>
-                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
-                    In parallelo al corso, approfondisco gli argomenti trattati in autonomia, realizzo progetti di prova per esercitarmi e, occasionalmente, creo <span className="font-bold"> web app </span> per <span className="font-bold"> privati </span> o <span className="font-bold"> collaboro </span>con amici alla realizzazione di progetti.
-                </p>
-                <p className=" text-lg  md:text-xl  text-center font-medium px-2" >
-                    Dopo vari progetti e tanti pezzi di me messi in progetti altrui, eccomi qui a costruire il sito che parla di me, <span className="font-bold"> Jader</span>, per farti davvero capire chi sono.
-                </p>
-            </section>
+            </div>
 
-            <hr className="my-10" />
-            <a className="cta mt-5 mb-10 mx-auto w-auto" href='#indice' >
-                <span className="span">Torna su</span>
-                <span className="second">
-                    <svg
-                        width="50px"
-                        height="20px"
-                        viewBox="0 0 66 43"
-                        version="1.1"
-                    >
-                        <g
-                            id="arrow"
-
-                        >
-                            <path
-                                className="one"
-                                d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 40.1543933,3.89485454 Z"
-                                fill="#FFFFFF"
-                            ></path>
-                            <path
-                                className="two"
-                                d="M20.1543933,3.89485454 L23.9763149,0.139296592 C24.1708311,-0.0518420739 24.4826329,-0.0518571125 24.6771675,0.139262789 L45.6916134,20.7848311 C46.0855801,21.1718824 46.0911863,21.8050225 45.704135,22.1989893 C45.7000188,22.2031791 45.6958657,22.2073326 45.6916762,22.2114492 L24.677098,42.8607841 C24.4825957,43.0519059 24.1708242,43.0519358 23.9762853,42.8608513 L20.1545186,39.1069479 C19.9575152,38.9134427 19.9546793,38.5968729 20.1481845,38.3998695 C20.1502893,38.3977268 20.1524132,38.395603 20.1545562,38.3934985 L36.9937789,21.8567812 C37.1908028,21.6632968 37.193672,21.3467273 37.0001876,21.1497035 C36.9980647,21.1475418 36.9959223,21.1453995 36.9937605,21.1432767 L20.1545208,4.60825197 C19.9574869,4.41477773 19.9546013,4.09820839 20.1480756,3.90117456 C20.1501626,3.89904911 20.1522686,3.89694235 20.1543933,3.89485454 Z"
-                                fill="#FFFFFF"
-                            ></path>
-                            <path
-                                className="three"
-                                d="M0.154393339,3.89485454 L3.97631488,0.139296592 C4.17083111,-0.0518420739 4.48263286,-0.0518571125 4.67716753,0.139262789 L25.6916134,20.7848311 C26.0855801,21.1718824 26.0911863,21.8050225 25.704135,22.1989893 C25.7000188,22.2031791 25.6958657,22.2073326 25.6916762,22.2114492 L4.67709797,42.8607841 C4.48259567,43.0519059 4.17082418,43.0519358 3.97628526,42.8608513 L0.154518591,39.1069479 C-0.0424848215,38.9134427 -0.0453206733,38.5968729 0.148184538,38.3998695 C0.150289256,38.3977268 0.152413239,38.395603 0.154556228,38.3934985 L16.9937789,21.8567812 C17.1908028,21.6632968 17.193672,21.3467273 17.0001876,21.1497035 C16.9980647,21.1475418 16.9959223,21.1453995 16.9937605,21.1432767 L0.15452076,4.60825197 C-0.0425130651,4.41477773 -0.0453986756,4.09820839 0.148075568,3.90117456 C0.150162624,3.89904911 0.152268631,3.89694235 0.154393339,3.89485454 Z"
-                                fill="#FFFFFF"
-                            ></path>
-                        </g>
-                    </svg>
-                </span>
-            </a>
-
-            <Footer></Footer>
+            <Footer />
         </>
     )
 }

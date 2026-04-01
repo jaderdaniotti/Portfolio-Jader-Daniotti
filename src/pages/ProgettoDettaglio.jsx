@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from "../Navbar";
 import Footer from "../Footer";
@@ -9,18 +9,10 @@ import {
     Tablet,
     Smartphone,
     ArrowLeft,
-    Code,
-    FileText,
     Globe,
-    Layers,
-    Sparkles,
     ExternalLink,
     Image as ImageIcon,
-    Database,
-    Server,
-    Palette,
-    Calendar,
-    Tag
+    X
 } from 'lucide-react';
 import GlobalLoader from '../components/GlobalLoader';
 
@@ -33,13 +25,13 @@ function ProgettoDettaglio() {
     const [allTechnologies, setAllTechnologies] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeDeviceTab, setActiveDeviceTab] = useState('pc');
+    const [lightboxImg, setLightboxImg] = useState(null);
 
     useEffect(() => {
         const loadProjectDetails = async () => {
             try {
                 setLoading(true);
 
-                // 1. Carica i dati del progetto
                 const { data: projectData, error: projectError } = await supabase
                     .from('projects')
                     .select('*')
@@ -49,35 +41,21 @@ function ProgettoDettaglio() {
                 if (projectError) throw projectError;
                 setProgetto(projectData);
 
-                // 2. Carica tutte le tecnologie disponibili
                 const { data: technologiesData, error: technologiesError } = await supabase
                     .from('technologies')
                     .select('*')
                     .order('order_index');
 
-                if (technologiesError) {
-                    console.error('Errore nel caricamento tecnologie:', technologiesError);
-                } else {
-                    setAllTechnologies(technologiesData || []);
-                }
+                if (!technologiesError) setAllTechnologies(technologiesData || []);
 
-                // 3. Carica le immagini del progetto
                 const { data: imagesData, error: imagesError } = await supabase
                     .from('project_images')
                     .select('*')
                     .eq('project_id', id)
                     .order('order_index');
 
-                if (imagesError) {
-                    console.error('Errore nel caricamento immagini:', imagesError);
-                } else {
-                    // Organizza le immagini per device_type
-                    const imagesByDevice = {
-                        pc: [],
-                        tablet: [],
-                        mobile: []
-                    };
-
+                if (!imagesError) {
+                    const imagesByDevice = { pc: [], tablet: [], mobile: [] };
                     (imagesData || []).forEach(img => {
                         if (img.device_type && imagesByDevice[img.device_type]) {
                             imagesByDevice[img.device_type].push({
@@ -87,40 +65,26 @@ function ProgettoDettaglio() {
                             });
                         }
                     });
-
                     setProjectImages(imagesByDevice);
 
-                    // Imposta tab attiva di default al primo device disponibile
                     const firstAvailableDevice = ['pc', 'tablet', 'mobile'].find(
-                        device => imagesByDevice[device] && imagesByDevice[device].length > 0
+                        device => imagesByDevice[device]?.length > 0
                     );
-                    if (firstAvailableDevice) {
-                        setActiveDeviceTab(firstAvailableDevice);
-                    }
+                    if (firstAvailableDevice) setActiveDeviceTab(firstAvailableDevice);
                 }
 
-                // 4. Carica le tecnologie del progetto
                 const { data: projectTechsData, error: projectTechsError } = await supabase
                     .from('project_technologies')
                     .select('*')
                     .eq('project_id', id);
 
-                if (projectTechsError) {
-                    console.error('Errore nel caricamento tecnologie progetto:', projectTechsError);
-                } else {
-                    // Organizza le tecnologie per tipo
-                    const technologiesByType = {
-                        frontend: [],
-                        backend: [],
-                        database: []
-                    };
-
+                if (!projectTechsError) {
+                    const technologiesByType = { frontend: [], backend: [], database: [] };
                     (projectTechsData || []).forEach(pt => {
                         if (pt.type && technologiesByType[pt.type]) {
                             technologiesByType[pt.type].push(pt.technology_id);
                         }
                     });
-
                     setProjectTechnologies(technologiesByType);
                 }
             } catch (error) {
@@ -130,33 +94,48 @@ function ProgettoDettaglio() {
             }
         };
 
-        if (id) {
-            loadProjectDetails();
-        }
+        if (id) loadProjectDetails();
     }, [id]);
 
-    // Ottieni le tecnologie complete per tipo
-    const getTechnologiesByType = (type) => {
-        if (!projectTechnologies[type]) return [];
-        return projectTechnologies[type]
+    const frontendTechs = useMemo(() => {
+        if (!projectTechnologies.frontend) return [];
+        return projectTechnologies.frontend
             .map(techId => allTechnologies.find(t => t.id === techId))
             .filter(Boolean);
-    };
+    }, [projectTechnologies.frontend, allTechnologies]);
 
-    const frontendTechs = getTechnologiesByType('frontend');
-    const backendTechs = getTechnologiesByType('backend');
-    const databaseTechs = getTechnologiesByType('database');
+    const backendTechs = useMemo(() => {
+        if (!projectTechnologies.backend) return [];
+        return projectTechnologies.backend
+            .map(techId => allTechnologies.find(t => t.id === techId))
+            .filter(Boolean);
+    }, [projectTechnologies.backend, allTechnologies]);
+
+    const databaseTechs = useMemo(() => {
+        if (!projectTechnologies.database) return [];
+        return projectTechnologies.database
+            .map(techId => allTechnologies.find(t => t.id === techId))
+            .filter(Boolean);
+    }, [projectTechnologies.database, allTechnologies]);
+    const allProjectTechs = useMemo(
+        () => [...frontendTechs, ...backendTechs, ...databaseTechs],
+        [frontendTechs, backendTechs, databaseTechs]
+    );
     const currentImages = projectImages[activeDeviceTab] || [];
+    const hasImages = projectImages.pc.length > 0 || projectImages.tablet.length > 0 || projectImages.mobile.length > 0;
+
+    const deviceConfig = {
+        pc: { icon: Monitor, label: 'Desktop' },
+        tablet: { icon: Tablet, label: 'Tablet' },
+        mobile: { icon: Smartphone, label: 'Mobile' }
+    };
 
     if (loading) {
         return (
             <>
-                <SEOHead
-                    title="Caricamento Progetto - Jader Daniotti Portfolio"
-                    description="Caricamento dettagli progetto..."
-                />
+                <SEOHead title="Caricamento Progetto - Jader Daniotti Portfolio" description="Caricamento dettagli progetto..." />
                 <Navbar />
-                <div className="min-h-screen bg-scuro-2 flex flex-col items-center justify-center">
+                <div className="min-h-screen bg-black flex items-center justify-center">
                     <GlobalLoader />
                 </div>
                 <Footer />
@@ -167,18 +146,12 @@ function ProgettoDettaglio() {
     if (!progetto) {
         return (
             <>
-                <SEOHead
-                    title="Progetto non trovato - Jader Daniotti Portfolio"
-                    description="Il progetto richiesto non è stato trovato."
-                />
+                <SEOHead title="Progetto non trovato - Jader Daniotti Portfolio" description="Il progetto richiesto non è stato trovato." />
                 <Navbar />
-                <div className="min-h-screen bg-scuro-2 flex flex-col items-center justify-center">
-                    <h1 className="text-4xl text-bianco mb-4">Progetto non trovato</h1>
-                    <button
-                        onClick={() => navigate('/progetti')}
-                        className="cta mx-auto w-auto"
-                    >
-                        <span className="span">Torna ai Progetti</span>
+                <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-6">
+                    <h1 className="text-4xl text-white font-medium">Progetto non trovato</h1>
+                    <button onClick={() => navigate('/progetti')} className="inline-flex items-center gap-2 rounded-sm bg-white px-7 py-3.5 text-sm font-semibold text-black transition-all hover:-translate-y-0.5">
+                        Torna ai Progetti
                     </button>
                 </div>
                 <Footer />
@@ -195,297 +168,253 @@ function ProgettoDettaglio() {
             />
             <Navbar />
 
-            <div className="min-h-screen bg-scuro-2 py-8 pt-20 md:pt-24">
-                <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl">
-                    {/* Header Section - Modern Card Design */}
-                    <div className="mb-8">
-                        <button
-                            onClick={() => navigate('/progetti')}
-                            className="group flex items-center gap-2 text-bianco hover:text-chiaro transition-all duration-300 mb-6 px-4 py-2 rounded-lg hover:bg-chiaro-2/20 backdrop-blur-sm"
-                        >
-                            <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-                            <span className="text-base font-medium">Torna ai Progetti</span>
-                        </button>
+            {/* Hero: full-bleed cover image + title overlay */}
+            <section className="relative isolate min-h-[70vh] md:min-h-[80vh] flex items-end overflow-hidden bg-scuro-2">
+                {progetto.cover_image && (
+                    <img
+                        src={progetto.cover_image}
+                        alt={progetto.title}
+                        className="absolute inset-0 w-full h-full object-cover opacity-45"
+                        loading="eager"
+                        decoding="async"
+                        fetchPriority="high"
+                    />
+                )}
+                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/50 to-black/10" />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-white/6 to-transparent opacity-60" />
 
-                        <div className="">
-                            <div className="flex items-start gap-4 mb-4">
-                                <div className="flex-1">
-                                    <h1 className="text-3xl md:text-5xl lg:text-8xl font-extrabold tracking-tighter text-bianco leading-tight">
-                                        {progetto.title}
-                                    </h1>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <hr className='my-8 ' />
-                    {/* Main Content Grid */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 items-center">
-                        {/* Left Column - Description & Technologies */}
-                        <div className="lg:col-span-2 space-y-6">
-                            {/* Description Card */}
-                            <div className="">
-                                <div className="flex items-center gap-3 mb-4">
-                                    
-                                    <h2 className="text-3xl md:text-4xl font-bold text-bianco">Descrizione</h2>
-                                </div>
-                                <p className="text-base font-medium md:text-lg text-bianco/90 leading-relaxed">
-                                    {progetto.description || 'Nessuna descrizione disponibile per questo progetto.'}
-                                </p>
-                            </div>
-                        </div>
+                <div className="relative z-10 w-full mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 pb-16 md:pb-24">
+                    <button
+                        onClick={() => navigate('/progetti')}
+                        className="group inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-8 text-sm"
+                    >
+                        <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+                        Tutti i progetti
+                    </button>
 
-                        {/* Right Column - Quick Actions & Info */}
-                        <div className="space-y-6 ">
-                            {/* Quick Actions Card */}
-                            {progetto.domain_url ? (
-                                <div className="glass rounded-xl p-6 border border-chiaro-2/30">
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <div className="p-2 bg-chiaro-2 rounded-lg">
-                                            <Globe className="w-5 h-5 text-bianco" />
-                                        </div>
-                                        <h3 className="text-xl font-bold text-bianco">Link Utili</h3>
-                                    </div>
-                                    <a
-                                        href={progetto.domain_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="cta w-full block text-center"
-                                    >
-                                        <span className="span">Visita il Sito</span>
-                                        <span className="second">
-                                            <svg
-                                                width="50px"
-                                                height="20px"
-                                                viewBox="0 0 66 43"
-                                                version="1.1"
-                                            >
-                                                <g id="arrow">
-                                                    <path
-                                                        className="one"
-                                                        d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 40.1543933,3.89485454 Z"
-                                                        fill="#FFFFFF"
-                                                    ></path>
-                                                    <path
-                                                        className="two"
-                                                        d="M20.1543933,3.89485454 L23.9763149,0.139296592 C24.1708311,-0.0518420739 24.4826329,-0.0518571125 24.6771675,0.139262789 L45.6916134,20.7848311 C46.0855801,21.1718824 46.0911863,21.8050225 45.704135,22.1989893 C45.7000188,22.2031791 45.6958657,22.2073326 45.6916762,22.2114492 L24.677098,42.8607841 C24.4825957,43.0519059 24.1708242,43.0519358 23.9762853,42.8608513 L20.1545186,39.1069479 C19.9575152,38.9134427 19.9546793,38.5968729 20.1481845,38.3998695 C20.1502893,38.3977268 20.1524132,38.395603 20.1545562,38.3934985 L36.9937789,21.8567812 C37.1908028,21.6632968 37.193672,21.3467273 37.0001876,21.1497035 C36.9980647,21.1475418 36.9959223,21.1453995 36.9937605,21.1432767 L20.1545208,4.60825197 C19.9574869,4.41477773 19.9546013,4.09820839 20.1480756,3.90117456 C20.1501626,3.89904911 20.1522686,3.89694235 20.1543933,3.89485454 Z"
-                                                        fill="#FFFFFF"
-                                                    ></path>
-                                                    <path
-                                                        className="three"
-                                                        d="M0.154393339,3.89485454 L3.97631488,0.139296592 C4.17083111,-0.0518420739 4.48263286,-0.0518571125 4.67716753,0.139262789 L25.6916134,20.7848311 C26.0855801,21.1718824 26.0911863,21.8050225 25.704135,22.1989893 C25.7000188,22.2031791 25.6958657,22.2073326 25.6916762,22.2114492 L4.67709797,42.8607841 C4.48259567,43.0519059 4.17082418,43.0519358 3.97628526,42.8608513 L0.154518591,39.1069479 C-0.0424848215,38.9134427 -0.0453206733,38.5968729 0.148184538,38.3998695 C0.150289256,38.3977268 0.152413239,38.395603 0.154556228,38.3934985 L16.9937789,21.8567812 C17.1908028,21.6632968 17.193672,21.3467273 17.0001876,21.1497035 C16.9980647,21.1475418 16.9959223,21.1453995 16.9937605,21.1432767 L0.15452076,4.60825197 C-0.0425130651,4.41477773 -0.0453986756,4.09820839 0.148075568,3.90117456 C0.150162624,3.89904911 0.152268631,3.89694235 0.154393339,3.89485454 Z"
-                                                        fill="#FFFFFF"
-                                                    ></path>
-                                                </g>
-                                            </svg>
-                                        </span>
-                                    </a>
-                                </div>
-                            ) : (
-                                <div className="text-center py-12">
-                                    <ImageIcon className="w-16 h-16 text-chiaro/50 mx-auto mb-4" />
-                                    <p className="text-chiaro">Nessun link disponibile per questo progetto.</p>
-                                </div>
-                            )}
-                        </div>
+                    <h1 className="text-5xl sm:text-7xl lg:text-[6rem] font-medium leading-[0.95] tracking-tight text-white" data-aos="fade-up">
+                        {progetto.title}
+                    </h1>
 
-                    </div>
-                    <hr className='my-8 ' />
-                    {/* Technologies Section */}
-                    {(frontendTechs.length > 0 || backendTechs.length > 0 || databaseTechs.length > 0) && (
-                        <div className="">
-                            <h2 className="text-3xl md:text-4xl font-bold text-bianco">Stack Tecnologico</h2>
-
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {/* Frontend Technologies */}
-                                {frontendTechs.length > 0 && (
-                                    <div className="bg-scuro/50 rounded-xl p-5 flex flex-col ">
-                                        <div className="flex items-center gap-3 ">
-                                            <div>
-                                                <h3 className="text-xl md:text-2xl font-bold text-bianco"> Frontend</h3>
-                                                <p className="text-md md:text-lg font-normal text-gray-200">
-                                                    {frontendTechs.length} {frontendTechs.length === 1 ? 'tecnologia' : 'tecnologie'}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-wrap gap-3">
-                                            {frontendTechs.map((tech) => (
-                                                <div
-                                                    key={tech.id}
-                                                    className="group flex flex-col items-center p-4 bg-scuro-2/60 rounded-xl hover:bg-chiaro-2/30 transition-all duration-300  hover:border-chiaro-2/40 hover:scale-105 cursor-pointer"
-                                                    title={tech.name}
-                                                >
-                                                    <div
-                                                        className="w-14 h-14 rounded-lg flex items-center justify-center mb-2 bg-bianco/5 p-2 group-hover:bg-bianco/10 transition-colors"
-                                                        dangerouslySetInnerHTML={{ __html: tech.svg_code }}
-                                                    />
-                                                    <span className="text-xs text-bianco font-medium text-center max-w-[80px] truncate">
-                                                        {tech.name}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Backend Technologies */}
-                                {backendTechs.length > 0 && (
-                                    <div className=" p-5 ">
-                                        <div className="flex items-center  gap-3 mb-4">
-                                            <div>
-                                                <h3 className="text-lg font-bold text-bianco">Backend</h3>
-                                                <p className="text-xs text-chiaro">
-                                                    {backendTechs.length} {backendTechs.length === 1 ? 'tecnologia' : 'tecnologie'}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-wrap gap-3">
-                                            {backendTechs.map((tech) => (
-                                                <div
-                                                    key={tech.id}
-                                                    className="group flex flex-col items-center p-4 bg-scuro-2/60 rounded-xl hover:bg-chiaro-2/30 transition-all duration-300  hover:border-chiaro-2/40 hover:scale-105 cursor-pointer"
-                                                    title={tech.name}
-                                                >
-                                                    <div
-                                                        className="w-14 h-14 rounded-lg flex items-center justify-center mb-2 bg-bianco/5 p-2 group-hover:bg-bianco/10 transition-colors"
-                                                        dangerouslySetInnerHTML={{ __html: tech.svg_code }}
-                                                    />
-                                                    <span className="text-xs text-bianco font-medium text-center max-w-[80px] truncate">
-                                                        {tech.name}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Database Technologies */}
-                                {databaseTechs.length > 0 && (
-                                    <div className="bg-scuro/50 rounded-xl p-5 flex flex-col ">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            
-                                            <div>
-                                                <h3 className="text-xl md:text-2xl font-bold text-bianco">Database</h3>
-                                                <p className="text-md md:text-lg font-normal text-gray-200">
-                                                    {databaseTechs.length} {databaseTechs.length === 1 ? 'tecnologia' : 'tecnologie'}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-wrap gap-3">
-                                            {databaseTechs.map((tech) => (
-                                                <div
-                                                    key={tech.id}
-                                                    className="group flex flex-col items-center p-4 bg-scuro-2/60 rounded-xl hover:bg-chiaro-2/30 transition-all duration-300  hover:border-chiaro-2/40 hover:scale-105 cursor-pointer"
-                                                    title={tech.name}
-                                                >
-                                                    <div
-                                                        className="w-14 h-14 rounded-lg flex items-center justify-center mb-2 bg-bianco/5 p-2 group-hover:bg-bianco/10 transition-colors"
-                                                        dangerouslySetInnerHTML={{ __html: tech.svg_code }}
-                                                    />
-                                                    <span className="text-xs text-bianco font-medium text-center max-w-[80px] truncate">
-                                                        {tech.name}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
+                    {allProjectTechs.length > 0 && (
+                        <div className="mt-6 flex flex-wrap gap-2">
+                            {allProjectTechs.map((tech) => (
+                                <span key={tech.id} className="rounded-full border border-white/14 bg-black/40 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-white/65">
+                                    {tech.name}
+                                </span>
+                            ))}
                         </div>
                     )}
-                    <hr className='my-8 ' />
-                    {/* Images Gallery Section */}
-                    {(projectImages.pc.length > 0 || projectImages.tablet.length > 0 || projectImages.mobile.length > 0) && (
-                        <div className=" p-6 md:p-8 ">
-                            <div className="flex items-center gap-3 mb-6">
-                                <h2 className="text-3xl md:text-4xl font-bold text-bianco">Galleria Progetto</h2>
-                            </div>
 
-                            {/* Device Tabs - Enhanced Design */}
-                            <div className="flex gap-3 mb-6 justify-center flex-wrap">
-                                {projectImages.pc.length > 0 && (
-                                    <button
-                                        onClick={() => setActiveDeviceTab('pc')}
-                                        className={`group px-5 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 border ${activeDeviceTab === 'pc'
-                                            ? 'bg-gradient-chiaro text-bianco border-chiaro shadow-lg scale-105'
-                                            : 'bg-scuro-2/50 text-chiaro border-chiaro-2/30 hover:bg-chiaro-2/20 hover:border-chiaro-2/50'
-                                            }`}
-                                    >
-                                        <Monitor className={`w-5 h-5 transition-transform ${activeDeviceTab === 'pc' ? 'scale-110' : ''}`} />
-                                        <span>Desktop</span>
-                                        <span className={`px-2 py-0.5 rounded-full text-xs ${activeDeviceTab === 'pc'
-                                            ? 'bg-bianco/20 text-bianco'
-                                            : 'bg-chiaro-2/30 text-chiaro'
-                                            }`}>
-                                            {projectImages.pc.length}
-                                        </span>
-                                    </button>
-                                )}
-                                {projectImages.tablet.length > 0 && (
-                                    <button
-                                        onClick={() => setActiveDeviceTab('tablet')}
-                                        className={`group px-5 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 border ${activeDeviceTab === 'tablet'
-                                            ? 'bg-gradient-chiaro text-bianco border-chiaro shadow-lg scale-105'
-                                            : 'bg-scuro-2/50 text-bianco border-chiaro-2/30 hover:bg-chiaro-2/20 hover:border-chiaro-2/50'
-                                            }`}
-                                    >
-                                        <Tablet className={`w-5 h-5 transition-transform ${activeDeviceTab === 'tablet' ? 'scale-110' : ''}`} />
-                                        <span>Tablet</span>
-                                        <span className={`px-2 py-0.5 rounded-full text-xs ${activeDeviceTab === 'tablet'
-                                            ? 'bg-bianco/20 text-bianco'
-                                            : 'bg-chiaro-2/30 text-bianco'
-                                            }`}>
-                                            {projectImages.tablet.length}
-                                        </span>
-                                    </button>
-                                )}
-                                {projectImages.mobile.length > 0 && (
-                                    <button
-                                        onClick={() => setActiveDeviceTab('mobile')}
-                                        className={`group px-5 py-3 rounded-xl font-medium transition-all duration-300 flex items-center gap-2 border ${activeDeviceTab === 'mobile'
-                                            ? 'bg-gradient-chiaro text-bianco border-chiaro shadow-lg scale-105'
-                                            : 'bg-scuro-2/50 text-bianco border-chiaro-2/30 hover:bg-chiaro-2/20 hover:border-chiaro-2/50'
-                                            }`}
-                                    >
-                                        <Smartphone className={`w-5 h-5 transition-transform ${activeDeviceTab === 'mobile' ? 'scale-110' : ''}`} />
-                                        <span>Mobile</span>
-                                        <span className={`px-2 py-0.5 rounded-full text-xs ${activeDeviceTab === 'mobile'
-                                            ? 'bg-bianco/20 text-bianco'
-                                            : 'bg-chiaro-2/30 text-bianco'
-                                            }`}>
-                                            {projectImages.mobile.length}
-                                        </span>
-                                    </button>
-                                )}
-                            </div>
-
-                            {/* Images Grid - Enhanced */}
-                            {currentImages.length > 0 ? (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                                    {currentImages.map((img, index) => (
-                                        <div
-                                            key={img.id}
-                                            className="group relative overflow-hidden rounded-xl border border-chiaro-2/20 hover:border-chiaro-2/50 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] bg-scuro/30"
-                                        >
-                                            <img
-                                                src={img.image_url}
-                                                alt={`${progetto.title} - ${activeDeviceTab} - Immagine ${index + 1}`}
-                                                className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-                                                loading="lazy"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-scuro-2/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="text-center py-12">
-                                    <ImageIcon className="w-16 h-16 text-chiaro/50 mx-auto mb-4" />
-                                    <p className="text-chiaro">Nessuna immagine disponibile per questo dispositivo.</p>
-                                </div>
-                            )}
+                    {progetto.domain_url && (
+                        <div className="mt-8">
+                            <a
+                                href={progetto.domain_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2.5 rounded-sm bg-white px-7 py-3.5 text-sm font-semibold text-black shadow-lg shadow-black/25 transition-all hover:-translate-y-0.5 hover:bg-white/92"
+                            >
+                                <Globe className="w-4 h-4" />
+                                Visita il sito
+                                <ExternalLink className="w-3.5 h-3.5 opacity-50" />
+                            </a>
                         </div>
                     )}
                 </div>
-            </div>
+            </section>
+
+            {/* Description */}
+            <section className="relative bg-scuro-2 border-t border-white/8">
+                <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+                        <div className="lg:col-span-4">
+                            <p className="text-xs font-semibold uppercase tracking-[0.45em] text-white/42" data-aos="fade-up">
+                                Il progetto
+                            </p>
+                            <h2 className="mt-3 text-3xl md:text-4xl font-medium tracking-tight text-white">
+                                Descrizione
+                            </h2>
+                        </div>
+                        <div className="lg:col-span-8" data-aos="fade-up">
+                            <p className="text-base md:text-lg leading-[1.8] text-white/72 font-normal">
+                                {progetto.description || 'Nessuna descrizione disponibile per questo progetto.'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Stack Tecnologico */}
+            {(frontendTechs.length > 0 || backendTechs.length > 0 || databaseTechs.length > 0) && (
+                <section className="relative bg-scuro-2 border-t border-white/8">
+                    <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+                        <p className="text-xs font-semibold uppercase tracking-[0.45em] text-white/42" data-aos="fade-up">
+                            Tecnologie
+                        </p>
+                        <h2 className="mt-3 text-3xl md:text-4xl font-medium tracking-tight text-white mb-14">
+                            Stack Tecnologico
+                        </h2>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-scuro-2/8 rounded-2xl overflow-hidden" data-aos="fade-up">
+                            {[
+                                { label: 'Frontend', techs: frontendTechs },
+                                { label: 'Backend', techs: backendTechs },
+                                { label: 'Database', techs: databaseTechs }
+                            ].filter(g => g.techs.length > 0).map((group) => (
+                                <div key={group.label} className="bg-scuro-2 p-8 md:p-10">
+                                    <div className="flex items-baseline justify-between mb-8">
+                                        <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-white/55">{group.label}</h3>
+                                        <span className="text-xs text-white/30 tabular-nums">{group.techs.length}</span>
+                                    </div>
+                                    <div className="flex flex-wrap gap-4">
+                                        {group.techs.map((tech) => (
+                                            <div key={tech.id} className="group flex flex-col items-center gap-2.5" title={tech.name}>
+                                                <div
+                                                    className="w-14 h-14 rounded-xl flex items-center justify-center bg-white/5 p-2.5 border border-white/8 group-hover:border-white/20 group-hover:bg-white/10 transition-all duration-300 group-hover:scale-110"
+                                                    dangerouslySetInnerHTML={{ __html: tech.svg_code }}
+                                                />
+                                                <span className="text-[11px] text-white/50 font-medium group-hover:text-white/80 transition-colors text-center max-w-[80px] truncate">
+                                                    {tech.name}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Gallery */}
+            {hasImages && (
+                <section className="relative bg-scuro-2 border-t border-white/8">
+                    <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+                        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-14">
+                            <div>
+                                <p className="text-xs font-semibold uppercase tracking-[0.45em] text-white/42" data-aos="fade-up">
+                                    Anteprime
+                                </p>
+                                <h2 className="mt-3 text-3xl md:text-4xl font-medium tracking-tight text-white">
+                                    Galleria
+                                </h2>
+                            </div>
+
+                            {/* Device switcher */}
+                            <div className="flex rounded-full border border-white/12 bg-white/4 p-1" data-aos="fade-up">
+                                {['pc', 'tablet', 'mobile'].filter(d => projectImages[d]?.length > 0).map((device) => {
+                                    const DeviceIcon = deviceConfig[device].icon;
+                                    const isActive = activeDeviceTab === device;
+                                    return (
+                                        <button
+                                            key={device}
+                                            onClick={() => setActiveDeviceTab(device)}
+                                            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                                                isActive
+                                                    ? 'bg-white text-black shadow-lg'
+                                                    : 'text-white/50 hover:text-white/80'
+                                            }`}
+                                        >
+                                            <DeviceIcon className="w-4 h-4" />
+                                            <span className="hidden sm:inline">{deviceConfig[device].label}</span>
+                                            <span className={`text-[10px] tabular-nums ${isActive ? 'text-black/50' : 'text-white/30'}`}>
+                                                {projectImages[device].length}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {currentImages.length > 0 ? (
+                            <div
+                                className={`grid gap-4 md:gap-6 ${
+                                    activeDeviceTab === 'mobile'
+                                        ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'
+                                        : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+                                }`}
+                            >
+                                {currentImages.map((img, index) => (
+                                    <div
+                                        key={img.id}
+                                        className="group relative overflow-hidden rounded-xl border border-white/8 hover:border-white/20 transition-all duration-500 cursor-pointer bg-white/2"
+                                        onClick={() => setLightboxImg(img.image_url)}
+                                    >
+                                        <div className={`overflow-hidden `}>
+                                            <img
+                                                src={img.image_url}
+                                                alt={`${progetto.title} - ${deviceConfig[activeDeviceTab].label} - ${index + 1}`}
+                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                                loading="lazy"
+                                                decoding="async"
+                                            />
+                                        </div>
+                                        <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                        <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                                            <span className="text-xs text-white/70 font-medium uppercase tracking-widest">
+                                                {deviceConfig[activeDeviceTab].label} {String(index + 1).padStart(2, '0')}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-20 rounded-2xl border border-dashed border-white/12">
+                                <ImageIcon className="w-12 h-12 text-white/20 mx-auto mb-4" />
+                                <p className="text-white/40 text-sm">Nessuna immagine per questo dispositivo.</p>
+                            </div>
+                        )}
+                    </div>
+                </section>
+            )}
+
+            {/* CTA bottom */}
+            <section className="relative bg-scuro-2 border-t border-white/8">
+                <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.45em] text-white/42">Prossimo passo</p>
+                            <h2 className="mt-3 text-2xl md:text-3xl font-medium tracking-tight text-white">Ti interessa un progetto simile?</h2>
+                        </div>
+                        <div className="flex gap-4">
+                            <button
+                                onClick={() => navigate('/progetti')}
+                                className="inline-flex items-center gap-2 rounded-sm border border-white/18 px-7 py-3.5 text-sm font-semibold text-white/88 transition-all hover:border-white/40 hover:bg-white/6"
+                            >
+                                <ArrowLeft className="w-4 h-4" />
+                                Altri progetti
+                            </button>
+                            <button
+                                onClick={() => navigate('/contatti')}
+                                className="inline-flex items-center gap-2 rounded-sm bg-white px-7 py-3.5 text-sm font-semibold text-black shadow-lg shadow-black/25 transition-all hover:-translate-y-0.5 hover:bg-white/92"
+                            >
+                                Contattami
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Lightbox */}
+            {lightboxImg && (
+                <div
+                    className="fixed inset-0 z-9999 bg-black/95 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer"
+                    onClick={() => setLightboxImg(null)}
+                >
+                    <button
+                        className="absolute top-6 right-6 text-white/60 hover:text-white transition-colors z-10"
+                        onClick={() => setLightboxImg(null)}
+                    >
+                        <X className="w-8 h-8" />
+                    </button>
+                    <img
+                        src={lightboxImg}
+                        alt="Anteprima ingrandita"
+                        className="max-w-full max-h-[90vh] object-contain rounded-lg"
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                </div>
+            )}
 
             <Footer />
         </>
@@ -493,4 +422,3 @@ function ProgettoDettaglio() {
 }
 
 export default ProgettoDettaglio;
-

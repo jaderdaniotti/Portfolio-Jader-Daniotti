@@ -21,13 +21,6 @@ const LandingPage = lazy(() => import('./pages/landingPage'));
 const Credits = lazy(() => import('./pages/Credits'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 
-// Componente di fallback durante il caricamento delle pagine
-const PageLoader = () => (
-  <div className="fixed inset-0 z-50 bg-scuro flex items-center justify-center">
-    <div className="loader"></div>
-  </div>
-);
-
 function App() {
   // Inizializza il tracking Umami
   useUmamiTracking();
@@ -35,7 +28,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Suspense fallback={<PageLoader />}>
+      <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path='/work' element={<Work />} />

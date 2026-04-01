@@ -3,6 +3,7 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import CardServizi from "../components/cardServizi";
 import SEOHead from '../components/SEOHead';
+import PageHero from '../components/PageHero';
 
 function Collaborazioni() {
   let cardServizi = {
@@ -213,13 +214,13 @@ function Collaborazioni() {
         keywords="collaborazioni web designer udine, siti web friuli, creazione siti web udine, jader daniotti, agenzie siti web udine"
       />
       <Navbar />
-      {/* titolo */}
-      <div className="py-10 px-5 pt-20 md:pt-24" id="">
-        <h1 className="text-center text-4xl md:text-7xl lg:text-8xl tracking-tight titolo-bianco">
-          COLLABORAZIONI
-        </h1>
-      </div>
-      <hr className="mb-10" />
+      
+      <PageHero
+        eyebrow="PARTNERSHIP"
+        title="Collaborazioni"
+        description="Collabora con Jader Daniotti per progetti web a Udine, Gemona del Friuli, Solaro e in tutto il Friuli. Servizi per imprese e professionisti."
+        keywords={["Aurora AI", "Wham Design", "G-START", "Friuli"]}
+      />
       {/* diff */}
       <figure className="diff aspect-16/9 " tabIndex={0}>
         <div className="diff-item-1" role="img" tabIndex={0}>

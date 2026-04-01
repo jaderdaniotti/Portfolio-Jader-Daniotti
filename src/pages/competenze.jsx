@@ -6,6 +6,7 @@ import Marquee from "react-fast-marquee";
 import SEOHead from '../components/SEOHead';
 import { portfolioAPI } from '../config/supabase';
 import GlobalLoader from "../components/GlobalLoader";
+import PageHero from '../components/PageHero';
 
 function Competenze() {
     
@@ -110,17 +111,20 @@ function Competenze() {
                 keywords="competenze web designer udine, jader daniotti skills, React, Laravel, siti web friuli, sviluppo web"
             />
             <Navbar />
-            <div className="py-10 px-5 pt-20 md:pt-24" id="indice">
-                <h1 className="text-center text-5xl md:text-8xl titolo-bianco">COMPETENZE</h1>
-            </div>
-            <hr className='mb-10' />
+            
+            <PageHero
+                eyebrow="SKILLS"
+                title="Competenze"
+                description="Ecco una lista di alcune delle competenze che ho acquisito nello sviluppo web e che uso nel mio quotidiano per creare siti web a Udine e in Friuli."
+                keywords={["React", "Laravel", "PHP", "JavaScript", "Tailwind"]}
+            />
             
             {loading ? (
-                <div className="text-center w-[100vw] h-[100vh] flex items-center justify-center py-20">
+                <div className="text-center w-screen h-screen bg-scuro-2 flex items-center justify-center py-20">
                     <GlobalLoader/>
                 </div>
             ) : (
-                <>
+                <div className="bg-scuro-2">
                     {skillData.frontend.length > 0 && (
                         <>
                             <SkillSection
@@ -170,7 +174,7 @@ function Competenze() {
                         </div>
                         <hr className='my-10' />
                     </section>
-                </>
+                </div>
             )}
             <Footer />
         </>

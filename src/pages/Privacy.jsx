@@ -12,7 +12,7 @@ const Privacy = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-bianco inter text-scuro">
+      <div className="min-h-screen bg-scuro-2 inter text-bianco py-6">
         <Navbar />
         <div className="container mx-auto px-4 py-8 pt-24">
           {/* Header */}
@@ -27,20 +27,20 @@ const Privacy = () => {
           </div>
 
           {/* Contenuto Privacy */}
-          <div className="max-w-4xl mx-auto" data-aos="fade-up" data-aos-delay="200">
-            <div className="bg-white/50 backdrop-blur-sm rounded-lg p-6 md:p-8 border border-scuro/10 space-y-6">
+          <div className="max-w-6xl mx-auto" data-aos="fade-up" data-aos-delay="200">
+            <div className="bg-scuro-2 p-6 rounded-lg border border-white/12 space-y-6">
               
               {/* Sezione Dati Raccolti */}
               <section>
-                <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-scuro">
+                <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-bianco">
                   Dati Raccolti
                 </h2>
-                <p className="text-scuro/80 leading-relaxed mb-4">
+                <p className="text-bianco/80 leading-relaxed mb-4">
                   I dati raccolti tramite i moduli di contatto (nome, email, telefono) 
                   saranno utilizzati esclusivamente per ricontattare l'utente in merito 
                   alla richiesta effettuata.
                 </p>
-                <p className="text-scuro/80 leading-relaxed">
+                <p className="text-bianco/80 leading-relaxed">
                   I dati non saranno ceduti a terzi e verranno trattati nel rispetto 
                   del Regolamento UE 2016/679 (GDPR).
                 </p>
@@ -48,27 +48,27 @@ const Privacy = () => {
 
               {/* Sezione Form Meta/Facebook */}
               <section className="pt-6 border-t border-scuro/10">
-                <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-scuro">
+                <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-bianco">
                   Form di Contatto Meta/Facebook
                 </h2>
-                <p className="text-scuro/80 leading-relaxed mb-4">
+                <p className="text-bianco/80 leading-relaxed mb-4">
                   Qualora vengano utilizzati form di contatto integrati con Meta (Facebook), 
                   i dati raccolti tramite tali form (nome, email, telefono, messaggio) 
                   sono gestiti secondo le politiche sulla privacy di Meta.
                 </p>
-                <p className="text-scuro/80 leading-relaxed mb-4">
+                <p className="text-bianco/80 leading-relaxed mb-4">
                   I dati ricevuti tramite i form Meta saranno utilizzati esclusivamente 
                   per rispondere alle richieste degli utenti e non saranno utilizzati 
                   per finalità di marketing diretto senza il consenso esplicito dell'utente.
                 </p>
-                <p className="text-scuro/80 leading-relaxed">
+                <p className="text-bianco/80 leading-relaxed">
                   Per maggiori informazioni sul trattamento dei dati da parte di Meta, 
                   consulta la{' '}
                   <a 
                     href="https://www.facebook.com/privacy/policy" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-scuro underline hover:text-scuro/70 transition-colors"
+                    className="text-bianco underline hover:text-bianco/70 transition-colors"
                   >
                     Privacy Policy di Meta
                   </a>.
@@ -77,18 +77,18 @@ const Privacy = () => {
 
               {/* Sezione Titolare */}
               <section className="pt-6 border-t border-scuro/10">
-                <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-scuro">
+                <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-bianco">
                   Titolare del Trattamento
                 </h2>
                 <div className="bg-scuro/5 rounded-lg p-4 space-y-2">
-                  <p className="text-scuro font-medium">
+                  <p className="text-bianco font-medium">
                     <span className="font-semibold">Titolare:</span> JaderWeb
                   </p>
-                  <p className="text-scuro">
+                      <p className="text-bianco">
                     <span className="font-semibold">Email:</span>{' '}
                     <a 
                       href="mailto:jaderdaniotti.lavoro@gmail.com" 
-                      className="text-scuro underline hover:text-scuro/70 transition-colors"
+                      className="text-bianco underline hover:text-bianco/70 transition-colors"
                     >
                       jaderdaniotti.lavoro@gmail.com
                     </a>
@@ -98,13 +98,13 @@ const Privacy = () => {
 
               {/* Sezione Diritti dell'Utente */}
               <section className="pt-6 border-t border-scuro/10">
-                <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-scuro">
+                <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-bianco">
                   Diritti dell'Utente
                 </h2>
-                <p className="text-scuro/80 leading-relaxed mb-4">
+                <p className="text-bianco/80 leading-relaxed mb-4">
                   Ai sensi del GDPR, l'utente ha diritto di:
                 </p>
-                <ul className="list-disc list-inside space-y-2 text-scuro/80 ml-4">
+                <ul className="list-disc list-inside space-y-2 text-bianco/80 ml-4">
                   <li>Accedere ai propri dati personali</li>
                   <li>Richiedere la rettifica dei dati inesatti</li>
                   <li>Richiedere la cancellazione dei dati</li>
@@ -112,7 +112,7 @@ const Privacy = () => {
                   <li>Richiedere la limitazione del trattamento</li>
                   <li>Richiedere la portabilità dei dati</li>
                 </ul>
-                <p className="text-scuro/80 leading-relaxed mt-4">
+                <p className="text-bianco/80 leading-relaxed mt-4">
                   Per esercitare questi diritti, è possibile contattare il titolare 
                   all'indirizzo email indicato sopra.
                 </p>
@@ -120,10 +120,10 @@ const Privacy = () => {
 
               {/* Sezione Conservazione Dati */}
               <section className="pt-6 border-t border-scuro/10">
-                <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-scuro">
+                <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-bianco">
                   Conservazione dei Dati
                 </h2>
-                <p className="text-scuro/80 leading-relaxed">
+                <p className="text-bianco/80 leading-relaxed">
                   I dati personali raccolti verranno conservati per il tempo necessario 
                   a rispondere alle richieste degli utenti e, comunque, non oltre il 
                   periodo previsto dalla normativa vigente.
@@ -135,14 +135,14 @@ const Privacy = () => {
 
           {/* Footer Note */}
           <div className="text-center mt-12">
-            <div className="bg-white/30 backdrop-blur-sm rounded-lg p-6 border border-scuro/10">
-              <p className="text-scuro/70 mb-4">
+            <div className=" backdrop-blur-sm rounded-lg p-6 border border-scuro/10">
+              <p className="text-bianco/70 mb-4">
                 Per qualsiasi domanda o richiesta relativa al trattamento dei dati personali, 
                 non esitare a contattarci.
               </p>
               <Link 
                 to="/" 
-                className="inline-flex text-bianco items-center px-6 py-3 bg-scuro rounded-lg hover:bg-scuro/80 transition-colors duration-300"
+                className="inline-flex text-bianco items-center px-6 py-3 bg-scuro-2 rounded-lg hover:bg-scuro-2/80 transition-colors duration-300"
               >
                 <i className="bi bi-arrow-left mr-2"></i>
                 Torna alla Home

@@ -2,6 +2,7 @@ import Navbar from "../Navbar"
 import Footer from "../Footer"
 import CardServizi from "../components/cardServizi";
 import SEOHead from '../components/SEOHead';
+import PageHero from '../components/PageHero';
 
 function Servizi() {
     let cardServizi = {
@@ -183,17 +184,19 @@ function Servizi() {
                 description="Creazione siti web a Udine, Gemona del Friuli, Solaro e in tutto il Friuli: portfolio, siti aziendali, e-commerce, landing page. Web designer Udine."
                 keywords="creazione siti web udine, siti web udine, siti web friuli, web designer udine, servizi web, siti aziendali, e-commerce, landing page, Gemona del Friuli, Solaro"
             />
-            <Navbar></Navbar>
-            <div className="py-10 px-5">
-                <h1 className="text-center text-4xl md:text-7xl lg:text-8xl tracking-tight titolo-bianco">
-                    SERVIZI
-                </h1>
-            </div>
-            <hr className="mb-10 " />
-            <div className="px-4   py-8 flex flex-col gap-10">
-                <h2 className="text-xl px-10 md:px-20 md:text-4xl font-bold text-bianco tracking-tight text-center">
-                    Dai il via alla tua impresa con un sito web! Qui trovi i miei servizi per te.
-                </h2>
+            <Navbar />
+            
+            <PageHero
+                eyebrow="SERVIZI"
+                title="Creazione Siti Web"
+                description="Dai il via alla tua impresa con un sito web! Portfolio, landing page, siti aziendali, e-commerce. Soluzioni su misura per Udine, Gemona del Friuli, Solaro e tutto il Friuli."
+                keywords={["Portfolio", "E-commerce", "Landing Page", "Siti Aziendali"]}
+                actions={[
+                    { href: "/contatti", label: "Richiedi preventivo" }
+                ]}
+            />
+            
+            <div className="px-4 py-8 flex flex-col gap-10">
                 {Object.entries(cardServizi).map(([chiave, valore]) => (
                     <section
                         key={chiave}

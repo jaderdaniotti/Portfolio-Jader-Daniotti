@@ -4,6 +4,7 @@ import Footer from "../Footer";
 import SEOHead from '../components/SEOHead';
 import emailjs from 'emailjs-com';
 import Aurora from "../components/Aurora";
+import PageHero from '../components/PageHero';
 
 function Contatti() {
   // Configurazione EmailJS
@@ -74,14 +75,19 @@ function Contatti() {
         />
       </div>
       
-      <div className="relative z-10">
-        <Navbar></Navbar>
-      {/* <div className="py-10 " id="contattisection">
-        <h1 className="text-center text-6xl md:text-8xl tracking-tight titolo-bianco">
-          CONTATTI
-        </h1>
-      </div>
-      <hr className="mb-10" /> */}
+      <div className="relative z-10 bg-scuro-2">
+        <Navbar />
+        
+        <PageHero
+          eyebrow="CONTATTI"
+          title="Parliamone"
+          description="Contattami per progetti web a Udine, Gemona del Friuli, Solaro e in tutto il Friuli. Email, WhatsApp, LinkedIn. Preventivo gratuito."
+          keywords={["Udine", "Friuli", "Preventivo", "Consulenza"]}
+          actions={[
+            { href: "mailto:jaderdaniotti.lavoro@gmail.com", label: "Invia Email" },
+            { href: "https://wa.me/3513152008", label: "WhatsApp", variant: "secondary" }
+          ]}
+        />
       {/* <div className="px-6 py-8">
         <p className="text-xl px-10 md:px-20 md:text-4xl font-bold text-bianco tracking-tight text-center">
           Scegli il modo per entrare in contatto.
@@ -109,7 +115,7 @@ function Contatti() {
       </div> */}
 
       {/* Form Personalizzato con Tabs */}
-      <div className="px-4 py-8 pt-20 md:pt-24 max-w-4xl mx-auto">
+      <div className="px-4 py-8 pt-20 md:pt-24 max-w-4xl mx-auto bg-scuro-2">
         <h2 className="text-5xl md:text-6xl font-bold text-bianco tracking-tight text-center mb-4">
           Cosa aspetti? <span className="italic">Contattami!</span>
         </h2>

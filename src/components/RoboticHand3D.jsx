@@ -150,7 +150,7 @@ function ErrorFallback({ error }) {
 }
 
 // Componente principale della robotic hand 3D
-function RoboticHand3D() {
+function RoboticHand3D({ onAvailabilityChange }) {
     const [isLoaded, setIsLoaded] = useState(false);
     const [hasError, setHasError] = useState(false);
     const [loadingTimeout, setLoadingTimeout] = useState(false);
@@ -165,6 +165,19 @@ function RoboticHand3D() {
         const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
         if (!gl) setHasError(true);
     }, []);
+
+    useEffect(() => {
+        if (!onAvailabilityChange) return;
+
+        if (isLoaded) {
+            onAvailabilityChange(true);
+            return;
+        }
+
+        if (hasError || loadingTimeout) {
+            onAvailabilityChange(false);
+        }
+    }, [isLoaded, hasError, loadingTimeout, onAvailabilityChange]);
 
     // Timeout per il caricamento - più lungo per il primo caricamento
     useEffect(() => {

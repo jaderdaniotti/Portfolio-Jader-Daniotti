@@ -18,6 +18,7 @@ function Home() {
     const [progetti, setProgetti] = useState([]);
     const [loading, setLoading] = useState(true);
     const [logoSource, setLogoSource] = useState("/loghi/logogrigio.png");
+    const [show3DSection, setShow3DSection] = useState(true);
 
     // Fetch delle tecnologie dal database
     useEffect(() => {
@@ -118,12 +119,6 @@ function Home() {
             />
             <div className="bg-svg relative overflow-hidden pt-20 md:pt-20">
                 <div className="relative z-10">
-
-                    <SEOHead
-                        title="Jader Daniotti - Web Designer Udine | Creazione Siti Web Friuli"
-                        description="Web designer a Udine e in Friuli: Jader Daniotti crea siti web per Udine, Gemona del Friuli, Solaro. Creazione siti web Udine, siti web Friuli. Portfolio e servizi."
-                        keywords="web designer udine, web designer gemona del friuli, web designer solaro, creazione siti web udine, siti web udine, siti web friuli, jader, jader daniotti, agenzie siti web udine, Web Design, UI/UX, Portfolio, React, Laravel"
-                    />
                     <Navbar />
                     {/* hero */}
                     {/* <div className="hero h-screen relative" id='home'>
@@ -164,7 +159,7 @@ function Home() {
                         <div className="grid grid-cols-1 md:grid-cols-2 align-center items-center justify-center  px-5 py-5 w-full text-center" id='chi-sono'>
                             <div className="text-center flex-col py-10">
                                 <h1 className="titolo-bianco tracking-tight text-7xl" data-aos="zoom-in" >Chi sono?</h1>
-                                <p className="py-2 text-lg md:text-xl text-bianco/80" data-aos="zoom-in">Web designer a Udine, Gemona del Friuli, Solaro e in tutto il Friuli — creazione siti web su misura.</p>
+                               
                                 <p className="py-6 text-3xl" data-aos="zoom-in" >
                                     Ciao a tutti, mi chiamo Jader Daniotti, sono un appassionato di <br /> <span className='text-chiaro'>Web Design</span>, <br /> <span className='text-chiaro'>UI/UX</span> e <br /><span className='text-chiaro'>Programmazione</span>.
                                 </p>
@@ -180,68 +175,32 @@ function Home() {
                     </section>
                     <hr />
                     {/* 3D */}
-                    <section className="py-5 min-h-screen  overflow-hidden">
-                        <div className="container mx-auto  overflow-visible">
-                            <div className="text-center mb-16">
-                                <h1 className='text-5xl tracking-tight md:text-8xl font-bold titolo-bianco py-5' data-aos="fade-up">
-                                    Tecnologia 3D
-                                </h1>
-                                <p className="text-2xl md:text-2xl font-medium max-w-3xl mx-auto" data-aos="fade-up">
-                                    Esplora le possibilità della tecnologia 3D nel web moderno.
-                                    Il robot è stato integrato utilizzando React Three Fiber.
-                                </p>
-                            </div>
+                    {show3DSection && (
+                        <>
+                            <section className="py-5 min-h-screen overflow-hidden">
+                                <div className="container mx-auto overflow-visible">
+                                    <div className="text-center mb-16">
+                                        <h1 className='text-5xl tracking-tight md:text-8xl font-bold titolo-bianco py-5' data-aos="fade-up">
+                                            Tecnologia 3D
+                                        </h1>
+                                        <p className="text-2xl md:text-2xl font-medium max-w-3xl mx-auto" data-aos="fade-up">
+                                            Esplora le possibilità della tecnologia 3D nel web moderno.
+                                            Il robot è stato integrato utilizzando React Three Fiber.
+                                        </p>
+                                    </div>
 
-                            <div className="grid grid-cols-1 gap-8 items-start overflow-visible">
-
-
-                                <div className="order-1 lg:order-2 overflow-visible">
-                                    <div className="rounded-2xl  phone-3d-container mb-8">
-                                        <RoboticHand3D />
+                                    <div className="grid grid-cols-1 gap-8 items-start overflow-visible">
+                                        <div className="order-1 lg:order-2 overflow-visible">
+                                            <div className="rounded-2xl phone-3d-container mb-8">
+                                                <RoboticHand3D onAvailabilityChange={setShow3DSection} />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
-                                {/* <div className="order-2 ">
-                            <div className=" rounded-2xl p-8 ">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-10">
-                                    {
-                                        [
-                                            {
-                                                title: "Rotazione automatica e controlli manuali",
-                                                icon: "text-bianco text-xl sm:text-2xl bi bi-arrow-clockwise",
-                                            },
-                                            {
-                                                title: "Zoom e navigazione fluida",
-                                                icon: "text-bianco text-xl sm:text-2xl bi bi-zoom-in",
-                                            },
-                                            {
-                                                title: "Illuminazione realistica e ombre",
-                                                icon: "text-bianco text-xl sm:text-2xl bi bi-palette",
-                                            },
-                                            {
-                                                title: "Rendering ottimizzato per le performance",
-                                                icon: "text-bianco text-xl sm:text-2xl bi bi-lightning",
-                                            },
-                                        ].map((feature, index) => (
-                                            <div className="bg-gradient-to-br from-scuro/20 to-scuro/40 backdrop-blur-sm border-2 border-chiaro/20 rounded-xl p-4 sm:p-9 hover:from-scuro/30 hover:to-scuro/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-chiaro/10 relative" key={index}>
-                                                <div className="w-12 h-12 sm:w-14 sm:h-14 bg-chiaro/10 rounded-full flex items-center justify-center absolute -top-8 left-1/2 -translate-x-1/2 bg-scuro-2 border-bianco border-2">
-                                                    <i className={feature.icon}></i>
-                                                </div>
-                                                <div className="flex items-center justify-center text-center ">
-                                                    <span className="text-bianco font-bold text-md sm:text-base lg:text-xl leading-tight">
-                                                        {feature.title}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        ))
-                                    }
-                                </div>
-                            </div>
-                        </div> */}
-                            </div>
-                        </div>
-                    </section>
-                    <hr />
+                            </section>
+                            <hr />
+                        </>
+                    )}
                     {/* progetti */}
                     <div className="py-16 ">
                         <div className="container mx-auto px-6">

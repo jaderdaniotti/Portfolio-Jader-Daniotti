@@ -6,6 +6,7 @@ import Footer from "../Footer";
 import SEOHead from '../components/SEOHead';
 import { supabase } from '../config/supabase';
 import GlobalLoader from '../components/GlobalLoader';
+import PageHero from '../components/PageHero';
 
 function Progetti() {
     const navigate = useNavigate();
@@ -68,16 +69,18 @@ function Progetti() {
                 description="Progetti di creazione siti web realizzati da Jader Daniotti per clienti a Udine, Gemona del Friuli, Solaro e in Friuli."
                 keywords="progetti siti web udine, portfolio jader daniotti, siti web friuli, realizzazioni web designer udine"
             />
-            <Navbar></Navbar>
+            <Navbar />
 
-            <div className="py-10 pt-20 md:pt-24" id="indice">
-                <h1 className="text-center text-6xl md:text-8xl titolo-bianco">PROGETTI</h1>
-                            </div>
-            <hr className='mb-10' />
+            <PageHero
+                eyebrow="PORTFOLIO"
+                title="Progetti"
+                description="Ecco alcuni dei miei progetti. Troverai anteprime per ogni tipo di device, una descrizione di come è stato creato e le tecnologie utilizzate."
+                keywords={["React", "Laravel", "UI/UX", "Responsive"]}
+            />
             
            
             {/* Grid progetti */}
-            <div className="mb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6 gap-6 md:px-8 px-2 items-stretch" id='projects'>
+            <div className="mb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6 gap-6 md:px-8 px-2 items-stretch py-6" id='projects'>
                 {progetti.map((progetto) => (
                     <div key={progetto.id} className="flex flex-col h-full">
                         <div onClick={() => handleProjectClick(progetto.id)} className="cursor-pointer h-full">

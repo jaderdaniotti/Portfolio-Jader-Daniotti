@@ -80,8 +80,7 @@ nav {
 }
 
 body {
-  background: #18122B;
-  background: linear-gradient(135deg, var(--scuro) 0%, var(--scuro-2) 100%);
+  background-color: var(--scuro-2);
   background-attachment: fixed;
   /* background-image: url(//immagini/sfondo.png);
   background-size: cover;
