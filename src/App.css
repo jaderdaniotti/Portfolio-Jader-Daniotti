@@ -207,6 +207,250 @@ body {
 
 /* #endregion */
 
+/* #region admin dashboard */
+.admin-dashboard {
+  position: relative;
+  background:
+    radial-gradient(circle at top left, rgba(116, 106, 148, 0.22), transparent 28%),
+    radial-gradient(circle at top right, rgba(68, 60, 104, 0.28), transparent 30%),
+    linear-gradient(180deg, rgba(23, 23, 23, 0.2) 0%, rgba(57, 48, 83, 0) 24%),
+    var(--scuro-2);
+}
+
+.admin-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(248, 248, 255, 0.14);
+  background: rgba(248, 248, 255, 0.96);
+  color: var(--scuro);
+  padding: 0.85rem 1.15rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.admin-toolbar-btn:hover {
+  transform: translateY(-1px);
+}
+
+.admin-toolbar-btn--ghost {
+  background: rgba(248, 248, 255, 0.08);
+  color: var(--bianco);
+  backdrop-filter: blur(10px);
+}
+
+.admin-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 110px;
+  border: 1px solid rgba(248, 248, 255, 0.08);
+  border-radius: 1.5rem;
+  padding: 1.25rem;
+  background: linear-gradient(180deg, rgba(248, 248, 255, 0.08), rgba(248, 248, 255, 0.03));
+  backdrop-filter: blur(14px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.16);
+}
+
+.admin-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, rgba(248, 248, 255, 0.2), rgba(116, 106, 148, 0.22));
+  color: var(--bianco);
+  border: 1px solid rgba(248, 248, 255, 0.08);
+}
+
+.admin-sidebar {
+  border: 1px solid rgba(248, 248, 255, 0.08);
+  border-radius: 1.75rem;
+  padding: 1.2rem;
+  background: linear-gradient(180deg, rgba(23, 23, 23, 0.44), rgba(57, 48, 83, 0.72));
+  backdrop-filter: blur(18px);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.22);
+}
+
+.admin-side-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border-radius: 1rem;
+  color: rgba(248, 248, 255, 0.7);
+  background: transparent;
+  border: 1px solid transparent;
+  font-weight: 700;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.admin-side-tab:hover {
+  color: var(--bianco);
+  background: rgba(248, 248, 255, 0.05);
+  border-color: rgba(248, 248, 255, 0.08);
+  transform: translateX(2px);
+}
+
+.admin-side-tab--active {
+  color: var(--bianco);
+  background: linear-gradient(135deg, rgba(116, 106, 148, 0.24), rgba(68, 60, 104, 0.5));
+  border-color: rgba(248, 248, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(248, 248, 255, 0.08);
+}
+
+.admin-side-tab__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 0.8rem;
+  background: rgba(248, 248, 255, 0.08);
+}
+
+.admin-content-shell {
+  min-height: 70vh;
+}
+
+.admin-section-panel {
+  border: 1px solid rgba(248, 248, 255, 0.08);
+  border-radius: 1.75rem;
+  background: linear-gradient(180deg, rgba(57, 48, 83, 0.42), rgba(23, 23, 23, 0.3));
+  backdrop-filter: blur(16px);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.18);
+}
+
+.admin-dashboard input,
+.admin-dashboard select,
+.admin-dashboard textarea {
+  background: rgba(248, 248, 255, 0.04);
+  border-color: rgba(248, 248, 255, 0.14) !important;
+  color: var(--bianco) !important;
+}
+
+.admin-dashboard input::placeholder,
+.admin-dashboard textarea::placeholder {
+  color: rgba(248, 248, 255, 0.36);
+}
+
+.admin-dashboard input:focus,
+.admin-dashboard select:focus,
+.admin-dashboard textarea:focus {
+  box-shadow: 0 0 0 4px rgba(116, 106, 148, 0.18);
+}
+
+.admin-dashboard table thead {
+  background: rgba(248, 248, 255, 0.95);
+}
+
+.admin-dashboard table tbody {
+  background: rgba(248, 248, 255, 0.98);
+}
+
+.admin-dashboard .bg-bianco {
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.08);
+}
+
+.admin-skill-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(248, 248, 255, 0.08);
+  border-radius: 1.4rem;
+  padding: 1.25rem;
+  background:
+    linear-gradient(180deg, rgba(248, 248, 255, 0.07), rgba(248, 248, 255, 0.025)),
+    linear-gradient(135deg, rgba(68, 60, 104, 0.38), rgba(23, 23, 23, 0.2));
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(14px);
+  transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+}
+
+.admin-skill-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(248, 248, 255, 0.08), transparent 28%);
+  pointer-events: none;
+}
+
+.admin-skill-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(248, 248, 255, 0.14);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.24);
+}
+
+.admin-skill-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, rgba(248, 248, 255, 0.14), rgba(116, 106, 148, 0.18));
+  border: 1px solid rgba(248, 248, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(248, 248, 255, 0.08);
+}
+
+.admin-skill-card__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  padding: 0.42rem 0.75rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.admin-skill-card__badge--frontend {
+  background: rgba(96, 165, 250, 0.12);
+  color: #bfdbfe;
+  border-color: rgba(96, 165, 250, 0.22);
+}
+
+.admin-skill-card__badge--backend {
+  background: rgba(74, 222, 128, 0.12);
+  color: #bbf7d0;
+  border-color: rgba(74, 222, 128, 0.2);
+}
+
+.admin-skill-card__badge--database {
+  background: rgba(192, 132, 252, 0.12);
+  color: #e9d5ff;
+  border-color: rgba(192, 132, 252, 0.2);
+}
+
+.admin-skill-card__badge--tool {
+  background: rgba(248, 248, 255, 0.1);
+  color: rgba(248, 248, 255, 0.84);
+  border-color: rgba(248, 248, 255, 0.12);
+}
+
+.admin-skill-card__progress {
+  width: 100%;
+  height: 0.65rem;
+  border-radius: 9999px;
+  background: rgba(248, 248, 255, 0.08);
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+.admin-skill-card__progress-bar {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--chiaro), var(--bianco));
+  box-shadow: 0 0 18px rgba(248, 248, 255, 0.16);
+}
+/* #endregion */
+
 /* #region font */
 .michroma-regular {
   font-family: "Michroma", sans-serif;

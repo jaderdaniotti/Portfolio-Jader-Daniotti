@@ -24,7 +24,8 @@ import {
   Tablet,
   Monitor,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  GripVertical
 } from 'lucide-react';
 
 const TabbedDashboard = ({ onLogout }) => {
@@ -56,6 +57,8 @@ const TabbedDashboard = ({ onLogout }) => {
     backend: [],
     database: []
   });
+  const [draggedProjectId, setDraggedProjectId] = useState(null);
+  const [isReorderingProjects, setIsReorderingProjects] = useState(false);
 
   // Verifica se l'utente è admin
   const isAdmin = () => {
@@ -514,10 +517,6 @@ const TabbedDashboard = ({ onLogout }) => {
             }
           }
 
-          if (deleteError) {
-            console.error('Errore nell\'eliminazione tecnologie esistenti:', deleteError);
-          }
-
           // Poi inserisci le nuove tecnologie
           const technologiesToInsert = [];
           for (const type of ['frontend', 'backend', 'database']) {
@@ -657,6 +656,64 @@ const TabbedDashboard = ({ onLogout }) => {
     } catch (error) {
       console.error('Errore nell\'aggiunta:', error);
     }
+  };
+
+  const reorderProjects = (items, draggedId, targetId) => {
+    const draggedIndex = items.findIndex((item) => item.id === draggedId);
+    const targetIndex = items.findIndex((item) => item.id === targetId);
+
+    if (draggedIndex === -1 || targetIndex === -1 || draggedIndex === targetIndex) {
+      return items;
+    }
+
+    const nextItems = [...items];
+    const [draggedItem] = nextItems.splice(draggedIndex, 1);
+    nextItems.splice(targetIndex, 0, draggedItem);
+
+    return nextItems.map((project, index) => ({
+      ...project,
+      order_index: index + 1
+    }));
+  };
+
+  const persistProjectOrder = async (orderedProjects) => {
+    setIsReorderingProjects(true);
+    const previousProjects = projects;
+    setProjects(orderedProjects);
+
+    try {
+      const client = getSupabaseClient();
+
+      for (const project of orderedProjects) {
+        const { error } = await client
+          .from('projects')
+          .update({ order_index: project.order_index })
+          .eq('id', project.id);
+
+        if (error) throw error;
+      }
+    } catch (error) {
+      console.error('Errore nel riordino progetti:', error);
+      setProjects(previousProjects);
+      alert('Errore nel riordino dei progetti: ' + error.message);
+    } finally {
+      setIsReorderingProjects(false);
+      setDraggedProjectId(null);
+    }
+  };
+
+  const handleProjectDragStart = (projectId) => {
+    setDraggedProjectId(projectId);
+  };
+
+  const handleProjectDrop = async (targetProjectId) => {
+    if (!draggedProjectId || draggedProjectId === targetProjectId || isReorderingProjects) {
+      setDraggedProjectId(null);
+      return;
+    }
+
+    const orderedProjects = reorderProjects(projects, draggedProjectId, targetProjectId);
+    await persistProjectOrder(orderedProjects);
   };
 
   const handleCreateTechnology = async () => {
@@ -835,61 +892,97 @@ const TabbedDashboard = ({ onLogout }) => {
   }
 
   return (
-    <div className="min-h-screen inter bg-scuro-2">
-      {/* Header */}
-      <header className="bg-scuro-2 border-b">
-        <div className=" mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-4xl tracking-tight font-medium text-chiaro">Dashboard di <span className='text-bianco font-bold'>Jader</span></h1>
-              <p className="text-gray-600 mt-1"></p>
+    <div className="admin-dashboard min-h-screen inter bg-scuro-2">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-linear-to-b from-chiaro-2/45 via-scuro-2/20 to-transparent" />
+
+      <header className="relative border-b border-white/8">
+        <div className="mx-auto max-w-[1600px] px-6 py-8 xl:px-10">
+          <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
+            <div className="max-w-4xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.45em] text-bianco/45">
+                Control Room
+              </p>
+              <h1 className="mt-3 text-4xl xl:text-6xl tracking-tight font-medium text-bianco">
+                Dashboard di <span className='titolo-bianco font-bold'>Jader</span>
+              </h1>
+              <p className="mt-4 max-w-3xl text-sm xl:text-base text-bianco/68 font-medium">
+                Gestisci contenuti, portfolio e asset del sito in un'unica interfaccia chiara, immersiva e ottimizzata per desktop.
+              </p>
             </div>
-            <div className="flex items-center gap-2">
+
+            <div className="flex items-center gap-3">
               <a
-                href="/" target='_blank'
-                className="flex items-center  bg-chiaro text-white px-6 py-2 rounded-md text-sm font-medium transition-colors"
+                href="/"
+                target='_blank'
+                rel="noreferrer"
+                className="admin-toolbar-btn"
               >
                 <Globe className="w-4 h-4" />
+                Apri sito
               </a>
               <button
                 onClick={handleLogout}
-                className="bg-chiaro text-white px-6 py-2 rounded-md text-sm font-medium transition-colors flex items-center"
+                className="admin-toolbar-btn admin-toolbar-btn--ghost"
               >
                 <LogOut className="w-4 h-4" />
+                Logout
               </button>
             </div>
+          </div>
+
+          <div className="mt-8 grid grid-cols-2 xl:grid-cols-4 gap-4">
+            {[
+              { label: 'Progetti', value: projects.length, icon: Rocket },
+              { label: 'Tecnologie', value: technologies.length, icon: Code },
+              { label: 'Strumenti', value: tools.length, icon: Wrench },
+              { label: 'Templates', value: templates.length, icon: FileText },
+            ].map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.label} className="admin-stat-card">
+                  <div className="admin-stat-icon">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-[11px] uppercase tracking-[0.28em] text-bianco/42">{item.label}</div>
+                    <div className="mt-2 text-3xl font-bold text-bianco">{item.value}</div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </header>
 
-      <div className=" mx-auto px-6 py-8">
-        {/* Navigation Tabs */}
-        <div className="">
-          <nav className="-mb-px flex space-x-8">
-            {tabs.map((tab) => {
-              const IconComponent = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center ${activeTab === tab.id
-                      ? 'text-bianco'
-                      : 'border-transparent text-chiaro hover:text-bianco hover:border-chiaro'
-                    }`}
-                >
-                  <IconComponent className="w-4 h-4 mr-2" />
-                  {tab.name}
-                </button>
-              );
-            })}
-          </nav>
-        </div>
+      <div className="relative mx-auto max-w-[1600px] px-6 py-8 xl:px-10">
+        <div className="grid grid-cols-1 xl:grid-cols-[280px_minmax(0,1fr)] gap-8 items-start">
+          <aside className="admin-sidebar xl:sticky xl:top-8">
+            <div className="mb-4">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-bianco/40">Sezioni</p>
+            </div>
+            <nav className="flex flex-col gap-2">
+              {tabs.map((tab) => {
+                const IconComponent = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`admin-side-tab ${activeTab === tab.id ? 'admin-side-tab--active' : ''}`}
+                  >
+                    <span className="admin-side-tab__icon">
+                      <IconComponent className="w-4 h-4" />
+                    </span>
+                    <span className="flex-1 text-left">{tab.name}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </aside>
 
-        {/* Tab Content */}
-        <div className=" rounded-lg">
+          <div className="admin-content-shell">
           {/* Stack Tab */}
           {activeTab === 'stack' && (
-            <div className="p-6">
+            <div className="admin-section-panel p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-bianco">Stack Tecnologico</h2>
                 {editingItem?.type !== 'technology' && (
@@ -1073,39 +1166,45 @@ const TabbedDashboard = ({ onLogout }) => {
 
               {/* Filtered Technologies */}
               {technologies.filter(tech => tech.category === activeStackTab).length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                   {technologies
                     .filter(tech => tech.category === activeStackTab)
                     .map((tech) => (
-                      <div key={tech.id} className={`border rounded-lg p-4 ${editingItem?.id === tech.id && editingItem?.type === 'technology' ? 'ring-2 ring-chiaro' : ''}`}>
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center space-x-3">
+                      <div key={tech.id} className={`admin-skill-card ${editingItem?.id === tech.id && editingItem?.type === 'technology' ? 'ring-2 ring-chiaro' : ''}`}>
+                            <div className="flex items-start justify-between gap-3 mb-4">
+                              <div className="flex items-center space-x-3 min-w-0">
                                 <div
-                                  className="w-8 h-8 rounded flex items-center justify-center"
+                                  className="admin-skill-card__icon p-2"
                                   dangerouslySetInnerHTML={{ __html: tech.svg_code }}
                                 />
-                                <h3 className="font-medium text-bianco">{tech.name}</h3>
+                                <div className="min-w-0">
+                                  <h3 className="font-semibold text-bianco text-lg leading-tight truncate">{tech.name}</h3>
+                                  <p className="text-xs uppercase tracking-[0.24em] text-bianco/38 mt-1">Skill</p>
+                                </div>
                               </div>
-                              <span className={`px-2 py-1 text-xs font-semibold rounded-full ${tech.category === 'frontend' ? 'bg-blue-100 text-blue-800' :
-                                  tech.category === 'backend' ? 'bg-green-100 text-green-800' :
-                                    'bg-purple-100 text-purple-800'
+                              <span className={`admin-skill-card__badge ${tech.category === 'frontend' ? 'admin-skill-card__badge--frontend' :
+                                  tech.category === 'backend' ? 'admin-skill-card__badge--backend' :
+                                    'admin-skill-card__badge--database'
                                 }`}>
                                 {tech.category}
                               </span>
                             </div>
-                            <div className="mb-2">
-                              <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div className="mb-4">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-[11px] uppercase tracking-[0.24em] text-bianco/42">Livello</span>
+                                <span className="text-sm font-semibold text-bianco">{tech.percent}%</span>
+                              </div>
+                              <div className="admin-skill-card__progress">
                                 <div
-                                  className="bg-chiaro h-2 rounded-full"
+                                  className="admin-skill-card__progress-bar"
                                   style={{ width: `${tech.percent}%` }}
                                 ></div>
                               </div>
-                              <p className="text-xs text-bianco mt-1">{tech.percent}%</p>
                             </div>
-                            <div className="flex space-x-2">
+                            <div className="flex items-center gap-3 pt-4 border-t border-white/8">
                               <button
                                 onClick={() => handleEdit(tech, 'technology')}
-                            className="text-bianco font-medium border-r-1 pr-2 text-sm flex items-center hover:text-chiaro transition-colors"
+                            className="text-bianco font-medium border-r pr-3 text-sm flex items-center hover:text-chiaro transition-colors"
                               >
                                 <Edit className="w-4 h-4 mr-1" />
                                 Modifica
@@ -1133,7 +1232,7 @@ const TabbedDashboard = ({ onLogout }) => {
 
           {/* Strumenti Tab */}
           {activeTab === 'strumenti' && (
-            <div className="p-6">
+            <div className="admin-section-panel p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-bianco">Strumenti di Lavoro</h2>
                 {editingItem?.type !== 'tool' && (
@@ -1244,9 +1343,9 @@ const TabbedDashboard = ({ onLogout }) => {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                 {tools.map((tool) => (
-                  <div key={tool.id} className="border rounded-lg p-4">
+                  <div key={tool.id} className="admin-skill-card">
                     {editingItem?.id === tool.id && editingItem?.type === 'tool' ? (
                       <div className="space-y-3">
                         <input
@@ -1284,26 +1383,37 @@ const TabbedDashboard = ({ onLogout }) => {
                       </div>
                     ) : (
                       <>
-                        <div className="flex items-center space-x-3 mb-2">
+                        <div className="flex items-start justify-between gap-3 mb-4">
+                          <div className="flex items-center space-x-3 min-w-0">
                           <div
-                            className="w-8 h-8 rounded flex items-center justify-center"
+                            className="admin-skill-card__icon p-2"
                             dangerouslySetInnerHTML={{ __html: tool.svg_code }}
                           />
-                          <h3 className="font-medium text-bianco">{tool.name}</h3>
+                            <div className="min-w-0">
+                              <h3 className="font-semibold text-bianco text-lg leading-tight truncate">{tool.name}</h3>
+                              <p className="text-xs uppercase tracking-[0.24em] text-bianco/38 mt-1">Tool</p>
+                            </div>
+                          </div>
+                          <span className="admin-skill-card__badge admin-skill-card__badge--tool">
+                            Tool
+                          </span>
                         </div>
-                        <div className="mb-2">
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="mb-4">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-[11px] uppercase tracking-[0.24em] text-bianco/42">Padronanza</span>
+                            <span className="text-sm font-semibold text-bianco">{tool.percent}%</span>
+                          </div>
+                          <div className="admin-skill-card__progress">
                             <div
-                              className="bg-chiaro h-2 rounded-full"
+                              className="admin-skill-card__progress-bar"
                               style={{ width: `${tool.percent}%` }}
                             ></div>
                           </div>
-                          <p className="text-xs text-bianco mt-1">{tool.percent}%</p>
                         </div>
-                        <div className="flex space-x-2">
+                        <div className="flex items-center gap-3 pt-4 border-t border-white/8">
                           <button
                             onClick={() => handleEdit(tool, 'tool')}
-                            className="text-bianco font-medium border-r-1 pr-2 text-sm flex items-center"
+                            className="text-bianco font-medium border-r pr-3 text-sm flex items-center hover:text-chiaro transition-colors"
                           >
                             <Edit className="w-4 h-4 mr-1" />
                             Modifica
@@ -1326,7 +1436,7 @@ const TabbedDashboard = ({ onLogout }) => {
 
           {/* Progetti Tab */}
           {activeTab === 'progetti' && (
-            <div className="p-6">
+            <div className="admin-section-panel p-6">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-bianco">Progetti</h2>
                 {editingItem?.type !== 'project' && (
@@ -1341,74 +1451,98 @@ const TabbedDashboard = ({ onLogout }) => {
                 )}
               </div>
 
-                            {/* Tabella progetti */}
-              <div className="overflow-x-auto mb-8">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-bianco">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
-                        Titolo
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
-                        Descrizione
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
-                        Featured
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
-                        Ordine
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-scuro uppercase tracking-wider">
-                        Azioni
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-bianco divide-y divide-bianco">
-                    {projects.length > 0 ? (
-                      projects.map((project) => (
-                        <tr key={project.id} className={editingItem?.id === project.id && editingItem?.type === 'project' ? 'bg-blue-50' : ''}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-scuro">
-                            {project.title}
-                          </td>
-                                <td className="px-6 py-4 text-sm text-scuro max-w-xs truncate">
-                            {project.description || '-'}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${project.featured ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                              }`}>
-                              {project.featured ? 'Sì' : 'No'}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-scuro">
-                            {project.order_index || 0}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium flex items-center gap-2">
-                            <button
-                              onClick={() => handleEdit(project, 'project')}
-                              className="text-scuro font-medium border-r-1 pr-2 text-sm flex items-center hover:text-chiaro transition-colors"
-                            >
-                              <Edit className="w-4 h-4 mr-1" />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(project.id, 'project')}
-                              className="text-scuro hover:text-chiaro flex items-center transition-colors"
-                            >
-                              <Trash2 className="w-4 h-4 mr-1" />
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="5" className="px-6 py-12 text-center text-scuro">
-                          <Rocket className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                          <p className="text-lg font-medium text-scuro">Nessun progetto ancora</p>
-                          <p className="text-sm text-scuro">Usa il bottone "Aggiungi Progetto" per creare il tuo primo progetto</p>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+              <div className="mb-8">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">
+                  <div>
+                    <h3 className="text-xl font-bold text-bianco">Griglia Progetti</h3>
+                    <p className="text-sm text-bianco/70">
+                      Trascina le card per cambiare l'ordine visualizzato nel sito.
+                    </p>
+                  </div>
+                  <div className="text-xs text-bianco/60">
+                    {isReorderingProjects ? 'Salvataggio ordine in corso...' : 'Drag and drop attivo'}
+                  </div>
+                </div>
+
+                {projects.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                    {projects.map((project) => {
+                      const isDragged = draggedProjectId === project.id;
+                      const isEditing = editingItem?.id === project.id && editingItem?.type === 'project';
+
+                      return (
+                        <div
+                          key={project.id}
+                          draggable={!isReorderingProjects}
+                          onDragStart={() => handleProjectDragStart(project.id)}
+                          onDragOver={(e) => e.preventDefault()}
+                          onDrop={() => handleProjectDrop(project.id)}
+                          onDragEnd={() => setDraggedProjectId(null)}
+                          className={`rounded-2xl border p-3 transition-all duration-200 bg-bianco text-scuro shadow-sm ${
+                            isDragged
+                              ? 'opacity-50 scale-[0.98] border-chiaro'
+                              : 'border-gray-200 hover:border-chiaro/60 hover:shadow-lg'
+                          } ${isEditing ? 'ring-2 ring-chiaro' : ''}`}
+                        >
+                          {project.cover_image ? (
+                            <div className="relative mb-3 overflow-hidden rounded-xl border border-gray-200 bg-gray-50">
+                              <div className="absolute top-2 left-2 z-10 rounded-full bg-white/90 px-2 py-1 text-[10px] font-semibold tracking-wide text-gray-600 shadow-sm">
+                                #{project.order_index || 0}
+                              </div>
+                              <div className="absolute top-2 right-2 z-10 cursor-grab active:cursor-grabbing rounded-full bg-white/90 p-1.5 text-gray-500 shadow-sm">
+                                <GripVertical className="w-4 h-4" />
+                              </div>
+                              <img
+                                src={project.cover_image}
+                                alt={project.title}
+                                className="w-full aspect-1080/1300 object-cover"
+                                loading="lazy"
+                              />
+                            </div>
+                          ) : (
+                            <div className="relative mb-3 w-full aspect-1080/1300 rounded-xl border border-dashed border-gray-300 bg-gray-50 flex items-center justify-center text-gray-400">
+                              <div className="absolute top-2 left-2 rounded-full bg-white/90 px-2 py-1 text-[10px] font-semibold tracking-wide text-gray-600 shadow-sm">
+                                #{project.order_index || 0}
+                              </div>
+                              <div className="absolute top-2 right-2 cursor-grab active:cursor-grabbing rounded-full bg-white/90 p-1.5 text-gray-500 shadow-sm">
+                                <GripVertical className="w-4 h-4" />
+                              </div>
+                              Nessuna cover
+                            </div>
+                          )}
+
+                          <div className="flex items-start justify-between gap-3">
+                            <h4 className="font-bold text-base leading-tight line-clamp-2 min-w-0">
+                              {project.title}
+                            </h4>
+                            <div className="flex items-center gap-2 shrink-0">
+                              <button
+                                onClick={() => handleEdit(project, 'project')}
+                                className="text-scuro font-medium text-sm flex items-center hover:text-chiaro transition-colors"
+                                aria-label={`Modifica ${project.title}`}
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(project.id, 'project')}
+                                className="text-scuro text-sm hover:text-chiaro flex items-center transition-colors"
+                                aria-label={`Elimina ${project.title}`}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="px-6 py-12 text-center bg-bianco rounded-2xl">
+                    <Rocket className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                    <p className="text-lg font-medium text-scuro">Nessun progetto ancora</p>
+                    <p className="text-sm text-scuro">Usa il bottone "Aggiungi Progetto" per creare il tuo primo progetto</p>
+                  </div>
+                )}
               </div>
 
               {/* Form di creazione/modifica progetto */}
@@ -2074,7 +2208,7 @@ const TabbedDashboard = ({ onLogout }) => {
 
           {/* Templates Tab */}
           {activeTab === 'templates' && (
-            <div className="p-6">
+            <div className="admin-section-panel p-6">
               <h2 className="text-2xl font-bold text-bianco mb-6">Templates</h2>
 
               {/* Form in alto - larghezza piena */}
@@ -2388,6 +2522,7 @@ const TabbedDashboard = ({ onLogout }) => {
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   );
