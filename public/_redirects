@@ -1,2 +1,2 @@
 /api/google-places/*   https://maps.googleapis.com/maps/api/:splat   200
-/*    /index.html   200
+/*    https://jaderweb.com/   301!

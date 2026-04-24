@@ -28,10 +28,9 @@
   status = 200
   force = true
 
-# Redirect per SPA
+# Redirect globale verso il nuovo sito
 [[redirects]]
   from = "/*"
-  to = "/index.html"
-  status = 200
+  to = "https://jaderweb.com/"
+  status = 301
   force = true
-  except = ["/sitemap.xml", "/robots.txt"]
